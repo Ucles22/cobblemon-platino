@@ -45,7 +45,7 @@ java {
 tasks.register("printModJars") {
 	doLast {
 		configurations.compileClasspath.resolve().each { f ->
-			if (f.name.contains("cobblemon") || f.name.contains("minecraft-")) println "JAR: " + f
+			println "JAR: " + f
 		}
 	}
 }

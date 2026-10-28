@@ -3,8 +3,8 @@
 set -u
 mkdir -p inspect
 gradle -q printModJars > inspect/jars.txt 2>&1 || true
-CJAR=$(grep -i 'JAR: .*cobblemon' inspect/jars.txt | head -1 | sed 's/^JAR: //')
-MJAR=$(grep 'JAR: .*minecraft-' inspect/jars.txt | grep -v sources | head -1 | sed 's/^JAR: //')
+CJAR=$(grep 'JAR: ' inspect/jars.txt | grep -i 'remapped_mods' | grep -i 'cobblemon' | head -1 | sed 's/^JAR: //')
+MJAR=$(grep 'JAR: .*minecraft-merged' inspect/jars.txt | grep -v sources | head -1 | sed 's/^JAR: //')
 echo "cobblemon=$CJAR" > inspect/paths.txt; echo "minecraft=$MJAR" >> inspect/paths.txt
 if [ -n "$CJAR" ] && [ -f "$CJAR" ]; then
   unzip -Z1 "$CJAR" > inspect/cobblemon-files.txt
