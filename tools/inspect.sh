@@ -3,7 +3,7 @@
 set -u
 mkdir -p inspect
 gradle -q printModJars > inspect/jars.txt 2>&1 || true
-CJAR=$(grep 'JAR: ' inspect/jars.txt | grep -i 'remapped_mods' | grep -i 'cobblemon' | head -1 | sed 's/^JAR: //')
+CJAR=$(grep 'JAR: ' inspect/jars.txt | grep 'remapped_mods' | grep '/com/cobblemon/' | head -1 | sed 's/^JAR: //')
 MJAR=$(grep 'JAR: .*minecraft-merged' inspect/jars.txt | grep -v sources | head -1 | sed 's/^JAR: //')
 echo "cobblemon=$CJAR" > inspect/paths.txt; echo "minecraft=$MJAR" >> inspect/paths.txt
 if [ -n "$CJAR" ] && [ -f "$CJAR" ]; then
