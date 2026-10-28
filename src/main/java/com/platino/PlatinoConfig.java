@@ -21,6 +21,8 @@ public class PlatinoConfig {
 	public boolean partyHud = true;
 	/** Inventario de Minecraft estilo Platino. */
 	public boolean inventoryTheme = true;
+	/** Recolorear PC, Resumen, equipo y botones de combate de Cobblemon (reinicia para aplicar). */
+	public boolean screensTheme = true;
 
 	/** Posición de la barra de equipo: desplazamiento desde el borde izquierdo / centro vertical. */
 	public int partyOffsetX = 0;
