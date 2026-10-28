@@ -26,6 +26,12 @@ jobs:
           git commit -qm "inspect" && git push -f origin ci-inspect
           git checkout -q -f ${{ github.sha }}
       - run: gradle build
+      - name: Guardar refmap para verificación
+        if: hashFiles('tools/INSPECT') != ''
+        run: |
+          mkdir -p /tmp/rm && cd /tmp/rm && unzip -o -q $GITHUB_WORKSPACE/build/libs/$(ls $GITHUB_WORKSPACE/build/libs | grep -v sources | head -1) '*refmap*.json' || true
+          cd $GITHUB_WORKSPACE && git fetch -q origin ci-inspect && git checkout -q -f FETCH_HEAD && mkdir -p inspect && cp /tmp/rm/*.json inspect/ 2>/dev/null || true
+          git add -f inspect && git commit -qm refmap && git push -q origin HEAD:ci-inspect || true
       - uses: actions/upload-artifact@v4
         with:
           name: cobblemon-platino-jar
