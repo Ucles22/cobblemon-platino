@@ -23,3 +23,9 @@ if [ -n "$MJAR" ] && [ -f "$MJAR" ]; then
   for c in net.minecraft.client.gui.screen.ingame.InventoryScreen net.minecraft.client.gui.screen.ingame.HandledScreen net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen net.minecraft.client.gui.DrawContext; do
     echo "==== $c"; javap -p -c -cp "$MJAR" "$c" 2>&1 | grep -E '^(  [a-z]|  (public|protected|private|static)|.*invoke)' ; done > inspect/minecraft-javap.txt
 fi
+# --- Segunda ronda: clases extra y bytecode con nombres de variables
+if [ -n "$CJAR" ] && [ -f "$CJAR" ]; then
+  for c in com.cobblemon.mod.common.client.battle.ActiveClientBattlePokemon com.cobblemon.mod.common.pokemon.status.PersistentStatus com.cobblemon.mod.common.pokemon.status.PersistentStatusContainer com.cobblemon.mod.common.pokemon.Gender com.cobblemon.mod.common.api.pokemon.status.Status com.cobblemon.mod.common.pokemon.FormData com.cobblemon.mod.common.pokemon.RenderablePokemon com.cobblemon.mod.common.entity.PoseType com.cobblemon.mod.common.client.render.models.blockbench.PosableState; do echo "==== $c"; javap -p -cp "$CJAR" "$c" 2>&1; done > inspect/cobblemon-javap2.txt
+  for c in com.cobblemon.mod.common.client.gui.battle.BattleOverlay com.cobblemon.mod.common.client.gui.PartyOverlay; do echo "==== $c"; javap -p -c -l -constants -cp "$CJAR" "$c" 2>&1; done > inspect/cobblemon-bytecode.txt
+  javap -p -cp "$CJAR" com.cobblemon.mod.common.client.gui.summary.Summary com.cobblemon.mod.common.client.gui.pc.PCGUI com.cobblemon.mod.common.client.gui.pc.StorageSlot com.cobblemon.mod.common.client.gui.pc.StorageWidget > inspect/cobblemon-screens.txt 2>&1
+fi
