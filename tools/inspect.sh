@@ -29,3 +29,11 @@ if [ -n "$CJAR" ] && [ -f "$CJAR" ]; then
   for c in com.cobblemon.mod.common.client.gui.battle.BattleOverlay com.cobblemon.mod.common.client.gui.PartyOverlay; do echo "==== $c"; javap -p -c -l -constants -cp "$CJAR" "$c" 2>&1; done > inspect/cobblemon-bytecode.txt
   javap -p -cp "$CJAR" com.cobblemon.mod.common.client.gui.summary.Summary com.cobblemon.mod.common.client.gui.pc.PCGUI com.cobblemon.mod.common.client.gui.pc.StorageSlot com.cobblemon.mod.common.client.gui.pc.StorageWidget > inspect/cobblemon-screens.txt 2>&1
 fi
+# --- Tercera ronda
+if [ -n "$MJAR" ] && [ -f "$MJAR" ]; then
+  javap -p -c -cp "$MJAR" net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen | awk '/drawBackground\(/{f=1} f&&/invoke/{print} f&&/^$/{exit}' > inspect/creative-bg.txt 2>&1
+fi
+if [ -n "$CJAR" ] && [ -f "$CJAR" ]; then
+  javap -p -c -constants -cp "$CJAR" com.cobblemon.mod.common.client.gui.summary.Summary | awk '/ (init|mouseClicked|keyPressed)\(/{f=1} f{print} f&&/^$/{f=0}' | grep -E '^  [a-z]|BASE|width|height|invoke' > inspect/summary-methods.txt 2>&1
+  javap -cp "$CJAR" com.cobblemon.mod.common.client.gui.summary.widgets.NicknameEntryWidget | head -3 >> inspect/summary-methods.txt
+fi

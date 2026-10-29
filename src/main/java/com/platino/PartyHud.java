@@ -21,7 +21,7 @@ import java.util.List;
 
 /** Barra de equipo estilo Platino (paneles azules con retrato, nombre, nivel y PS). */
 public final class PartyHud {
-	private static final int W = 104;
+	private static final int W = 114;
 	private static final int H = 26;
 	private static final int CW = 70; // ancho compacto
 	private static final int GAP = 2;
@@ -122,7 +122,8 @@ public final class PartyHud {
 
 			// Icono de nota
 			if (Notes.has(p.getUuid())) {
-				Draw.dsText(c, "✎", x + w - 9, compact ? y + h - 9 : y + 17, Draw.GOLD, 0xFF6A4A00);
+				if (compact) Draw.dsText(c, "✎", x + w - 9, y + 2, Draw.GOLD, 0xFF6A4A00);
+				else Draw.dsText(c, "✎", tx, y + 17, Draw.GOLD, 0xFF6A4A00);
 			}
 		}
 	}
@@ -146,7 +147,7 @@ public final class PartyHud {
 			try {
 				m.translate(px + 10.5 - 1, py - 12, 0);
 				portrait.invoke(p.getSpecies().getResourceIdentifier(), m, 0f, p.getForm().getBaseScale(), false,
-						(PosableState) state, partialTicks, 0f, 0f, 0f, 0f, 0f, false, 0f, 0f, 0f, 0f, 126868, null);
+						(PosableState) state, 0f, 0f, 0f, 0f, 0f, 0f, false, 0f, 0f, 0f, 0f, 126868, null);
 			} finally {
 				m.pop();
 				c.disableScissor();

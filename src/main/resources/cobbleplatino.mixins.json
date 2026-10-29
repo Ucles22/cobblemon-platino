@@ -6,7 +6,8 @@
 	"client": [
 		"BattleOverlayMixin",
 		"PartyOverlayMixin",
-		"InventoryScreenMixin"
+		"InventoryScreenMixin",
+		"CreativeInventoryScreenMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

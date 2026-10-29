@@ -23,6 +23,8 @@ public class PlatinoConfig {
 	public boolean inventoryTheme = true;
 	/** Recolorear PC, Resumen, equipo y botones de combate de Cobblemon (reinicia para aplicar). */
 	public boolean screensTheme = true;
+	/** Paleta de las pantallas de Cobblemon: diamante, perla, platino u original. Cambiar con /platino paleta. */
+	public String palette = "diamante";
 
 	/** Posición de la barra de equipo: desplazamiento desde el borde izquierdo / centro vertical. */
 	public int partyOffsetX = 0;
