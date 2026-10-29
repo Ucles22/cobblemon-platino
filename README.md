@@ -2,7 +2,7 @@
 
 Mod **solo de cliente** que da a Cobblemon una interfaz inspirada en **Pokémon Platino**.
 
-- **Combate:** cajas de PS estilo DS (rival arriba a la izquierda, tu Pokémon a la derecha) con nombre, sexo, nivel, estado, barra de PS animada, PS numéricos y EXP.
+- **Combate:** cajas de PS estilo DS (tu Pokémon arriba a la izquierda, el rival arriba a la derecha) con nombre, sexo, nivel, estado, barra de PS animada, PS numéricos y EXP.
 - **Barra de equipo:** paneles azules con retrato, nivel y PS; seleccionado en dorado, debilitados en rojo.
 - **Inventario (E):** fondo estilo menú de Platino (plata y dorado).
 - **PC, Resumen y botones de combate de Cobblemon:** recoloreados en memoria con la paleta Platino.

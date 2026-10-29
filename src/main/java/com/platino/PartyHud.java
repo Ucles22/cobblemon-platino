@@ -63,68 +63,72 @@ public final class PartyHud {
 				Draw.round(c, x, y + h / 2 - 2, x + 12, y + h / 2 + 2, 0x80303838);
 				continue;
 			}
-			boolean fainted = p.isFainted();
-			int top, bottom, border;
-			if (fainted) { top = 0xFFE07868; bottom = 0xFFB84838; border = 0xFF682820; }
-			else if (sel) { top = 0xFF78C0F0; bottom = 0xFF3880C8; border = Draw.GOLD; }
-			else { top = 0xFF5898D0; bottom = 0xFF3068A8; border = 0xFF203858; }
+			Draw.batch(c, () -> drawFrame(c, p, x, y, w, h, sel, compact));
+			if (!compact) drawPortrait(c, p, i, x + 2, y + 2, partialTicks);
+			int tx = compact ? x + 4 : x + 26;
+			drawDetails(c, p, x, y, w, h, tx, compact);
+		}
+	}
 
-			Draw.round(c, x + 1, y + 1, x + w + 1, y + h + 1, 0x60000000);
-			Draw.panelGradient(c, x, y, x + w, y + h, border, top, bottom);
-			if (sel) c.fill(x + 2, y + 1, x + w - 2, y + 2, 0xFFFFF0A0);
+	private static void drawFrame(DrawContext c, Pokemon p, int x, int y, int w, int h, boolean sel, boolean compact) {
+		boolean fainted = p.isFainted();
+		int top, bottom, border;
+		if (fainted) { top = 0xFFE07868; bottom = 0xFFB84838; border = 0xFF682820; }
+		else if (sel) { top = 0xFF78C0F0; bottom = 0xFF3880C8; border = Draw.GOLD; }
+		else { top = 0xFF5898D0; bottom = 0xFF3068A8; border = 0xFF203858; }
 
-			int tx;
-			if (compact) {
-				tx = x + 4;
-			} else {
-				// Retrato circular
-				int px = x + 3, py = y + 3;
-				Draw.round(c, px, py, px + 20, py + 20, 0xFF203858);
-				Draw.round(c, px + 1, py + 1, px + 19, py + 19, 0xFFD8E8F8);
-				drawPortrait(c, p, i, px - 1, py - 1, partialTicks);
-				tx = x + 26;
-			}
+		Draw.round(c, x + 1, y + 1, x + w + 1, y + h + 1, 0x60000000);
+		Draw.panelGradient(c, x, y, x + w, y + h, border, top, bottom);
+		if (sel) c.fill(x + 2, y + 1, x + w - 2, y + 2, 0xFFFFF0A0);
 
-			String lv = "Nv" + p.getLevel();
-			String name = Draw.fit(p.getDisplayName(false).getString(), (x + w - 4 - Draw.width(lv) - 8) - tx);
-			Draw.dsText(c, name, tx, y + 3, 0xFFFFFFFF, 0xFF203048);
-			int gx = tx + Draw.width(name) + 1;
-			Gender g = p.getGender();
-			if (g == Gender.MALE) Draw.dsText(c, "♂", gx, y + 3, 0xFF88C8FF, 0xFF203048);
-			else if (g == Gender.FEMALE) Draw.dsText(c, "♀", gx, y + 3, 0xFFFFA8C8, 0xFF203048);
-			Draw.dsText(c, lv, x + w - 4 - Draw.width(lv), y + 3, 0xFFFFFFFF, 0xFF203048);
+		if (!compact) {
+			// Retrato circular
+			int px = x + 3, py = y + 3;
+			Draw.round(c, px, py, px + 20, py + 20, 0xFF203858);
+			Draw.round(c, px + 1, py + 1, px + 19, py + 19, 0xFFD8E8F8);
+		}
+	}
 
-			// Barra de PS
-			int max = Math.max(1, p.getMaxHealth());
-			float ratio = p.getCurrentHealth() / (float) max;
-			int barY = compact ? y + h - 6 : y + 13;
-			int barX = tx;
-			PersistentStatusContainer st = p.getStatus();
-			if (st != null && st.getStatus() != null && !compact) {
-				int bw = Draw.statusBadge(c, st.getStatus().getShowdownName(), tx, barY - 1);
-				if (bw > 0) barX = tx + bw + 2;
-			}
-			if (compact) {
-				c.fill(barX, barY, x + w - 4, barY + 3, Draw.OUTLINE);
-				int fw = Math.round((x + w - 5 - barX - 1) * Math.max(0, Math.min(1, ratio)));
-				int col = ratio > 0.5f ? Draw.HP_GREEN : ratio > 0.2f ? Draw.HP_YELLOW : Draw.HP_RED;
-				if (fw > 0) c.fill(barX + 1, barY + 1, barX + 1 + fw, barY + 2, col);
-			} else {
-				Draw.hpBar(c, barX, barY, x + w - 4 - barX, ratio, false);
-				// PS pequeños bajo la barra
-				String hp = p.getCurrentHealth() + "/" + max;
-				c.getMatrices().push();
-				c.getMatrices().translate(x + w - 4 - Draw.width(hp) * 0.6f, y + 20.5f, 0);
-				c.getMatrices().scale(0.6f, 0.6f, 1f);
-				c.drawText(Draw.font(), hp, 0, 0, 0xFFE8F0F8, false);
-				c.getMatrices().pop();
-			}
+	private static void drawDetails(DrawContext c, Pokemon p, int x, int y, int w, int h, int tx, boolean compact) {
+		String lv = "Nv" + p.getLevel();
+		String name = Draw.fit(p.getDisplayName(false).getString(), (x + w - 4 - Draw.width(lv) - 8) - tx);
+		Draw.dsText(c, name, tx, y + 3, 0xFFFFFFFF, 0xFF203048);
+		int gx = tx + Draw.width(name) + 1;
+		Gender g = p.getGender();
+		if (g == Gender.MALE) Draw.dsText(c, "♂", gx, y + 3, 0xFF88C8FF, 0xFF203048);
+		else if (g == Gender.FEMALE) Draw.dsText(c, "♀", gx, y + 3, 0xFFFFA8C8, 0xFF203048);
+		Draw.dsText(c, lv, x + w - 4 - Draw.width(lv), y + 3, 0xFFFFFFFF, 0xFF203048);
 
-			// Icono de nota
-			if (Notes.has(p.getUuid())) {
-				if (compact) Draw.dsText(c, "✎", x + w - 9, y + 2, Draw.GOLD, 0xFF6A4A00);
-				else Draw.dsText(c, "✎", tx, y + 17, Draw.GOLD, 0xFF6A4A00);
-			}
+		// Barra de PS
+		int max = Math.max(1, p.getMaxHealth());
+		float ratio = p.getCurrentHealth() / (float) max;
+		int barY = compact ? y + h - 6 : y + 13;
+		int barX = tx;
+		PersistentStatusContainer st = p.getStatus();
+		if (st != null && st.getStatus() != null && !compact) {
+			int bw = Draw.statusBadge(c, st.getStatus().getShowdownName(), tx, barY - 1);
+			if (bw > 0) barX = tx + bw + 2;
+		}
+		if (compact) {
+			c.fill(barX, barY, x + w - 4, barY + 3, Draw.OUTLINE);
+			int fw = Math.round((x + w - 5 - barX - 1) * Math.max(0, Math.min(1, ratio)));
+			int col = ratio > 0.5f ? Draw.HP_GREEN : ratio > 0.2f ? Draw.HP_YELLOW : Draw.HP_RED;
+			if (fw > 0) c.fill(barX + 1, barY + 1, barX + 1 + fw, barY + 2, col);
+		} else {
+			Draw.hpBar(c, barX, barY, x + w - 4 - barX, ratio, false);
+			// PS pequeños bajo la barra
+			String hp = p.getCurrentHealth() + "/" + max;
+			c.getMatrices().push();
+			c.getMatrices().translate(x + w - 4 - Draw.width(hp) * 0.6f, y + 20.5f, 0);
+			c.getMatrices().scale(0.6f, 0.6f, 1f);
+			c.drawText(Draw.font(), hp, 0, 0, 0xFFE8F0F8, false);
+			c.getMatrices().pop();
+		}
+
+		// Icono de nota
+		if (Notes.has(p.getUuid())) {
+			if (compact) Draw.dsText(c, "✎", x + w - 9, y + 2, Draw.GOLD, 0xFF6A4A00);
+			else Draw.dsText(c, "✎", tx, y + 17, Draw.GOLD, 0xFF6A4A00);
 		}
 	}
 

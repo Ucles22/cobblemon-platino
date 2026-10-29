@@ -14,7 +14,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 /** Sustituye las tarjetas de combate de Cobblemon por cajas estilo Platino. */
 @Mixin(value = BattleOverlay.class, remap = false)
 public abstract class BattleOverlayMixin {
-	@Inject(method = "drawTile", at = @At("HEAD"), cancellable = true, remap = false)
+	@Inject(method = "drawTile", at = @At(value = "INVOKE", shift = At.Shift.AFTER,
+			target = "Lcom/cobblemon/mod/common/client/battle/ActiveClientBattlePokemon;animate(F)V"),
+			cancellable = true, remap = false)
 	private void platino$drawTile(DrawContext context, float tickDelta, ActiveClientBattlePokemon active, boolean left,
 								  int rank, PokedexEntryProgress dexState, boolean hasCommand, boolean isHovered,
 								  boolean isCompact, CallbackInfo ci) {

@@ -2,17 +2,14 @@ package com.platino;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import net.fabricmc.loader.api.FabricLoader;
-
-import java.io.Reader;
-import java.io.Writer;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import com.google.gson.reflect.TypeToken;
+import net.minecraft.client.MinecraftClient;
 
 /** config/cobbleplatino.json */
 public class PlatinoConfig {
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+	private static final TypeToken<PlatinoConfig> TYPE = TypeToken.get(PlatinoConfig.class);
+	private static final JsonFileStore STORE = new JsonFileStore("cobbleplatino.json");
 	private static PlatinoConfig instance = new PlatinoConfig();
 
 	/** Cajas de vida estilo Platino en combate. */
@@ -41,7 +38,7 @@ public class PlatinoConfig {
 	/** Barra de equipo más pequeña (sin retrato). */
 	public boolean partyCompact = false;
 
-	/** Caja del rival: arriba a la izquierda. Caja propia: a la derecha. Desplazamientos en píxeles. */
+	/** Caja propia: arriba a la izquierda. Caja del rival: arriba a la derecha. Desplazamientos en píxeles. */
 	public int foeOffsetX = 0;
 	public int foeOffsetY = 0;
 	public int allyOffsetX = 0;
@@ -51,31 +48,28 @@ public class PlatinoConfig {
 		return instance;
 	}
 
-	private static Path path() {
-		return FabricLoader.getInstance().getConfigDir().resolve("cobbleplatino.json");
-	}
-
 	public static void load() {
-		PlatinoConfig cfg = null;
-		if (Files.exists(path())) {
-			try (Reader r = Files.newBufferedReader(path(), StandardCharsets.UTF_8)) {
-				cfg = GSON.fromJson(r, PlatinoConfig.class);
-			} catch (Exception e) {
-				PlatinoClient.LOGGER.error("[Cobblemon Platino] cobbleplatino.json no válido, usando valores por defecto", e);
-			}
-		}
-		instance = cfg != null ? cfg : new PlatinoConfig();
+		instance = sanitize(STORE.readNow(GSON, TYPE));
 		save();
 	}
 
+	public static void reload(Runnable onApplied) {
+		STORE.read(GSON, TYPE).thenAcceptAsync(loaded -> {
+			instance = sanitize(loaded);
+			save();
+			onApplied.run();
+		}, MinecraftClient.getInstance());
+	}
+
 	public static void save() {
-		try {
-			Files.createDirectories(path().getParent());
-			try (Writer w = Files.newBufferedWriter(path(), StandardCharsets.UTF_8)) {
-				GSON.toJson(instance, w);
-			}
-		} catch (Exception e) {
-			PlatinoClient.LOGGER.error("[Cobblemon Platino] No se pudo guardar la configuración", e);
-		}
+		STORE.write(GSON.toJson(instance));
+	}
+
+	private static PlatinoConfig sanitize(PlatinoConfig loaded) {
+		PlatinoConfig defaults = new PlatinoConfig();
+		if (loaded == null) return defaults;
+		if (loaded.palette == null) loaded.palette = defaults.palette;
+		if (loaded.battleMenuSide == null) loaded.battleMenuSide = defaults.battleMenuSide;
+		return loaded;
 	}
 }

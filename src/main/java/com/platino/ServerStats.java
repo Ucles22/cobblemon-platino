@@ -16,6 +16,9 @@ import java.util.regex.Pattern;
 /** Datos del marcador del servidor: primero el de DiosesMon, si no el marcador normal de Minecraft. */
 public final class ServerStats {
 	private static final Pattern FORMAT = Pattern.compile("§[0-9a-fk-orx]", Pattern.CASE_INSENSITIVE);
+	private static final Pattern WHITESPACE_RUN = Pattern.compile("[ \\t]+");
+	private static final Pattern COUNTDOWN = Pattern.compile("\\d+\\s*[dhms]\\b");
+	private static final Pattern CLOCK_OR_DATE = Pattern.compile("\\d{1,2}[/:]\\d{2}");
 	private static final Pattern MONEY = Pattern.compile("(?:DINERO|MONEY|SALDO|BALANCE)\\s*:?\\s*\\$?\\s*([0-9][0-9.,]*[0-9kKmM]?)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern COINS = Pattern.compile("DIOSESCOINS\\s*:?\\s*([0-9][0-9.,]*)", Pattern.CASE_INSENSITIVE);
 	private static final Pattern POINTS = Pattern.compile("PUNTOS\\s+(?:DE\\s+)?BATALLA\\s*:?\\s*([0-9][0-9.,]*)", Pattern.CASE_INSENSITIVE);
@@ -29,6 +32,14 @@ public final class ServerStats {
 
 	private ServerStats() {}
 
+	public static void reset() {
+		money = null;
+		coins = null;
+		points = null;
+		clan = null;
+		lastUpdate = 0;
+	}
+
 	/** Pasa versalitas a letras normales y quita iconos de fuente propia (zona privada Unicode). */
 	static String normalize(String raw) {
 		StringBuilder sb = new StringBuilder(raw.length());
@@ -39,7 +50,7 @@ public final class ServerStats {
 			else if (ch >= '\ue000' && ch <= '\uf8ff') sb.append(' ');
 			else sb.append(ch);
 		}
-		return FORMAT.matcher(sb).replaceAll("").replaceAll("[ \\t]+", " ");
+		return WHITESPACE_RUN.matcher(FORMAT.matcher(sb).replaceAll("")).replaceAll(" ");
 	}
 
 	public static void update() {
@@ -73,7 +84,7 @@ public final class ServerStats {
 			if (p == null && (x = POINTS.matcher(line)).find()) p = x.group(1);
 			if (cl == null && (x = CLAN.matcher(line)).find()) cl = x.group(1);
 			// Para el plan B: líneas con un número que no sean fechas ni cuentas atrás
-			if (!line.matches(".*\\d+\\s*[dhms]\\b.*") && !line.matches(".*\\d{1,2}[/:]\\d{2}.*")) {
+			if (!COUNTDOWN.matcher(line).find() && !CLOCK_OR_DATE.matcher(line).find()) {
 				Matcher n = NUMBER.matcher(line);
 				if (n.find()) numeric.add((r.indexOf(COIN_GLYPH) >= 0 ? "C" : "N") + n.group(1));
 			}

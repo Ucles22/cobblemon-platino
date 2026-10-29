@@ -11,15 +11,11 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
-/** Cajas de combate estilo Pokémon Platino (rival arriba a la izquierda, tu Pokémon a la derecha). */
+/** Cajas de combate estilo Pokémon Platino (tu Pokémon arriba a la izquierda, el rival arriba a la derecha, como Cobblemon). */
 public final class BattleHud {
-	public static final int W = 124;
-	private static final Map<UUID, Float> shownHp = new HashMap<>();
-	private static long lastFrame = System.nanoTime();
+	public static final int W = 132;
 
 	private BattleHud() {}
 
@@ -46,31 +42,22 @@ public final class BattleHud {
 		MinecraftClient mc = MinecraftClient.getInstance();
 		PlatinoConfig cfg = PlatinoConfig.get();
 		int sw = mc.getWindow().getScaledWidth();
-		int sh = mc.getWindow().getScaledHeight();
 
 		int h = ally ? 42 : 31;
+		int y0 = 46 - h + rank * Math.max(40, h + 4);
 		int x, y;
 		if (ally) {
-			x = sw - W - 46 + cfg.allyOffsetX;
-			y = (int) (sh * 0.52f) + rank * (h + 4) - cfg.allyOffsetY;
+			x = 13 + cfg.allyOffsetX;
+			y = y0 - cfg.allyOffsetY;
 		} else {
-			x = 10 + cfg.foeOffsetX;
-			y = 10 + rank * (h + 4) - cfg.foeOffsetY;
+			x = sw - 13 - W + cfg.foeOffsetX;
+			y = y0 - cfg.foeOffsetY;
 		}
 
 		// Animación suave de la barra de PS
 		float max = bp.getMaxHp();
-		float target = max > 0 ? bp.getHpValue() / max : 0f;
-		target = Math.max(0, Math.min(1, target));
-		long now = System.nanoTime();
-		float dt = Math.min(0.1f, (now - lastFrame) / 1_000_000_000f);
-		lastFrame = now;
-		float cur = shownHp.getOrDefault(bp.getUuid(), target);
-		float step = dt * 0.8f;
-		if (Math.abs(target - cur) <= step) cur = target;
-		else cur += Math.signum(target - cur) * step;
-		shownHp.put(bp.getUuid(), cur);
-		if (shownHp.size() > 64) shownHp.clear();
+		float target = !bp.isHpFlat() ? bp.getHpValue() : max > 0 ? bp.getHpValue() / max : 0f;
+		float cur = Math.max(0, Math.min(1, target));
 
 		int border = hovered ? Draw.GOLD : Draw.OUTLINE;
 		// Sombra

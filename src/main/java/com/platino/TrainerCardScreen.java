@@ -19,6 +19,8 @@ public class TrainerCardScreen extends Screen {
 	private static final int TEXT = 0xFFFFFFFF, SHADOW = 0xFF905050;
 	private long opened;
 	private String error;
+	private int caught;
+	private long caughtUpdated;
 
 	public TrainerCardScreen() {
 		super(Text.literal("Ficha de Entrenador"));
@@ -67,7 +69,7 @@ public class TrainerCardScreen extends Screen {
 		Draw.round(c, x + 3, y + 4, x + CW + 3, y + CH + 4, 0x70000000);
 		Draw.panel(c, x, y, x + CW, y + CH, 0xFFB04848, 0xFFF8F0E0);
 		Draw.panelGradient(c, x + 3, y + 3, x + CW - 3, y + CH - 3, 0xFF983838, 0xFFF07878, 0xFFE05858);
-		pokeballWatermark(c, x + 70, y + 84);
+		Draw.batch(c, () -> pokeballWatermark(c, x + 70, y + 84));
 
 		Draw.tinyBall(c, x + 9, y + 8);
 		Draw.dsText(c, "FICHA DE ENTRENADOR", x + 20, y + 8, TEXT, SHADOW);
@@ -160,7 +162,16 @@ public class TrainerCardScreen extends Screen {
 		}
 	}
 
-	private static int caughtCount() {
+	private int caughtCount() {
+		long now = System.currentTimeMillis();
+		if (now - caughtUpdated >= 1000) {
+			caught = countCaught();
+			caughtUpdated = now;
+		}
+		return caught;
+	}
+
+	private static int countCaught() {
 		try {
 			ClientPokedexManager dex = CobblemonClient.INSTANCE.getClientPokedexData();
 			int n = 0;

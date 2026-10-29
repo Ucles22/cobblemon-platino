@@ -3,13 +3,7 @@ package com.platino;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import net.fabricmc.loader.api.FabricLoader;
 
-import java.io.Reader;
-import java.io.Writer;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -17,47 +11,46 @@ import java.util.UUID;
 /** Notas por Pokémon (por UUID), guardadas en config/cobbleplatino_notas.json. Solo en tu PC. */
 public final class Notes {
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-	private static Map<String, String> notes = new LinkedHashMap<>();
+	private static final TypeToken<LinkedHashMap<String, String>> STORED_TYPE = new TypeToken<LinkedHashMap<String, String>>() {};
+	private static final JsonFileStore STORE = new JsonFileStore("cobbleplatino_notas.json");
+	private static final Map<UUID, String> notes = new LinkedHashMap<>();
 
 	private Notes() {}
 
-	private static Path path() {
-		return FabricLoader.getInstance().getConfigDir().resolve("cobbleplatino_notas.json");
+	public static void load() {
+		Map<String, String> stored = STORE.readNow(GSON, STORED_TYPE);
+		if (stored == null) return;
+		notes.clear();
+		stored.forEach(Notes::putStored);
 	}
 
-	public static void load() {
-		if (!Files.exists(path())) return;
-		try (Reader r = Files.newBufferedReader(path(), StandardCharsets.UTF_8)) {
-			Map<String, String> m = GSON.fromJson(r, new TypeToken<LinkedHashMap<String, String>>() {}.getType());
-			if (m != null) notes = m;
-		} catch (Exception e) {
-			PlatinoClient.LOGGER.error("[Cobblemon Platino] No se pudieron leer las notas", e);
+	private static void putStored(String key, String text) {
+		if (text == null || text.isBlank()) return;
+		try {
+			notes.put(UUID.fromString(key), text);
+		} catch (IllegalArgumentException e) {
+			PlatinoClient.LOGGER.warn("[Cobblemon Platino] Nota con id no válido, se ignora: {}", key);
 		}
 	}
 
 	private static void save() {
-		try {
-			Files.createDirectories(path().getParent());
-			try (Writer w = Files.newBufferedWriter(path(), StandardCharsets.UTF_8)) {
-				GSON.toJson(notes, w);
-			}
-		} catch (Exception e) {
-			PlatinoClient.LOGGER.error("[Cobblemon Platino] No se pudieron guardar las notas", e);
-		}
+		Map<String, String> stored = new LinkedHashMap<>();
+		notes.forEach((id, text) -> stored.put(id.toString(), text));
+		STORE.write(GSON.toJson(stored));
 	}
 
 	public static String get(UUID id) {
-		return id == null ? "" : notes.getOrDefault(id.toString(), "");
+		return id == null ? "" : notes.getOrDefault(id, "");
 	}
 
 	public static boolean has(UUID id) {
-		return id != null && !get(id).isBlank();
+		return id != null && notes.containsKey(id);
 	}
 
 	public static void set(UUID id, String text) {
 		if (id == null) return;
-		if (text == null || text.isBlank()) notes.remove(id.toString());
-		else notes.put(id.toString(), text.strip());
+		if (text == null || text.isBlank()) notes.remove(id);
+		else notes.put(id, text.strip());
 		save();
 	}
 }

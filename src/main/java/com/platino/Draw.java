@@ -17,7 +17,7 @@ public final class Draw {
 	public static final int SILVER_DARK = 0xFF68707C;
 	public static final int GOLD = 0xFFF8C830;
 	public static final int GOLD_DARK = 0xFFB88818;
-	public static final int TEXT_DARK = 0xFF404040;
+	public static final int TEXT_DARK = 0xFF414141;
 	public static final int TEXT_SHADOW = 0xFFC8C8C0;
 	public static final int MALE = 0xFF3088F8;
 	public static final int FEMALE = 0xFFF85888;
@@ -30,36 +30,65 @@ public final class Draw {
 	public static final int EXP_BLUE = 0xFF40A8F8;
 	public static final int EXP_BLUE_HI = 0xFF88D0F8;
 
+	private static final String ELLIPSIS = "…";
+	private static int batchDepth;
+
 	public static TextRenderer font() {
 		return MinecraftClient.getInstance().textRenderer;
 	}
 
+	public static void batch(DrawContext c, Runnable drawing) {
+		if (batchDepth > 0) {
+			drawing.run();
+			return;
+		}
+		batchDepth++;
+		try {
+			c.draw(drawing);
+		} catch (RuntimeException | Error e) {
+			releaseDrawCallback(c);
+			throw e;
+		} finally {
+			batchDepth--;
+		}
+	}
+
+	private static void releaseDrawCallback(DrawContext c) {
+		c.draw(() -> {});
+	}
+
 	/** Rectángulo con esquinas recortadas de 1 px. */
 	public static void round(DrawContext c, int x1, int y1, int x2, int y2, int color) {
-		c.fill(x1 + 1, y1, x2 - 1, y1 + 1, color);
-		c.fill(x1, y1 + 1, x2, y2 - 1, color);
-		c.fill(x1 + 1, y2 - 1, x2 - 1, y2, color);
+		batch(c, () -> {
+			c.fill(x1 + 1, y1, x2 - 1, y1 + 1, color);
+			c.fill(x1, y1 + 1, x2, y2 - 1, color);
+			c.fill(x1 + 1, y2 - 1, x2 - 1, y2, color);
+		});
 	}
 
 	/** Panel con borde oscuro de 1 px y relleno (esquinas de 2 px). */
 	public static void panel(DrawContext c, int x1, int y1, int x2, int y2, int border, int fill) {
-		c.fill(x1 + 2, y1, x2 - 2, y1 + 1, border);
-		c.fill(x1 + 2, y2 - 1, x2 - 2, y2, border);
-		c.fill(x1, y1 + 2, x1 + 1, y2 - 2, border);
-		c.fill(x2 - 1, y1 + 2, x2, y2 - 2, border);
-		c.fill(x1 + 1, y1 + 1, x1 + 2, y1 + 2, border);
-		c.fill(x2 - 2, y1 + 1, x2 - 1, y1 + 2, border);
-		c.fill(x1 + 1, y2 - 2, x1 + 2, y2 - 1, border);
-		c.fill(x2 - 2, y2 - 2, x2 - 1, y2 - 1, border);
-		c.fill(x1 + 2, y1 + 1, x2 - 2, y2 - 1, fill);
-		c.fill(x1 + 1, y1 + 2, x1 + 2, y2 - 2, fill);
-		c.fill(x2 - 2, y1 + 2, x2 - 1, y2 - 2, fill);
+		batch(c, () -> {
+			c.fill(x1 + 2, y1, x2 - 2, y1 + 1, border);
+			c.fill(x1 + 2, y2 - 1, x2 - 2, y2, border);
+			c.fill(x1, y1 + 2, x1 + 1, y2 - 2, border);
+			c.fill(x2 - 1, y1 + 2, x2, y2 - 2, border);
+			c.fill(x1 + 1, y1 + 1, x1 + 2, y1 + 2, border);
+			c.fill(x2 - 2, y1 + 1, x2 - 1, y1 + 2, border);
+			c.fill(x1 + 1, y2 - 2, x1 + 2, y2 - 1, border);
+			c.fill(x2 - 2, y2 - 2, x2 - 1, y2 - 1, border);
+			c.fill(x1 + 2, y1 + 1, x2 - 2, y2 - 1, fill);
+			c.fill(x1 + 1, y1 + 2, x1 + 2, y2 - 2, fill);
+			c.fill(x2 - 2, y1 + 2, x2 - 1, y2 - 2, fill);
+		});
 	}
 
 	/** Panel con degradado vertical. */
 	public static void panelGradient(DrawContext c, int x1, int y1, int x2, int y2, int border, int top, int bottom) {
-		panel(c, x1, y1, x2, y2, border, top);
-		c.fillGradient(x1 + 1, y1 + 2, x2 - 1, y2 - 2, top, bottom);
+		batch(c, () -> {
+			panel(c, x1, y1, x2, y2, border, top);
+			c.fillGradient(x1 + 1, y1 + 2, x2 - 1, y2 - 2, top, bottom);
+		});
 	}
 
 	/** Texto estilo DS: color oscuro con sombra clara desplazada 1 px. */
@@ -86,9 +115,10 @@ public final class Draw {
 	/** Recorta un texto para que quepa en maxW píxeles. */
 	public static String fit(String s, int maxW) {
 		TextRenderer f = font();
-		if (f.getWidth(s) <= maxW) return s;
-		while (s.length() > 1 && f.getWidth(s + "…") > maxW) s = s.substring(0, s.length() - 1);
-		return s + "…";
+		if (s.isEmpty() || f.getWidth(s) <= maxW) return s;
+		String head = f.trimToWidth(s, Math.max(0, maxW - f.getWidth(ELLIPSIS)));
+		if (head.isEmpty()) head = s.substring(0, Character.charCount(s.codePointAt(0)));
+		return head + ELLIPSIS;
 	}
 
 	/** Barra de PS estilo Platino con etiqueta "PS". */
@@ -100,10 +130,14 @@ public final class Draw {
 			c.drawText(font(), "PS", x + 2, y, GOLD, false);
 			bx = x + 14;
 		}
-		int bw = w - (bx - x);
+		int barX = bx;
+		float clamped = Math.max(0, Math.min(1, ratio));
+		batch(c, () -> drawHpFill(c, barX, y, w - (barX - x), clamped));
+	}
+
+	private static void drawHpFill(DrawContext c, int bx, int y, int bw, float ratio) {
 		round(c, bx, y, bx + bw, y + 7, OUTLINE);
 		c.fill(bx + 1, y + 1, bx + bw - 1, y + 6, 0xFF505858);
-		ratio = Math.max(0, Math.min(1, ratio));
 		int fillW = Math.round((bw - 2) * ratio);
 		if (ratio > 0 && fillW < 1) fillW = 1;
 		int col, hi;
@@ -117,13 +151,15 @@ public final class Draw {
 	}
 
 	public static void expBar(DrawContext c, int x, int y, int w, float ratio) {
-		c.fill(x, y, x + w, y + 3, OUTLINE);
-		c.fill(x + 1, y + 1, x + w - 1, y + 2, 0xFF505858);
-		ratio = Math.max(0, Math.min(1, ratio));
-		int fw = Math.round((w - 2) * ratio);
-		if (fw > 0) {
-			c.fill(x + 1, y + 1, x + 1 + fw, y + 2, EXP_BLUE);
-		}
+		float clamped = Math.max(0, Math.min(1, ratio));
+		batch(c, () -> {
+			c.fill(x, y, x + w, y + 3, OUTLINE);
+			c.fill(x + 1, y + 1, x + w - 1, y + 2, 0xFF505858);
+			int fw = Math.round((w - 2) * clamped);
+			if (fw > 0) {
+				c.fill(x + 1, y + 1, x + 1 + fw, y + 2, EXP_BLUE);
+			}
+		});
 	}
 
 	/** Insignia de estado alterado (PAR, QUE, ENV, DOR, CON). */
@@ -147,12 +183,14 @@ public final class Draw {
 
 	/** Pokéball diminuta (indicador de capturado). */
 	public static void tinyBall(DrawContext c, int x, int y) {
-		c.fill(x + 1, y, x + 6, y + 1, OUTLINE);
-		c.fill(x, y + 1, x + 7, y + 6, OUTLINE);
-		c.fill(x + 1, y + 6, x + 6, y + 7, OUTLINE);
-		c.fill(x + 1, y + 1, x + 6, y + 3, 0xFFE83030);
-		c.fill(x + 1, y + 4, x + 6, y + 6, 0xFFF8F8F8);
-		c.fill(x + 3, y + 3, x + 4, y + 4, 0xFFF8F8F8);
+		batch(c, () -> {
+			c.fill(x + 1, y, x + 6, y + 1, OUTLINE);
+			c.fill(x, y + 1, x + 7, y + 6, OUTLINE);
+			c.fill(x + 1, y + 6, x + 6, y + 7, OUTLINE);
+			c.fill(x + 1, y + 1, x + 6, y + 3, 0xFFE83030);
+			c.fill(x + 1, y + 4, x + 6, y + 6, 0xFFF8F8F8);
+			c.fill(x + 3, y + 3, x + 4, y + 4, 0xFFF8F8F8);
+		});
 	}
 
 	public static int lerpColor(int a, int b, float t) {
