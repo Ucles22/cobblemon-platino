@@ -151,6 +151,18 @@ public class PlatinoClient implements ClientModInitializer {
 				pendingCard = 2;
 				return 1;
 			}));
+			root.then(ClientCommandManager.literal("debug").then(ClientCommandManager.literal("marcador").executes(ctx -> {
+				var lines = ServerStats.debugLines();
+				ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino] Marcador DiosesMon: " + lines.size() + " líneas"));
+				for (String l : lines) {
+					ctx.getSource().sendFeedback(Text.literal(" · " + l));
+					LOGGER.info("[Cobblemon Platino] marcador: {}", l);
+				}
+				ServerStats.update();
+				ctx.getSource().sendFeedback(Text.literal("→ dinero=" + ServerStats.money + " coins=" + ServerStats.coins
+						+ " puntos=" + ServerStats.points + " clan=" + ServerStats.clan));
+				return 1;
+			})));
 			root.executes(ctx -> {
 				ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino " + version() + "] /platino ficha · combate · paleta · recargar"));
 				return 1;

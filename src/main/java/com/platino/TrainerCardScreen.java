@@ -113,8 +113,12 @@ public class TrainerCardScreen extends Screen {
 
 		int fx1 = x + 176, fy1 = y + 22, fx2 = x + CW - 10, fy2 = y + 122;
 		Draw.panel(c, fx1, fy1, fx2, fy2, 0xFFF8B8B8, 0x50FFFFFF);
+		c.fill(fx1 + 8, fy2 - 10, fx2 - 8, fy2 - 6, 0x30000000);
+		c.draw();
+		// El muñeco se dibuja dentro de la capa de la tarjeta para quedar por delante
+		c.getMatrices().translate(0, 0, 150);
+		InventoryScreen.drawEntity(c, fx1 + 2, fy1 + 2, fx2 - 2, fy2 - 4, 44, 0.0625f, mouseX, mouseY, mc.player);
 		c.getMatrices().pop();
-		InventoryScreen.drawEntity(c, fx1 + 2, fy1 + 2, fx2 - 2, fy2 - 2, 42, 0.0625f, mouseX, mouseY, mc.player);
 	}
 
 	private void row(DrawContext c, int x1, int x2, int y, String label, String value) {
