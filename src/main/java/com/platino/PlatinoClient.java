@@ -4,6 +4,8 @@ import com.cobblemon.mod.common.client.CobblemonClient;
 import com.cobblemon.mod.common.client.gui.summary.Summary;
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
+import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
@@ -46,8 +48,9 @@ public class PlatinoClient implements ClientModInitializer {
 				InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_K, "category.cobbleplatino"));
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (cardKey.wasPressed()) {
-				if (client.currentScreen == null) client.setScreen(new TrainerCardScreen());
+				if (client.currentScreen == null) openCard();
 			}
+			if (pendingCard > 0 && --pendingCard == 0) openCard();
 		});
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (notesKey.wasPressed()) {
@@ -144,10 +147,14 @@ public class PlatinoClient implements ClientModInitializer {
 					})));
 			root.then(combate);
 			root.then(ClientCommandManager.literal("ficha").executes(ctx -> {
-				MinecraftClient mc = MinecraftClient.getInstance();
-				mc.send(() -> mc.setScreen(new TrainerCardScreen()));
+				// Se abre 2 ticks después, cuando el chat ya se ha cerrado
+				pendingCard = 2;
 				return 1;
 			}));
+			root.executes(ctx -> {
+				ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino " + version() + "] /platino ficha · combate · paleta · recargar"));
+				return 1;
+			});
 			dispatcher.register(root.then(pal).then(ClientCommandManager.literal("recargar").executes(ctx -> {
 				PlatinoConfig.load();
 				ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino] Configuración recargada."));
@@ -155,7 +162,31 @@ public class PlatinoClient implements ClientModInitializer {
 			})));
 		});
 
-		LOGGER.info("[Cobblemon Platino] Cargado");
+		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> client.execute(() -> {
+			if (client.player != null) {
+				client.player.sendMessage(Text.literal("§6[Cobblemon Platino " + version() + "]§f K = Ficha de Entrenador · N = Notas"
+						+ (DiosesmonBridge.isPresent() ? " · marcador DiosesMon OK" : "")), false);
+			}
+		}));
+
+		LOGGER.info("[Cobblemon Platino] Cargado " + version());
+	}
+
+	private static int pendingCard = 0;
+
+	private static void openCard() {
+		MinecraftClient mc = MinecraftClient.getInstance();
+		try {
+			mc.setScreen(new TrainerCardScreen());
+		} catch (Throwable t) {
+			LOGGER.error("[Cobblemon Platino] No se pudo abrir la Ficha", t);
+			if (mc.player != null) mc.player.sendMessage(Text.literal("§c[Cobblemon Platino] Error al abrir la Ficha: " + t), false);
+		}
+	}
+
+	public static String version() {
+		return FabricLoader.getInstance().getModContainer(MOD_ID)
+				.map(m -> m.getMetadata().getVersion().getFriendlyString()).orElse("?");
 	}
 
 	public static Pokemon selectedPartyPokemon() {
