@@ -13,6 +13,7 @@ import net.fabricmc.fabric.api.client.screen.v1.ScreenKeyboardEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.resource.ResourceType;
+import com.mojang.brigadier.arguments.FloatArgumentType;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.TextFieldWidget;
@@ -117,6 +118,22 @@ public class PlatinoClient implements ClientModInitializer {
 				}
 				combate.then(node);
 			}
+			for (String side : new String[]{"izquierda", "derecha"}) {
+				combate.then(ClientCommandManager.literal("posicion").then(ClientCommandManager.literal(side).executes(ctx -> {
+					PlatinoConfig.get().battleMenuSide = side;
+					PlatinoConfig.save();
+					ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino] Menú de combate a la " + side));
+					return 1;
+				})));
+			}
+			combate.then(ClientCommandManager.literal("tamano").then(ClientCommandManager
+					.argument("escala", FloatArgumentType.floatArg(0.5f, 1.5f)).executes(ctx -> {
+						PlatinoConfig.get().battleMenuScale = FloatArgumentType.getFloat(ctx, "escala");
+						PlatinoConfig.save();
+						ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino] Tamaño del menú: "
+								+ PlatinoConfig.get().battleMenuScale));
+						return 1;
+					})));
 			root.then(combate);
 			dispatcher.register(root.then(pal).then(ClientCommandManager.literal("recargar").executes(ctx -> {
 				PlatinoConfig.load();

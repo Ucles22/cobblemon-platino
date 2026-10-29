@@ -7,6 +7,7 @@ import com.cobblemon.mod.common.client.storage.ClientParty;
 import com.cobblemon.mod.common.pokemon.Gender;
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.cobblemon.mod.common.pokemon.status.PersistentStatus;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 
@@ -30,6 +31,18 @@ public final class BattleHud {
 								String dexState, boolean hasCommand, boolean hovered) {
 		ClientBattlePokemon bp = active.getBattlePokemon();
 		if (bp == null) return;
+		float[] prev = RenderSystem.getShaderColor().clone();
+		RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
+		try {
+			drawTileInner(c, bp, active, ally, rank, dexState, hasCommand, hovered);
+		} finally {
+			c.draw();
+			RenderSystem.setShaderColor(prev[0], prev[1], prev[2], prev[3]);
+		}
+	}
+
+	private static void drawTileInner(DrawContext c, ClientBattlePokemon bp, ActiveClientBattlePokemon active, boolean ally,
+									  int rank, String dexState, boolean hasCommand, boolean hovered) {
 		MinecraftClient mc = MinecraftClient.getInstance();
 		PlatinoConfig cfg = PlatinoConfig.get();
 		int sw = mc.getWindow().getScaledWidth();
@@ -38,7 +51,7 @@ public final class BattleHud {
 		int h = ally ? 42 : 31;
 		int x, y;
 		if (ally) {
-			x = sw - W - 10 + cfg.allyOffsetX;
+			x = sw - W - 46 + cfg.allyOffsetX;
 			y = (int) (sh * 0.52f) + rank * (h + 4) - cfg.allyOffsetY;
 		} else {
 			x = 10 + cfg.foeOffsetX;
@@ -72,7 +85,7 @@ public final class BattleHud {
 		int ix = x + (ally ? 6 : 5);
 		// Nombre + sexo
 		String name = Draw.fit(bp.getDisplayName().getString(), W - 52);
-		Draw.dsText(c, name, ix, y + 4, Draw.TEXT_DARK, Draw.TEXT_SHADOW);
+		Draw.dsText(c, name, ix, y + 4, 0xFF303030, Draw.TEXT_SHADOW);
 		int gx = ix + Draw.width(name) + 2;
 		Gender g = bp.getGender();
 		if (g == Gender.MALE) Draw.dsText(c, "♂", gx, y + 4, Draw.MALE, 0xFFA8C8F8);

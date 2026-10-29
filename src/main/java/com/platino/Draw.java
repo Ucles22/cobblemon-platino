@@ -65,15 +65,18 @@ public final class Draw {
 	/** Texto estilo DS: color oscuro con sombra clara desplazada 1 px. */
 	public static void dsText(DrawContext c, String s, int x, int y, int color, int shadow) {
 		TextRenderer f = font();
+		c.draw();
 		c.drawText(f, s, x + 1, y + 1, shadow, false);
+		c.draw();
+		c.getMatrices().push();
+		c.getMatrices().translate(0, 0, 0.5f);
 		c.drawText(f, s, x, y, color, false);
+		c.getMatrices().pop();
+		c.draw();
 	}
 
 	public static void dsText(DrawContext c, Text t, int x, int y, int color, int shadow) {
-		TextRenderer f = font();
-		String s = t.getString();
-		c.drawText(f, s, x + 1, y + 1, shadow, false);
-		c.drawText(f, s, x, y, color, false);
+		dsText(c, t.getString(), x, y, color, shadow);
 	}
 
 	public static int width(String s) {

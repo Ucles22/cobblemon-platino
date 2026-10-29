@@ -75,12 +75,20 @@ public final class DsTextBox {
 			promptShown = null;
 		}
 
-		// Geometría: abajo a la izquierda, sin pisar el menú DS
+		// Geometría: al lado del menú DS si está visible; si no, centrado sobre la barra rápida
 		int boxH = 38;
-		int right = DsBattleMenu.isActive() && PlatinoConfig.get().battleMenu ? sw - DsBattleMenu.W - 16 : sw - 8;
-		int w = Math.min(300, right - 8);
-		int x = DsBattleMenu.isActive() ? 8 : (sw - w) / 2;
-		int y = sh - boxH - (DsBattleMenu.isActive() ? 8 : 26);
+		int x, y, w;
+		if (DsBattleMenu.isActive() && PlatinoConfig.get().battleMenu) {
+			float[] b = DsBattleMenu.bounds();
+			boolean menuLeft = b[0] < sw / 2f;
+			w = Math.min(300, (int) (menuLeft ? sw - b[2] - 16 : b[0] - 16));
+			x = menuLeft ? (int) b[2] + 8 : (int) b[0] - 8 - w;
+			y = (int) b[3] - boxH;
+		} else {
+			w = Math.min(300, sw - 16);
+			x = (sw - w) / 2;
+			y = sh - boxH - 26;
+		}
 
 		c.getMatrices().push();
 		c.getMatrices().translate(0, 0, 300);

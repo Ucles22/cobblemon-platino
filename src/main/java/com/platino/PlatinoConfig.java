@@ -21,6 +21,11 @@ public class PlatinoConfig {
 	public boolean battleMenu = true;
 	/** Cuadro de texto de combate estilo DS. /platino combate texto on|off */
 	public boolean battleText = true;
+	/** Posición del menú DS: "izquierda" o "derecha". Tamaño: 0.5 - 1.5. */
+	public String battleMenuSide = "izquierda";
+	public float battleMenuScale = 0.8f;
+	public int battleMenuOffsetX = 0;
+	public int battleMenuOffsetY = 0;
 	/** Barra de equipo estilo Platino (sustituye la de Cobblemon). */
 	public boolean partyHud = true;
 	/** Inventario de Minecraft estilo Platino. */

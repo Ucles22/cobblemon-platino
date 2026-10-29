@@ -10,7 +10,9 @@ import net.minecraft.sound.SoundEvents;
 /** Menú de combate estilo pantalla táctil de Diamante/Perla/Platino: LUCHAR, BOLSA, HUIR, POKéMON. */
 public final class DsBattleMenu {
 	public static final int W = 176, H = 112;
-	private static int px, py;
+	/** Origen y escala en pantalla; todo se dibuja en coordenadas locales (0..W, 0..H). */
+	private static float ox, oy, scale = 1f;
+	private static final int px = 0, py = 0;
 	private static long lastRender;
 
 	private DsBattleMenu() {}
@@ -30,7 +32,8 @@ public final class DsBattleMenu {
 		}
 
 		boolean hit(double mx, double my) {
-			return mx >= px + x1 && mx < px + x2 && my >= py + y1 && my < py + y2;
+			double lx = (mx - ox) / scale, ly = (my - oy) / scale;
+			return lx >= x1 && lx < x2 && ly >= y1 && ly < y2;
 		}
 	}
 
@@ -40,8 +43,18 @@ public final class DsBattleMenu {
 
 	private static void layout() {
 		var win = MinecraftClient.getInstance().getWindow();
-		px = win.getScaledWidth() - W - 8;
-		py = win.getScaledHeight() - H - 8;
+		PlatinoConfig cfg = PlatinoConfig.get();
+		scale = Math.max(0.5f, Math.min(1.5f, cfg.battleMenuScale));
+		float w = W * scale, h = H * scale;
+		boolean left = !"derecha".equalsIgnoreCase(cfg.battleMenuSide);
+		ox = left ? 8 + cfg.battleMenuOffsetX : win.getScaledWidth() - w - 8 + cfg.battleMenuOffsetX;
+		oy = win.getScaledHeight() - h - 6 - cfg.battleMenuOffsetY;
+	}
+
+	/** Rectángulo que ocupa el menú en pantalla: {x1, y1, x2, y2}. */
+	public static float[] bounds() {
+		layout();
+		return new float[]{ox, oy, ox + W * scale, oy + H * scale};
 	}
 
 	private static BattleOptionTile tile(BattleGeneralActionSelection sel, Btn b) {
@@ -61,7 +74,8 @@ public final class DsBattleMenu {
 		layout();
 		lastRender = System.currentTimeMillis();
 		c.getMatrices().push();
-		c.getMatrices().translate(0, 0, 300);
+		c.getMatrices().translate(ox, oy, 300);
+		c.getMatrices().scale(scale, scale, 1f);
 
 		// Fondo gris con banda blanca superior y Pokéball
 		Draw.round(c, px + 3, py + 3, px + W + 3, py + H + 3, 0x60000000);
