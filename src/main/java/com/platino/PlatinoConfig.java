@@ -17,6 +17,10 @@ public class PlatinoConfig {
 
 	/** Cajas de vida estilo Platino en combate. */
 	public boolean battleHud = true;
+	/** Menú LUCHAR/BOLSA/HUIR/POKéMON estilo DS. /platino combate menu on|off */
+	public boolean battleMenu = true;
+	/** Cuadro de texto de combate estilo DS. /platino combate texto on|off */
+	public boolean battleText = true;
 	/** Barra de equipo estilo Platino (sustituye la de Cobblemon). */
 	public boolean partyHud = true;
 	/** Inventario de Minecraft estilo Platino. */

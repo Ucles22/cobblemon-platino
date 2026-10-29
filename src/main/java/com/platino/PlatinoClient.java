@@ -100,6 +100,24 @@ public class PlatinoClient implements ClientModInitializer {
 					return 1;
 				}));
 			}
+			var combate = ClientCommandManager.literal("combate");
+			for (String part : new String[]{"menu", "texto"}) {
+				var node = ClientCommandManager.literal(part);
+				for (String state : new String[]{"on", "off"}) {
+					node.then(ClientCommandManager.literal(state).executes(ctx -> {
+						boolean on = state.equals("on");
+						if (part.equals("menu")) PlatinoConfig.get().battleMenu = on;
+						else PlatinoConfig.get().battleText = on;
+						PlatinoConfig.save();
+						ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino] "
+								+ (part.equals("menu") ? "Menú de combate DS" : "Cuadro de texto DS")
+								+ (on ? " ACTIVADO" : " DESACTIVADO")));
+						return 1;
+					}));
+				}
+				combate.then(node);
+			}
+			root.then(combate);
 			dispatcher.register(root.then(pal).then(ClientCommandManager.literal("recargar").executes(ctx -> {
 				PlatinoConfig.load();
 				ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino] Configuración recargada."));
