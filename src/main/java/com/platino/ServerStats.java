@@ -78,15 +78,13 @@ public final class ServerStats {
 				if (n.find()) numeric.add((r.indexOf(COIN_GLYPH) >= 0 ? "C" : "N") + n.group(1));
 			}
 		}
-		// Plan B por orden: DINERO, DIOSESCOINS (lleva el icono de moneda), PUNTOS BATALLA
-		if (m == null || p == null) {
-			List<String> plain = new ArrayList<>();
-			for (String v : numeric) {
-				if (v.charAt(0) == 'C') { if (co == null) co = v.substring(1); }
-				else plain.add(v.substring(1));
-			}
-			if (m == null && !plain.isEmpty()) m = plain.get(0);
-			if (p == null && plain.size() >= 2) p = plain.get(1);
+		// Plan B por orden del marcador: 1º DINERO, 2º DIOSESCOINS, 3º PUNTOS BATALLA
+		if (m == null || co == null || p == null) {
+			List<String> nums = new ArrayList<>();
+			for (String v : numeric) nums.add(v.substring(1));
+			if (m == null && nums.size() >= 1) m = nums.get(0);
+			if (co == null && nums.size() >= 2) co = nums.get(1);
+			if (p == null && nums.size() >= 3) p = nums.get(2);
 		}
 		if (m != null) money = m;
 		if (co != null) coins = co;
