@@ -32,6 +32,7 @@ public class PlatinoClient implements ClientModInitializer {
 	public static final String MOD_ID = "cobbleplatino";
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	private static KeyBinding notesKey;
+	private static KeyBinding cardKey;
 
 	@Override
 	public void onInitializeClient() {
@@ -41,6 +42,13 @@ public class PlatinoClient implements ClientModInitializer {
 
 		notesKey = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.cobbleplatino.notes",
 				InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_N, "category.cobbleplatino"));
+		cardKey = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.cobbleplatino.card",
+				InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_K, "category.cobbleplatino"));
+		ClientTickEvents.END_CLIENT_TICK.register(client -> {
+			while (cardKey.wasPressed()) {
+				if (client.currentScreen == null) client.setScreen(new TrainerCardScreen());
+			}
+		});
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (notesKey.wasPressed()) {
 				if (client.currentScreen != null) continue;
@@ -135,6 +143,11 @@ public class PlatinoClient implements ClientModInitializer {
 						return 1;
 					})));
 			root.then(combate);
+			root.then(ClientCommandManager.literal("ficha").executes(ctx -> {
+				MinecraftClient mc = MinecraftClient.getInstance();
+				mc.send(() -> mc.setScreen(new TrainerCardScreen()));
+				return 1;
+			}));
 			dispatcher.register(root.then(pal).then(ClientCommandManager.literal("recargar").executes(ctx -> {
 				PlatinoConfig.load();
 				ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino] Configuración recargada."));

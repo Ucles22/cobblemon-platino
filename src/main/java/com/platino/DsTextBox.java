@@ -20,7 +20,16 @@ public final class DsTextBox {
 	private static String promptShown;
 	private static long promptStart;
 
+	private static String flashText;
+	private static long flashStart;
+
 	private DsTextBox() {}
+
+	/** Muestra un aviso temporal en el cuadro (p. ej. "¡No puedes usar la BOLSA!"). */
+	public static void flash(String text) {
+		flashText = text;
+		flashStart = System.currentTimeMillis();
+	}
 
 	private static String plain(OrderedText t) {
 		StringBuilder sb = new StringBuilder();
@@ -100,7 +109,10 @@ public final class DsTextBox {
 
 		int tx = x + 9, maxW = w - 22;
 		int textCol = a | 0x484848, shadowCol = a | 0xD0D0C8;
-		if (promptShown != null) {
+		if (flashText != null && now - flashStart < 2200) {
+			int fc = (int) Math.min(flashText.length(), (now - flashStart) * CPS / 1000);
+			drawLine(c, flashText.substring(0, fc), tx, y + 9, maxW, textCol, shadowCol);
+		} else if (promptShown != null) {
 			int pc = (int) Math.min(promptShown.length(), (now - promptStart) * CPS / 1000);
 			drawLine(c, promptShown.substring(0, pc), tx, y + 9, maxW, textCol, shadowCol);
 		} else {
