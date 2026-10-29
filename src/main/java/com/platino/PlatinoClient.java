@@ -108,7 +108,7 @@ public class PlatinoClient implements ClientModInitializer {
 					PlatinoConfig.get().screensTheme = !name.equals("original");
 					PlatinoConfig.save();
 					ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino] Paleta: " + name + " (recargando texturas…)"));
-					MinecraftClient.getInstance().reloadResources();
+					ScreenRecolor.reapply();
 					return 1;
 				}));
 			}
@@ -168,18 +168,19 @@ public class PlatinoClient implements ClientModInitializer {
 				return 1;
 			});
 			dispatcher.register(root.then(pal).then(ClientCommandManager.literal("recargar").executes(ctx -> {
-				PlatinoConfig.load();
-				ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino] Configuración recargada."));
+				PlatinoConfig.reload(() -> ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino] Configuración recargada.")));
 				return 1;
 			})));
 		});
 
 		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> client.execute(() -> {
+			ServerStats.reset();
 			if (client.player != null) {
 				client.player.sendMessage(Text.literal("§6[Cobblemon Platino " + version() + "]§f K = Ficha de Entrenador · N = Notas"
 						+ (DiosesmonBridge.isPresent() ? " · marcador DiosesMon OK" : "")), false);
 			}
 		}));
+		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> client.execute(ServerStats::reset));
 
 		LOGGER.info("[Cobblemon Platino] Cargado " + version());
 	}

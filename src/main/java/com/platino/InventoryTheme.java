@@ -13,6 +13,10 @@ public final class InventoryTheme {
 	private InventoryTheme() {}
 
 	public static void drawBackground(DrawContext c, ScreenHandler handler, int x, int y, int w, int h, Layout layout) {
+		Draw.batch(c, () -> drawBackgroundFills(c, handler, x, y, w, h, layout));
+	}
+
+	private static void drawBackgroundFills(DrawContext c, ScreenHandler handler, int x, int y, int w, int h, Layout layout) {
 		// Sombra y marco
 		Draw.round(c, x + 3, y + 3, x + w + 3, y + h + 3, 0x70000000);
 		Draw.panelGradient(c, x, y, x + w, y + h, Draw.OUTLINE, 0xFFD8E0EC, 0xFF98A8C0);
