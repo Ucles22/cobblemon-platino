@@ -37,3 +37,7 @@ if [ -n "$CJAR" ] && [ -f "$CJAR" ]; then
   javap -p -c -constants -cp "$CJAR" com.cobblemon.mod.common.client.gui.summary.Summary | awk '/ (init|mouseClicked|keyPressed)\(/{f=1} f{print} f&&/^$/{f=0}' | grep -E '^  [a-z]|BASE|width|height|invoke' > inspect/summary-methods.txt 2>&1
   javap -cp "$CJAR" com.cobblemon.mod.common.client.gui.summary.widgets.NicknameEntryWidget | head -3 >> inspect/summary-methods.txt
 fi
+# --- Cuarta ronda: Pokédex del cliente
+if [ -n "$CJAR" ] && [ -f "$CJAR" ]; then
+  for c in com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager com.cobblemon.mod.common.api.pokedex.AbstractPokedexManager com.cobblemon.mod.common.api.pokedex.SpeciesDexRecord com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress; do echo "==== $c"; javap -p -cp "$CJAR" "$c" 2>&1 | grep -v 'lambda\|access\$'; done > inspect/pokedex.txt
+fi
