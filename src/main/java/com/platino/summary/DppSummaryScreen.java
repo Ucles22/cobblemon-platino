@@ -216,7 +216,7 @@ public class DppSummaryScreen extends Screen {
 			case SKILLS -> drawSkills(c, p, rx, ry, rw, rh);
 			case MOVES -> drawMoves(c, p, rx, ry, rw, rh, mouseX, mouseY);
 			case STATS -> drawStatsPage(c, p, rx, ry, rw);
-			case MARKS -> drawMarks(c, p, rx, ry, rw, rh);
+			case MARKS -> drawMarks(c, p, rx, ry, rw, rh, mouseX, mouseY);
 		}
 		if (page == Page.MOVES && swapSlot >= 0) drawSwapList(c, p, rx, ry, rw, rh, mouseX, mouseY);
 		if (toast != null && System.currentTimeMillis() < toastUntil) {
@@ -623,7 +623,7 @@ public class DppSummaryScreen extends Screen {
 		if (fw > 0) c.fill(x + 1, y + 1, x + 1 + fw, y + 3, color);
 	}
 
-	private void drawMarks(DrawContext c, Pokemon p, int x, int y, int w, int h) {
+	private void drawMarks(DrawContext c, Pokemon p, int x, int y, int w, int h, int mx, int my) {
 		List<Object> marks = new ArrayList<>();
 		try {
 			marks.addAll(p.getMarks());
@@ -634,16 +634,48 @@ public class DppSummaryScreen extends Screen {
 			return;
 		}
 		int cols = 4, cell = (w - 16) / cols;
+		Object hovered = null;
 		for (int i = 0; i < Math.min(marks.size(), 12); i++) {
 			int cx = x + 8 + (i % cols) * cell, cy = y + 8 + (i / cols) * 44;
-			Draw.round(c, cx + 2, cy, cx + cell - 2, cy + 40, 0xFFFFF0FA);
 			Object mark = marks.get(i);
+			boolean over = mx >= cx + 2 && mx < cx + cell - 2 && my >= cy && my < cy + 40;
+			if (over) hovered = mark;
+			Draw.round(c, cx + 2, cy, cx + cell - 2, cy + 40, over ? 0xFFF8D0EC : 0xFFFFF0FA);
 			Identifier tex = markTexture(mark);
 			if (tex != null) c.drawTexture(tex, cx + cell / 2 - 12, cy + 4, 24, 24, 0f, 0f, 1, 1, 1, 1);
 			String name = Draw.fit(markName(mark), cell - 6);
 			c.drawText(textRenderer, name, cx + cell / 2 - textRenderer.getWidth(name) / 2, cy + 30, 0xFF604050, false);
 		}
 		if (marks.size() > 12) Draw.dsText(c, "+" + (marks.size() - 12) + " más", x + w - 60, y + h - 14, 0xFF804070, 0xFFF8E0F0);
+		if (hovered != null) {
+			List<Text> tip = new ArrayList<>();
+			tip.add(Text.literal(markName(hovered)));
+			String desc = markText(hovered, "getDescription");
+			if (desc != null && !desc.isBlank()) {
+				for (OrderedText line : textRenderer.wrapLines(StringVisitable.plain(desc), 180)) {
+					StringBuilder sb = new StringBuilder();
+					line.accept((idx, style, cp) -> {
+						sb.appendCodePoint(cp);
+						return true;
+					});
+					tip.add(Text.literal(sb.toString()).formatted(net.minecraft.util.Formatting.GRAY));
+				}
+			}
+			c.getMatrices().push();
+			c.getMatrices().translate(0, 0, 300);
+			c.drawTooltip(textRenderer, tip, mx, my);
+			c.getMatrices().pop();
+		}
+	}
+
+	private static String markText(Object mark, String method) {
+		try {
+			Object o = mark.getClass().getMethod(method).invoke(mark);
+			if (o instanceof Text t) return t.getString();
+			if (o instanceof String str) return Text.translatable(str).getString();
+		} catch (Throwable ignored) {
+		}
+		return null;
 	}
 
 	private static Identifier markTexture(Object mark) {
