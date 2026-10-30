@@ -41,3 +41,18 @@ fi
 if [ -n "$CJAR" ] && [ -f "$CJAR" ]; then
   for c in com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager com.cobblemon.mod.common.api.pokedex.AbstractPokedexManager com.cobblemon.mod.common.api.pokedex.SpeciesDexRecord com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress; do echo "==== $c"; javap -p -cp "$CJAR" "$c" 2>&1 | grep -v 'lambda\|access\$'; done > inspect/pokedex.txt
 fi
+# --- Quinta ronda: abrir Resumen y Pokédex
+if [ -n "$CJAR" ] && [ -f "$CJAR" ]; then
+  { javap -p -cp "$CJAR" 'com.cobblemon.mod.common.client.gui.summary.Summary$Companion';
+    grep -i 'gui/pokedex/PokedexGUI' inspect/cobblemon-files.txt;
+    javap -p -cp "$CJAR" 'com.cobblemon.mod.common.client.gui.pokedex.PokedexGUI$Companion';
+    javap -p -cp "$CJAR" com.cobblemon.mod.common.client.gui.pokedex.PokedexGUI | head -20;
+    grep -iE 'pokedex.*(Type|Types)\.class' inspect/cobblemon-files.txt | head;
+    javap -p -cp "$CJAR" com.cobblemon.mod.common.item.PokedexItem 2>&1 | head -30;
+    javap -p -cp "$CJAR" com.cobblemon.mod.common.api.item.PokedexType 2>&1 | head -30;
+  } > inspect/open-screens.txt 2>&1
+fi
+if [ -n "$MJAR" ] && [ -f "$MJAR" ]; then
+  javap -p -cp "$MJAR" net.minecraft.client.MinecraftClient | grep -iE 'openGameMenu|setScreen' > inspect/mc-menu.txt
+  javap -p -cp "$MJAR" net.minecraft.client.gui.screen.Screen | grep -iE 'getTooltipFromItem' >> inspect/mc-menu.txt
+fi
