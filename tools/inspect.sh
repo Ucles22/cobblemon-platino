@@ -87,3 +87,7 @@ if [ -n "$CJAR" ] && [ -f "$CJAR" ]; then
     javap -p -c -constants -cp "$CJAR" com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget | awk '/renderPKM|renderWidget/{f=1} f' | grep -E '^  [a-z]|ldc|bipush|sipush|fconst|dconst|getstatic|invoke' | head -90;
   } > inspect/model-widget.txt 2>&1
 fi
+if [ -n "$CJAR" ] && [ -f "$CJAR" ]; then
+  javap -p -c -constants -cp "$CJAR" com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget | awk '/private final void renderPKM/{f=1} f' | sed -n '1,120p' > inspect/model-widget-full.txt
+  javap -p -c -constants -cp "$CJAR" com.cobblemon.mod.common.client.gui.summary.Summary | grep -B12 'ModelWidget."<init>"' | head -40 >> inspect/model-widget-full.txt
+fi
