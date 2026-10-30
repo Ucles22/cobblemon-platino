@@ -118,3 +118,15 @@ if [ -n "$CJAR" ] && [ -f "$CJAR" ]; then
   { for c in com.cobblemon.mod.common.pokemon.Pokemon; do javap -p -cp "$CJAR" "$c" | grep -E 'public final .* (getIvs|getEvs|getNature|getMintedNature|getEffectiveNature|getMoveSet|getAbility|getStat|getAttack|getDefence|getSpecialAttack|getSpecialDefence|getSpeed|getTypes|getPrimaryType|getSecondaryType)\('; done; } >> inspect/calc-api.txt 2>&1
   grep -E 'item/(held|battle)/|HeldItem|ChoiceItem|item/.*(Band|Specs|Orb|Belt|Vest|Eviolite)' inspect/cobblemon-files.txt | grep class | head -30 >> inspect/calc-api.txt
 fi
+# --- Duodécima ronda: paquetes para cambiar movimientos y orden del equipo
+if [ -n "$CJAR" ] && [ -f "$CJAR" ]; then
+  { for c in com.cobblemon.mod.common.net.messages.server.storage.party.SwapPartyPokemonPacket com.cobblemon.mod.common.net.messages.server.storage.party.MovePartyPokemonPacket \
+           com.cobblemon.mod.common.net.messages.server.RequestMoveSwapPacket com.cobblemon.mod.common.net.messages.server.BenchMovePacket \
+           com.cobblemon.mod.common.api.moves.BenchedMoves com.cobblemon.mod.common.api.moves.BenchedMove com.cobblemon.mod.common.api.storage.party.PartyPosition \
+           com.cobblemon.mod.common.api.net.NetworkPacket com.cobblemon.mod.common.CobblemonNetwork com.cobblemon.mod.common.client.storage.ClientParty com.cobblemon.mod.common.client.storage.ClientStorage; do
+      echo "==== $c"; javap -p -cp "$CJAR" "$c" 2>&1 | grep -vE 'lambda|access\$' | head -50; done
+    echo "==== summary bytecode (packets)"
+    for c in $(grep -E '^com/cobblemon/mod/common/client/gui/summary/.*\.class$' inspect/cobblemon-files.txt | sed 's/\.class$//' | tr '/' '.'); do
+      javap -p -c -cp "$CJAR" "$c" 2>/dev/null | grep -E '^  [a-z].*\(|Packet|sendToServer|PartyPosition' | grep -B1 -E 'Packet|PartyPosition' | sed "s/^/$c: /"; done
+  } > inspect/move-party-api.txt 2>&1
+fi
