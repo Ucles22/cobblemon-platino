@@ -24,6 +24,7 @@ import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Text;
+import net.minecraft.util.Hand;
 import org.lwjgl.glfw.GLFW;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,6 +62,10 @@ public class PlatinoClient implements ClientModInitializer {
 				if (client.currentScreen == null) client.setScreen(new BagScreen());
 			}
 			LowHpAlarm.tick(client);
+			if (pendingUse > 0 && --pendingUse == 0 && client.currentScreen == null
+					&& client.player != null && client.interactionManager != null) {
+				client.interactionManager.interactItem(client.player, Hand.MAIN_HAND);
+			}
 			if (pendingBag > 0 && --pendingBag == 0) client.setScreen(new BagScreen());
 		});
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
@@ -137,17 +142,18 @@ public class PlatinoClient implements ClientModInitializer {
 				}));
 			}
 			var combate = ClientCommandManager.literal("combate");
-			for (String part : new String[]{"menu", "texto", "pitido"}) {
+			for (String part : new String[]{"menu", "texto", "pitido", "bolsa"}) {
 				var node = ClientCommandManager.literal(part);
 				for (String state : new String[]{"on", "off"}) {
 					node.then(ClientCommandManager.literal(state).executes(ctx -> {
 						boolean on = state.equals("on");
 						if (part.equals("menu")) PlatinoConfig.get().battleMenu = on;
 						else if (part.equals("texto")) PlatinoConfig.get().battleText = on;
+						else if (part.equals("bolsa")) PlatinoConfig.get().battleBag = on;
 						else PlatinoConfig.get().lowHpBeep = on;
 						PlatinoConfig.save();
 						ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino] "
-								+ (part.equals("menu") ? "Menú de combate DS" : part.equals("texto") ? "Cuadro de texto DS" : "Pitido de vida baja")
+								+ (part.equals("menu") ? "Menú de combate DS" : part.equals("texto") ? "Cuadro de texto DS" : part.equals("bolsa") ? "Bolsa en combate" : "Pitido de vida baja")
 								+ (on ? " ACTIVADO" : " DESACTIVADO")));
 						return 1;
 					}));
@@ -192,20 +198,12 @@ public class PlatinoClient implements ClientModInitializer {
 				pendingBag = 2;
 				return 1;
 			}));
-			for (String state : new String[]{"on", "off"}) {
-				root.then(ClientCommandManager.literal("menu").then(ClientCommandManager.literal(state).executes(ctx -> {
-					PlatinoConfig.get().pauseMenu = state.equals("on");
-					PlatinoConfig.save();
-					ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino] Menú de pausa DPPt " + (state.equals("on") ? "ACTIVADO" : "DESACTIVADO")));
-					return 1;
-				})));
-			}
 			root.then(ClientCommandManager.literal("pokereloj").executes(ctx -> {
 				pendingPoketch = 2;
 				return 1;
 			}));
 			root.executes(ctx -> {
-				ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino " + version() + "] /platino ficha · pokereloj · bolsa · menu · combate · paleta · recargar"));
+				ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino " + version() + "] /platino ficha · pokereloj · bolsa · combate · paleta · recargar"));
 				return 1;
 			});
 			dispatcher.register(root.then(pal).then(ClientCommandManager.literal("recargar").executes(ctx -> {
@@ -217,7 +215,7 @@ public class PlatinoClient implements ClientModInitializer {
 		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> client.execute(() -> {
 			ServerStats.reset();
 			if (client.player != null) {
-				client.player.sendMessage(Text.literal("§6[Cobblemon Platino " + version() + "]§f Esc = Menú · I = Bolsa · K = Ficha · P = Pokéreloj · N = Notas"
+				client.player.sendMessage(Text.literal("§6[Cobblemon Platino " + version() + "]§f I = Bolsa · K = Ficha · P = Pokéreloj · N = Notas"
 						+ (DiosesmonBridge.isPresent() ? " · marcador DiosesMon OK" : "")), false);
 			}
 		}));
@@ -229,6 +227,12 @@ public class PlatinoClient implements ClientModInitializer {
 	private static int pendingCard = 0;
 	private static int pendingPoketch = 0;
 	private static int pendingBag = 0;
+	private static int pendingUse = 0;
+
+	/** Usa el objeto de la mano en 2 ticks (cuando la Bolsa ya se ha cerrado). */
+	public static void useHeldItemSoon() {
+		pendingUse = 2;
+	}
 
 	public static boolean isBagKey(int keyCode, int scanCode) {
 		return bagKey != null && bagKey.matchesKey(keyCode, scanCode);

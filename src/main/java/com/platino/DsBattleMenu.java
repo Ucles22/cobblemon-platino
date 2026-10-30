@@ -165,6 +165,11 @@ public final class DsBattleMenu {
 				return true;
 			}
 			mc.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.4f));
+			if (b == Btn.BAG && PlatinoConfig.get().battleBag) {
+				// La Bolsa estilo DPPt en lugar de "usa los objetos del inventario"
+				mc.setScreen(new BagScreen(sel.getBattleGUI()));
+				return true;
+			}
 			t.getOnClick().invoke();
 			return true;
 		}

@@ -20,8 +20,8 @@ public class PlatinoConfig {
 	public boolean battleText = true;
 	/** Pitido de vida baja en combate. /platino combate pitido on|off */
 	public boolean lowHpBeep = true;
-	/** Menú de pausa estilo DPPt al pulsar Esc. /platino menu on|off */
-	public boolean pauseMenu = true;
+	/** BOLSA del menú de combate abre la Bolsa DPPt. /platino combate bolsa on|off */
+	public boolean battleBag = true;
 	/** Posición del menú DS: "izquierda" o "derecha". Tamaño: 0.5 - 1.5. */
 	public String battleMenuSide = "izquierda";
 	public float battleMenuScale = 0.8f;

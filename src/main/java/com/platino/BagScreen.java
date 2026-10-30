@@ -1,5 +1,7 @@
 package com.platino;
 
+import com.cobblemon.mod.common.client.CobblemonClient;
+import com.cobblemon.mod.common.item.battle.BagItemLike;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -46,9 +48,40 @@ public class BagScreen extends Screen {
 	private int pocket, selected, scroll;
 	private long lastRefresh;
 
+	/** Pantalla de combate a la que volver si se cierra sin usar nada (null fuera de combate). */
+	private final Screen battleParent;
+	private String flash;
+	private long flashUntil;
+
 	public BagScreen() {
+		this(null);
+	}
+
+	/** Bolsa abierta desde el botón BOLSA del combate. */
+	public BagScreen(Screen battleParent) {
 		super(Text.literal("Bolsa"));
-		pocket = lastPocket;
+		this.battleParent = battleParent;
+		pocket = battleParent != null ? Pocket.MEDICINE.ordinal() : lastPocket;
+	}
+
+	@Override
+	public void close() {
+		MinecraftClient mc = MinecraftClient.getInstance();
+		if (battleParent != null && CobblemonClient.INSTANCE.getBattle() != null) mc.setScreen(battleParent);
+		else super.close();
+	}
+
+	private boolean inBattle() {
+		return battleParent != null;
+	}
+
+	/** ¿Se puede usar en combate? Medicinas, bayas y objetos X de Cobblemon (BagItemLike) y Poké Balls. */
+	private static boolean usableInBattle(ItemStack st) {
+		return st.getItem() instanceof BagItemLike || isBall(st);
+	}
+
+	private static boolean isBall(ItemStack st) {
+		return Registries.ITEM.getId(st.getItem()).getPath().endsWith("_ball");
 	}
 
 	@Override
@@ -148,6 +181,7 @@ public class BagScreen extends Screen {
 		for (int yy = y + 4; yy < y + H - 4; yy += 4) c.fill(x + 2, yy, x + W - 2, yy + 1, 0x18FFFFFF);
 
 		drawBag(c, x + 14, y + 12, pk);
+		if (inBattle()) Draw.dsText(c, "COMBATE", x + 14 + 45 - Draw.width("COMBATE") / 2, y + 4, 0xFFFFFFFF, 0xFF303030);
 		// Nombre del bolsillo
 		int nx1 = x + 8, nx2 = x + LIST_X - 6, ny = y + 102;
 		Draw.panel(c, nx1, ny, nx2, ny + 16, 0xFF303840, 0xFFF8F8F8);
@@ -169,7 +203,7 @@ public class BagScreen extends Screen {
 		int ly2 = ly1 + rows * ROW + 6;
 		Draw.panel(c, lx1, ly1, lx2, ly2, 0xFF303840, 0xFFF8F8F8);
 		if (items.isEmpty()) {
-			String empty = "Bolsillo vacío";
+			String empty = inBattle() ? "Nada que usar aquí" : "Bolsillo vacío";
 			Draw.dsText(c, empty, (lx1 + lx2) / 2 - Draw.width(empty) / 2, (ly1 + ly2) / 2 - 4, 0xFF909090, 0xFFE0E0E0);
 		}
 		scroll = Math.max(0, Math.min(scroll, Math.max(0, items.size() - rows)));
@@ -184,7 +218,8 @@ public class BagScreen extends Screen {
 			c.drawItem(g.stack(), lx1 + 14, ry + 1);
 			String cnt = "×" + g.count();
 			String nm = Draw.fit(g.stack().getName().getString(), lx2 - lx1 - 50 - Draw.width(cnt));
-			Draw.dsText(c, nm, lx1 + 33, ry + 5, 0xFF404040, 0xFFC8C8C8);
+			boolean dim = inBattle() && !usableInBattle(g.stack());
+			Draw.dsText(c, nm, lx1 + 33, ry + 5, dim ? 0xFFA0A0A0 : 0xFF404040, 0xFFC8C8C8);
 			Draw.dsText(c, cnt, lx2 - 8 - Draw.width(cnt), ry + 5, 0xFF404040, 0xFFC8C8C8);
 			if (sel && (System.currentTimeMillis() / 400) % 2 == 0) Draw.dsText(c, "▶", lx1 + 5, ry + 5, 0xFFE03030, 0xFFF0A0A0);
 		}
@@ -200,7 +235,9 @@ public class BagScreen extends Screen {
 		int dx1 = x + 8, dy1 = y + H - 46, dx2 = x + W - 84, dy2 = y + H - 8;
 		Draw.panel(c, dx1, dy1, dx2, dy2, 0xFF303840, 0xFF808890);
 		Draw.panel(c, dx1 + 3, dy1 + 3, dx2 - 3, dy2 - 3, 0xFF485058, 0xFFF8F8F8);
-		if (!items.isEmpty()) {
+		if (flash != null && System.currentTimeMillis() < flashUntil) {
+			Draw.dsText(c, Draw.fit(flash, dx2 - dx1 - 16), dx1 + 9, dy1 + 15, 0xFFC03030, 0xFFF0C8C8);
+		} else if (!items.isEmpty()) {
 			Group g = items.get(selected);
 			c.drawItem(g.stack(), dx1 + 8, dy1 + 11);
 			List<Text> tip = Screen.getTooltipFromItem(MinecraftClient.getInstance(), g.stack());
@@ -217,7 +254,7 @@ public class BagScreen extends Screen {
 		}
 		// Botones
 		boolean canUse = !items.isEmpty();
-		button(c, x + W - 78, y + H - 46, x + W - 8, y + H - 28, "A LA MANO", canUse, mouseX, mouseY, 0xFF58B858);
+		button(c, x + W - 78, y + H - 46, x + W - 8, y + H - 28, inBattle() ? "USAR" : "A LA MANO", canUse, mouseX, mouseY, 0xFF58B858);
 		button(c, x + W - 78, y + H - 26, x + W - 8, y + H - 8, "CERRAR", true, mouseX, mouseY, 0xFF6890D0);
 		c.getMatrices().pop();
 	}
@@ -263,22 +300,60 @@ public class BagScreen extends Screen {
 	}
 
 	/** Pone el objeto seleccionado en la mano (como pulsar un número en el inventario). */
-	private void toHand() {
-		List<Group> items = pockets.get(pocket);
-		if (items.isEmpty()) return;
+	private boolean moveToHand(Group g) {
 		MinecraftClient mc = MinecraftClient.getInstance();
 		var player = mc.player;
-		if (player == null || mc.interactionManager == null) return;
+		if (player == null || mc.interactionManager == null) return false;
 		PlayerInventory inv = player.getInventory();
-		int slot = items.get(selected).slots().get(0);
+		int slot = g.slots().get(0);
 		if (slot < 9) {
 			inv.selectedSlot = slot;
 		} else {
 			// En PlayerScreenHandler las ranuras 9-35 son el inventario principal
 			mc.interactionManager.clickSlot(player.playerScreenHandler.syncId, slot, inv.selectedSlot, SlotActionType.SWAP, player);
 		}
+		return true;
+	}
+
+	private void toHand() {
+		List<Group> items = pockets.get(pocket);
+		if (items.isEmpty()) return;
+		Group g = items.get(selected);
+		if (inBattle()) {
+			useInBattle(g);
+			return;
+		}
+		if (moveToHand(g)) {
+			beep(1.2f);
+			super.close();
+		}
+	}
+
+	/**
+	 * Igual que el botón "Bag" de Cobblemon (minimiza el combate), pero además coge el objeto y lo usa:
+	 * las pociones abren la selección de Pokémon de Cobblemon; las Poké Balls quedan en la mano para lanzarlas.
+	 */
+	private void useInBattle(Group g) {
+		MinecraftClient mc = MinecraftClient.getInstance();
+		ItemStack st = g.stack();
+		if (!usableInBattle(st)) {
+			flash = "¡No puedes usar " + st.getName().getString() + " en combate!";
+			flashUntil = System.currentTimeMillis() + 2000;
+			mc.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.BLOCK_NOTE_BLOCK_BASS.value(), 0.6f, 0.6f));
+			return;
+		}
+		if (!moveToHand(g)) return;
 		beep(1.2f);
-		close();
+		var battle = CobblemonClient.INSTANCE.getBattle();
+		if (battle != null) battle.setMinimised(true);
+		mc.setScreen(null);
+		if (isBall(st)) {
+			if (mc.player != null) {
+				mc.player.sendMessage(Text.literal("§e¡Apunta al Pokémon y lanza la " + st.getName().getString() + " con clic derecho!"), true);
+			}
+		} else {
+			PlatinoClient.useHeldItemSoon();
+		}
 	}
 
 	@Override

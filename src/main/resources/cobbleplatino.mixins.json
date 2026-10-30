@@ -10,8 +10,7 @@
 		"CreativeInventoryScreenMixin",
 		"BattleGeneralSelectionMixin",
 		"BattleGUIMixin",
-		"BattleMessagePaneMixin",
-		"MinecraftClientMixin"
+		"BattleMessagePaneMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
