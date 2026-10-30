@@ -282,15 +282,14 @@ public class PoketchScreen extends Screen {
 			if (fw > 0) c.fill(x + 2, barY + 2, x + 2 + fw, barY + 7, ratio > 0.2f ? p[2] : p[1]);
 			if (fw > 0) c.fill(x + 2, barY + 2, x + 2 + fw, barY + 3, p[1]);
 
-			// Retrato con filtro LCD (el filtro va por delante del modelo 3D)
-			int px = x, py = y + 1;
-			PartyHud.drawPortrait(c, pk, i, px - 1, py - 1, 0f);
+			// Mini modelo 3D quieto, a color (si fallara, se usa el retrato)
+			int px = x, py = y;
+			if (!MiniModel.failed()) {
+				MiniModel.draw(c, pk, px, py, 22);
+			} else {
+				PartyHud.drawPortrait(c, pk, i, px - 1, py - 1, 0f);
+			}
 			c.draw();
-			c.getMatrices().push();
-			c.getMatrices().translate(0, 0, 400);
-			c.fill(px + 1, py + 1, px + 19, py + 19, (0x99 << 24) | (p[0] & 0xFFFFFF));
-			c.fill(px + 1, py + 1, px + 19, py + 19, (0x40 << 24) | (p[1] & 0xFFFFFF));
-			c.getMatrices().pop();
 
 			// Nombre y nivel
 			boolean holds;
