@@ -11,6 +11,7 @@ import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.cobblemon.mod.common.pokemon.status.PersistentStatusContainer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
@@ -67,6 +68,7 @@ public final class PartyHud {
 			if (!compact) drawPortrait(c, p, i, x + 2, y + 2, partialTicks);
 			int tx = compact ? x + 4 : x + 26;
 			drawDetails(c, p, x, y, w, h, tx, compact);
+			drawHeldItem(c, p, compact ? x + w - 14 : x + 13, compact ? y + 1 : y + 12);
 		}
 	}
 
@@ -133,6 +135,23 @@ public final class PartyHud {
 	}
 
 	/** Llama a la función de retrato de Cobblemon (drawPosablePortrait$default), igual que hace su propia barra. */
+	/** Icono real del objeto equipado, pequeño, en la esquina del retrato. */
+	static void drawHeldItem(DrawContext c, Pokemon p, int x, int y) {
+		ItemStack held;
+		try {
+			held = p.heldItem();
+		} catch (Throwable t) {
+			return;
+		}
+		if (held == null || held.isEmpty()) return;
+		Draw.round(c, x - 1, y - 1, x + 12, y + 12, 0xC0F8F0D0);
+		c.getMatrices().push();
+		c.getMatrices().translate(x, y, 150);
+		c.getMatrices().scale(0.7f, 0.7f, 1f);
+		c.drawItem(held, 0, 0);
+		c.getMatrices().pop();
+	}
+
 	static void drawPortrait(DrawContext c, Pokemon p, int index, int px, int py, float partialTicks) {
 		if (portraitFailed) return;
 		try {
