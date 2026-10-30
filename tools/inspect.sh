@@ -130,3 +130,22 @@ if [ -n "$CJAR" ] && [ -f "$CJAR" ]; then
       javap -p -c -cp "$CJAR" "$c" 2>/dev/null | grep -E '^  [a-z].*\(|Packet|sendToServer|PartyPosition' | grep -B1 -E 'Packet|PartyPosition' | sed "s/^/$c: /"; done
   } > inspect/move-party-api.txt 2>&1
 fi
+# --- Decimotercera ronda: PC y menú de equipo
+if [ -n "$CJAR" ] && [ -f "$CJAR" ]; then
+  { for c in com.cobblemon.mod.common.client.storage.ClientPC com.cobblemon.mod.common.client.storage.ClientBox com.cobblemon.mod.common.api.storage.pc.PCPosition \
+           com.cobblemon.mod.common.client.gui.pc.PCGUIConfiguration com.cobblemon.mod.common.client.gui.pc.PCGUI\$Companion \
+           com.cobblemon.mod.common.net.messages.server.storage.pc.MovePCPokemonPacket com.cobblemon.mod.common.net.messages.server.storage.pc.SwapPCPokemonPacket \
+           com.cobblemon.mod.common.net.messages.server.storage.pc.MovePCPokemonToPartyPacket com.cobblemon.mod.common.net.messages.server.storage.pc.MovePartyPokemonToPCPacket \
+           com.cobblemon.mod.common.net.messages.server.storage.SwapPCPartyPokemonPacket com.cobblemon.mod.common.net.messages.server.storage.pc.ReleasePCPokemonPacket \
+           com.cobblemon.mod.common.net.messages.server.storage.party.ReleasePartyPokemonPacket com.cobblemon.mod.common.net.messages.server.storage.pc.UnlinkPlayerFromPCPacket \
+           com.cobblemon.mod.common.net.messages.server.storage.pc.SortPCBoxPacket com.cobblemon.mod.common.net.messages.server.SendOutPokemonPacket \
+           com.cobblemon.mod.common.net.messages.client.storage.pc.OpenPCPacket com.cobblemon.mod.common.client.storage.ClientStorageManager; do
+      echo "==== $c"; javap -p -cp "$CJAR" "$c" 2>&1 | grep -vE 'lambda|access\$|encode|decode|Codec|sendToPlayer|sendToAll' | head -60; done
+    echo "==== PCGUI.closeNormally / onClose / init (bytecode)"
+    javap -p -c -cp "$CJAR" com.cobblemon.mod.common.client.gui.pc.PCGUI | awk '/ (closeNormally|close|removed|init)\(/{f=1} f{print} f&&/^$/{f=0}' | grep -E '^  [a-z]|invoke|new ' | head -80
+    echo "==== OpenPCHandler"
+    for c in $(grep -E 'net/client(handling)?/.*(OpenPC|ClosePC)Handler.*\.class$' inspect/cobblemon-files.txt | sed 's/\.class$//' | tr '/' '.'); do echo "-- $c"; javap -p -c -cp "$CJAR" "$c" | grep -E '^  [a-z]|invoke|new ' | head -40; done
+    echo "==== StorageWidget handling (packets)"
+    javap -p -c -cp "$CJAR" com.cobblemon.mod.common.client.gui.pc.StorageWidget | grep -E '^  [a-z].*\(|Packet\."<init>"|PCPosition\."<init>"|PartyPosition\."<init>"' | head -80
+  } > inspect/pc-api.txt 2>&1
+fi
