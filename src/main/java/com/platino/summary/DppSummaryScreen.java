@@ -26,7 +26,15 @@ import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 
 import java.lang.reflect.Method;
+import com.cobblemon.mod.common.api.storage.party.PartyPosition;
+import com.cobblemon.mod.common.client.CobblemonClient;
+import com.cobblemon.mod.common.client.storage.ClientParty;
+import com.cobblemon.mod.common.net.messages.server.BenchMovePacket;
+import com.cobblemon.mod.common.net.messages.server.RequestMoveSwapPacket;
+import com.cobblemon.mod.common.net.messages.server.storage.party.MovePartyPokemonPacket;
+import com.cobblemon.mod.common.net.messages.server.storage.party.SwapPartyPokemonPacket;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -70,6 +78,14 @@ public class DppSummaryScreen extends Screen {
 	private Page page;
 	private int selectedMove = -1;
 	private int x0, y0;
+	/** Movimiento que se está sustituyendo (-1 = ninguno) y desplazamiento de la lista. */
+	private int swapSlot = -1, swapScroll = 0;
+	private List<MoveTemplate> swapOptions = List.of();
+	/** Submenú para ordenar el equipo y hueco elegido (-1 = ninguno). */
+	private boolean partyMenu;
+	private int partyPick = -1;
+	private String toast;
+	private long toastUntil;
 
 	public DppSummaryScreen(java.util.Collection<? extends Pokemon> original, boolean editable, int selection) {
 		super(Text.literal("Datos"));
@@ -92,6 +108,49 @@ public class DppSummaryScreen extends Screen {
 		return party.isEmpty() ? null : party.get(index);
 	}
 
+	private static ClientParty clientParty() {
+		try {
+			return CobblemonClient.INSTANCE.getStorage().getParty();
+		} catch (Throwable t) {
+			return null;
+		}
+	}
+
+	/** El Pokémon está en el equipo del jugador y la ficha permite editar. */
+	private boolean canEdit(Pokemon p) {
+		ClientParty cp = clientParty();
+		return editable && p != null && cp != null && cp.findByUUID(p.getUuid()) != null;
+	}
+
+	private static boolean inBattle() {
+		try {
+			return CobblemonClient.INSTANCE.getBattle() != null;
+		} catch (Throwable t) {
+			return false;
+		}
+	}
+
+	private void toast(String msg) {
+		toast = msg;
+		toastUntil = System.currentTimeMillis() + 2500;
+	}
+
+	/** Si la ficha muestra el equipo, se rehace con el orden actual (tras cambiar de sitio a un Pokémon). */
+	private void syncParty() {
+		ClientParty cp = clientParty();
+		Pokemon cur = pk();
+		if (!editable || cp == null || cur == null || cp.findByUUID(cur.getUuid()) == null) return;
+		List<Pokemon> fresh = new ArrayList<>();
+		for (Pokemon q : cp.getSlots()) if (q != null) fresh.add(q);
+		if (fresh.isEmpty()) return;
+		party.clear();
+		party.addAll(fresh);
+		original.clear();
+		original.addAll(cp.getSlots());
+		for (int i = 0; i < party.size(); i++) if (party.get(i).getUuid().equals(cur.getUuid())) index = i;
+		index = Math.max(0, Math.min(index, party.size() - 1));
+	}
+
 	@Override
 	public boolean shouldPause() {
 		return false;
@@ -108,6 +167,7 @@ public class DppSummaryScreen extends Screen {
 	public void render(DrawContext c, int mouseX, int mouseY, float delta) {
 		super.render(c, mouseX, mouseY, delta);
 		hits.clear();
+		syncParty();
 		Pokemon p = pk();
 		if (p == null) {
 			close();
@@ -139,6 +199,16 @@ public class DppSummaryScreen extends Screen {
 			case MOVES -> drawMoves(c, p, rx, ry, rw, rh, mouseX, mouseY);
 			case STATS -> drawStatsPage(c, p, rx, ry, rw);
 			case MARKS -> drawMarks(c, p, rx, ry, rw, rh);
+		}
+		if (page == Page.MOVES && swapSlot >= 0) drawSwapList(c, p, rx, ry, rw, rh, mouseX, mouseY);
+		if (partyMenu) drawPartyMenu(c, mouseX, mouseY);
+		if (toast != null && System.currentTimeMillis() < toastUntil) {
+			int tw = Draw.width(toast) + 16;
+			c.getMatrices().push();
+			c.getMatrices().translate(0, 0, 200);
+			Draw.panel(c, x0 + W / 2 - tw / 2, y0 + H - 22, x0 + W / 2 + tw / 2, y0 + H - 6, 0xFF303848, 0xFFF8F8F0);
+			Draw.dsText(c, toast, x0 + W / 2 - tw / 2 + 8, y0 + H - 18, 0xFF303038, 0xFFD8D8D0);
+			c.getMatrices().pop();
 		}
 		c.getMatrices().pop();
 	}
@@ -177,6 +247,18 @@ public class DppSummaryScreen extends Screen {
 		for (int i = 0; i < 6; i++) {
 			boolean on = i < markings.size() && markings.get(i) != null && markings.get(i) > 0;
 			c.drawText(textRenderer, sym[i], sx + i * 11, py + ps + 3, on ? 0xFF303038 : 0xFFA0A098, false);
+		}
+		// Ordenar equipo
+		if (canEdit(p) && party.size() > 1) {
+			button(c, x + 10, py + ps + 15, x + w - 10, py + ps + 28, "⇅ Ordenar equipo", mx, my, 0xFFB8D8F8, () -> {
+				if (inBattle()) {
+					toast("No se puede durante un combate.");
+					return;
+				}
+				partyMenu = true;
+				partyPick = -1;
+				swapSlot = -1;
+			});
 		}
 		// Objeto
 		int iy = y0 + H - 38;
@@ -450,6 +532,12 @@ public class DppSummaryScreen extends Screen {
 				selectedMove = selectedMove == idx ? -1 : idx;
 				beep(1.7f);
 			}));
+			if (canEdit(p)) {
+				int bx = x + 8;
+				if (i > 0) button(c, bx, ry + 14, bx + 12, ry + 26, "▲", mx, my, 0xFFF8E0D8, () -> swapMoves(p, idx, idx - 1));
+				if (i < moves.size() - 1) button(c, bx + 14, ry + 14, bx + 26, ry + 26, "▼", mx, my, 0xFFF8E0D8, () -> swapMoves(p, idx, idx + 1));
+				button(c, bx + 30, ry + 14, bx + 84, ry + 26, "⇄ Cambiar", mx, my, 0xFFF8E0D8, () -> openSwap(p, idx));
+			}
 		}
 		// Detalle del movimiento elegido
 		int dy = y + 124;
@@ -554,6 +642,166 @@ public class DppSummaryScreen extends Screen {
 		return "?";
 	}
 
+	// ---------------------------------------------------------------- Cambiar movimientos
+
+	private void swapMoves(Pokemon p, int a, int b) {
+		ClientParty cp = clientParty();
+		if (cp == null) return;
+		int slot = cp.getPosition(p.getUuid());
+		if (slot < 0) return;
+		new RequestMoveSwapPacket(a, b, slot).sendToServer();
+		if (selectedMove == a) selectedMove = b;
+		else if (selectedMove == b) selectedMove = a;
+	}
+
+	private void openSwap(Pokemon p, int slot) {
+		if (inBattle()) {
+			toast("No se puede durante un combate.");
+			return;
+		}
+		List<MoveTemplate> known = new ArrayList<>();
+		for (Move m : p.getMoveSet().getMoves()) known.add(m.getTemplate());
+		List<MoveTemplate> opts = new ArrayList<>();
+		try {
+			for (MoveTemplate t : p.getAllAccessibleMoves()) if (!known.contains(t)) opts.add(t);
+		} catch (Throwable ignored) {
+		}
+		opts.sort(Comparator.comparing((MoveTemplate t) -> t.getDisplayName().getString(), String.CASE_INSENSITIVE_ORDER));
+		if (opts.isEmpty()) {
+			toast("No conoce otros movimientos.");
+			return;
+		}
+		swapOptions = opts;
+		swapSlot = slot;
+		swapScroll = 0;
+	}
+
+	private static final int SWAP_ROW = 15;
+
+	private int swapVisible(int rh) {
+		return (rh - 40) / SWAP_ROW;
+	}
+
+	private void drawSwapList(DrawContext c, Pokemon p, int x, int y, int w, int h, int mx, int my) {
+		List<Move> moves = p.getMoveSet().getMoves();
+		if (swapSlot >= moves.size()) {
+			swapSlot = -1;
+			return;
+		}
+		c.getMatrices().push();
+		c.getMatrices().translate(0, 0, 150);
+		hits.add(new Hit(x, y, x + w, y + h, () -> {})); // bloquea los clics a lo que hay debajo
+		Draw.panel(c, x, y, x + w, y + h, 0xFFE05850, 0xFFF8E8E4);
+		String old = moves.get(swapSlot).getTemplate().getDisplayName().getString();
+		Draw.dsText(c, Draw.fit("Olvidar " + old + " y aprender:", w - 80), x + 8, y + 7, 0xFF303038, 0xFFE8D0C8);
+		button(c, x + w - 66, y + 4, x + w - 6, y + 17, "Cancelar", mx, my, 0xFFF8F8F0, () -> swapSlot = -1);
+		int vis = swapVisible(h);
+		swapScroll = Math.max(0, Math.min(swapScroll, Math.max(0, swapOptions.size() - vis)));
+		int ly = y + 22;
+		for (int i = 0; i < vis && swapScroll + i < swapOptions.size(); i++) {
+			MoveTemplate t = swapOptions.get(swapScroll + i);
+			int ry = ly + i * SWAP_ROW;
+			boolean hover = mx >= x + 4 && mx < x + w - 10 && my >= ry && my < ry + SWAP_ROW - 1;
+			Draw.round(c, x + 4, ry, x + w - 10, ry + SWAP_ROW - 1, hover ? 0xFFF8C8C0 : (i % 2 == 0 ? 0xFFF8D8D0 : 0xFFF8E4DC));
+			TypeBadge.draw(c, t.getElementalType().getName(), x + 7, ry + 2);
+			Draw.dsText(c, Draw.fit(t.getDisplayName().getString(), w - 130), x + 10 + TypeBadge.WIDTH, ry + 3, 0xFF303038, 0xFFE8C8C0);
+			var cat = t.getDamageCategory();
+			String info = (cat == DamageCategories.INSTANCE.getPHYSICAL() ? "Fís " : cat == DamageCategories.INSTANCE.getSPECIAL() ? "Esp " : "Est ")
+					+ (t.getPower() > 0 ? String.valueOf((int) t.getPower()) : "—");
+			Draw.dsText(c, info, x + w - 16 - Draw.width(info), ry + 3, 0xFF805050, 0xFFE8C8C0);
+			MoveTemplate pick = t;
+			hits.add(new Hit(x + 4, ry, x + w - 10, ry + SWAP_ROW - 1, () -> {
+				new BenchMovePacket(true, p.getUuid(), moves.get(swapSlot).getTemplate(), pick).sendToServer();
+				beep(1.9f);
+				toast(p.getDisplayName(false).getString() + " aprendió " + pick.getDisplayName().getString() + ".");
+				swapSlot = -1;
+			}));
+		}
+		// Barra de desplazamiento
+		if (swapOptions.size() > vis) {
+			int th = h - 26, sy = y + 22;
+			c.fill(x + w - 8, sy, x + w - 5, sy + th - 4, 0xFFE0B0A8);
+			int kh = Math.max(10, (th - 4) * vis / swapOptions.size());
+			int ky = sy + (th - 4 - kh) * swapScroll / Math.max(1, swapOptions.size() - vis);
+			c.fill(x + w - 8, ky, x + w - 5, ky + kh, 0xFFE05850);
+		}
+		c.getMatrices().pop();
+	}
+
+	// ---------------------------------------------------------------- Ordenar equipo
+
+	private void drawPartyMenu(DrawContext c, int mx, int my) {
+		ClientParty cp = clientParty();
+		if (cp == null) {
+			partyMenu = false;
+			return;
+		}
+		c.getMatrices().push();
+		c.getMatrices().translate(0, 0, 300);
+		c.fill(x0, y0, x0 + W, y0 + H, 0x90101018);
+		hits.add(new Hit(x0, y0, x0 + W, y0 + H, () -> {}));
+		int mw = 260, mh = 200, x = x0 + (W - mw) / 2, y = y0 + (H - mh) / 2;
+		Draw.panel(c, x, y, x + mw, y + mh, 0xFF283048, 0xFF5898D0);
+		c.fillGradient(x + 1, y + 1, x + mw - 1, y + 17, 0xFF78C0F0, 0xFF3880C8);
+		Draw.dsText(c, "ORDENAR EQUIPO", x + 8, y + 5, 0xFFFFFFFF, 0xFF203048);
+		button(c, x + mw - 60, y + 3, x + mw - 5, y + 15, "Cerrar", mx, my, 0xFFF8F8F0, () -> partyMenu = false);
+		List<Pokemon> slots = cp.getSlots();
+		int cw = (mw - 18) / 2, ch = 46;
+		for (int i = 0; i < 6; i++) {
+			int sx = x + 6 + (i % 2) * (cw + 6), sy = y + 22 + (i / 2) * (ch + 4) + (i % 2) * 8;
+			Pokemon q = i < slots.size() ? slots.get(i) : null;
+			boolean picked = i == partyPick;
+			boolean hover = mx >= sx && mx < sx + cw && my >= sy && my < sy + ch;
+			int border = picked ? Draw.GOLD : 0xFF203858;
+			int top = q == null ? 0xFF406080 : picked ? 0xFF78C0F0 : hover ? 0xFF68A8E0 : 0xFF5898D0;
+			int bottom = q == null ? 0xFF305070 : picked ? 0xFF3880C8 : 0xFF3068A8;
+			Draw.panelGradient(c, sx, sy, sx + cw, sy + ch, border, top, bottom);
+			if (q != null) {
+				Draw.round(c, sx + 3, sy + 3, sx + 43, sy + ch - 3, 0xFFD8E8F8);
+				c.draw();
+				MiniModel.draw(c, q, sx + 4, sy + 4, 38);
+				c.draw();
+				Draw.dsText(c, Draw.fit(q.getDisplayName(false).getString(), cw - 52), sx + 47, sy + 6, 0xFFFFFFFF, 0xFF203048);
+				Draw.dsText(c, "Nv." + q.getLevel(), sx + 47, sy + 18, 0xFFFFF0C0, 0xFF203048);
+				Draw.hpBar(c, sx + 47, sy + 32, cw - 52, q.getCurrentHealth() / (float) Math.max(1, q.getMaxHealth()), false);
+			} else {
+				Draw.dsText(c, "Vacío", sx + cw / 2 - Draw.width("Vacío") / 2, sy + ch / 2 - 4, 0xFFB0C8E0, 0xFF203048);
+			}
+			int slot = i;
+			hits.add(new Hit(sx, sy, sx + cw, sy + ch, () -> pickPartySlot(cp, slot)));
+		}
+		String hint = partyPick < 0 ? "Elige un Pokémon y luego su nuevo sitio." : "Ahora elige con quién se cambia.";
+		Draw.dsText(c, hint, x + mw / 2 - Draw.width(hint) / 2, y + mh - 14, 0xFFFFFFFF, 0xFF203048);
+		c.getMatrices().pop();
+	}
+
+	private void pickPartySlot(ClientParty cp, int slot) {
+		List<Pokemon> slots = cp.getSlots();
+		Pokemon target = slot < slots.size() ? slots.get(slot) : null;
+		if (partyPick < 0) {
+			if (target == null) return;
+			partyPick = slot;
+			beep(1.7f);
+			return;
+		}
+		if (partyPick == slot) {
+			partyPick = -1;
+			return;
+		}
+		Pokemon from = slots.get(partyPick);
+		if (from == null) {
+			partyPick = -1;
+			return;
+		}
+		if (target == null) {
+			new MovePartyPokemonPacket(from.getUuid(), new PartyPosition(partyPick), new PartyPosition(slot)).sendToServer();
+		} else {
+			new SwapPartyPokemonPacket(from.getUuid(), new PartyPosition(partyPick), target.getUuid(), new PartyPosition(slot)).sendToServer();
+		}
+		beep(1.9f);
+		partyPick = -1;
+	}
+
 	// ---------------------------------------------------------------- Controles
 
 	private void button(DrawContext c, int x1, int y1, int x2, int y2, String label, int mx, int my, int color, Runnable action) {
@@ -577,6 +825,7 @@ public class DppSummaryScreen extends Screen {
 		page = p;
 		lastPage = p.ordinal();
 		selectedMove = -1;
+		swapSlot = -1;
 		beep(1.6f);
 	}
 
@@ -589,6 +838,7 @@ public class DppSummaryScreen extends Screen {
 		if (party.size() < 2) return;
 		index = Math.floorMod(index + dir, party.size());
 		selectedMove = -1;
+		swapSlot = -1;
 		beep(1.4f);
 	}
 
@@ -605,7 +855,10 @@ public class DppSummaryScreen extends Screen {
 	@Override
 	public boolean mouseClicked(double mx, double my, int button) {
 		if (button == 0) {
-			for (Hit h : new ArrayList<>(hits)) {
+			// Lo último dibujado (botones pequeños, ventanas superpuestas) tiene prioridad
+			List<Hit> list = new ArrayList<>(hits);
+			for (int i = list.size() - 1; i >= 0; i--) {
+				Hit h = list.get(i);
 				if (h.contains(mx, my)) {
 					h.action().run();
 					return true;
@@ -617,12 +870,24 @@ public class DppSummaryScreen extends Screen {
 
 	@Override
 	public boolean mouseScrolled(double mx, double my, double horizontal, double vertical) {
-		if (vertical != 0) switchPokemon(vertical > 0 ? -1 : 1);
+		if (vertical == 0) return true;
+		if (partyMenu) return true;
+		if (page == Page.MOVES && swapSlot >= 0) {
+			swapScroll += vertical > 0 ? -1 : 1;
+			return true;
+		}
+		switchPokemon(vertical > 0 ? -1 : 1);
 		return true;
 	}
 
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+		if (keyCode == GLFW.GLFW_KEY_ESCAPE && (partyMenu || swapSlot >= 0)) {
+			partyMenu = false;
+			swapSlot = -1;
+			return true;
+		}
+		if (partyMenu || swapSlot >= 0) return true;
 		switch (keyCode) {
 			case GLFW.GLFW_KEY_LEFT, GLFW.GLFW_KEY_A -> { switchPage(-1); return true; }
 			case GLFW.GLFW_KEY_RIGHT, GLFW.GLFW_KEY_D -> { switchPage(1); return true; }
