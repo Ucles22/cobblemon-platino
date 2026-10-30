@@ -1,6 +1,8 @@
 package com.platino;
 
 import com.cobblemon.mod.common.client.CobblemonClient;
+import com.cobblemon.mod.common.api.item.PokemonSelectingItem;
+import com.cobblemon.mod.common.battles.BagItems;
 import com.cobblemon.mod.common.item.battle.BagItemLike;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -75,9 +77,15 @@ public class BagScreen extends Screen {
 		return battleParent != null;
 	}
 
-	/** ¿Se puede usar en combate? Medicinas, bayas y objetos X de Cobblemon (BagItemLike) y Poké Balls. */
+	/** ¿Se puede usar en combate? Pociones, medicinas, bayas, objetos X y Poké Balls. */
 	private static boolean usableInBattle(ItemStack st) {
-		return st.getItem() instanceof BagItemLike || isBall(st);
+		if (isBall(st) || st.getItem() instanceof BagItemLike || st.getItem() instanceof PokemonSelectingItem) return true;
+		try {
+			// La misma comprobación que usa Cobblemon para saber si un objeto vale en combate
+			return BagItems.getConvertibleForStack(st) != null;
+		} catch (Throwable t) {
+			return false;
+		}
 	}
 
 	private static boolean isBall(ItemStack st) {
