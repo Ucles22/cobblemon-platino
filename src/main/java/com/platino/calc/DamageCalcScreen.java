@@ -55,6 +55,13 @@ public class DamageCalcScreen extends Screen {
 		final Supplier<List<Opt>> options;
 		final Supplier<String> current;
 		final Consumer<Object> onPick;
+		/** Lista corta sin buscador útil (p. ej. boosts): se abre del ancho justo y muestra todas las opciones. */
+		boolean compact;
+
+		Combo compact() {
+			compact = true;
+			return this;
+		}
 
 		Combo(String id, Supplier<List<Opt>> options, Supplier<String> current, Consumer<Object> onPick) {
 			this.id = id;
@@ -212,6 +219,12 @@ public class DamageCalcScreen extends Screen {
 					() -> abilityName(atk), o -> s.ability = ((CalcData.AbilityEntry) o).id()));
 			combos.add(new Combo(k + "item", DamageCalcScreen::itemOpts, () -> s.item.label,
 					o -> s.item = (DamageEngine.Item) o));
+			for (int i = 1; i < 6; i++) {
+				int st = i;
+				combos.add(new Combo(k + "boost" + i, DamageCalcScreen::boostOpts,
+						() -> boostLabel((atk ? S.atk : S.def).stages[st]),
+						o -> (atk ? S.atk : S.def).stages[st] = (Integer) o).compact());
+			}
 		}
 		combos.add(new Combo("move", DamageCalcScreen::moveOpts, () -> S.move == null ? "" : S.move.display(),
 				o -> S.move = (CalcData.MoveEntry) o));
@@ -221,6 +234,24 @@ public class DamageCalcScreen extends Screen {
 				() -> S.field.terrain.label, o -> S.field.terrain = (DamageEngine.Terrain) o));
 		combos.add(new Combo("aparty", DamageCalcScreen::partyOpts, () -> "", o -> fillFromPokemon(true, (Pokemon) o)));
 		combos.add(new Combo("dparty", DamageCalcScreen::partyOpts, () -> "", o -> fillFromPokemon(false, (Pokemon) o)));
+	}
+
+	private static String boostLabel(int v) {
+		return v == 0 ? "--" : v > 0 ? "+" + v : String.valueOf(v);
+	}
+
+	private static List<Opt> boostOpts() {
+		List<Opt> out = new ArrayList<>();
+		for (int v = 6; v >= -6; v--) out.add(new Opt(boostLabel(v), boostLabel(v), "", v));
+		return out;
+	}
+
+	/** Estadística con el boost aplicado (multiplicador de los juegos: +1 = ×1,5 … +6 = ×4; -1 = ×2/3 … -6 = ×1/4). */
+	private static int boosted(DamageEngine.Side s, int i) {
+		int v = s.stat(i);
+		if (i == 0) return v;
+		int st = Math.max(-6, Math.min(6, s.stages[i]));
+		return st >= 0 ? v * (2 + st) / 2 : v * 2 / (2 - st);
 	}
 
 	private Combo combo(String id) {
@@ -423,7 +454,7 @@ public class DamageCalcScreen extends Screen {
 		text(c, "Base", cBase, y, MID);
 		text(c, "IV", cIv + 14, y, MID);
 		text(c, "EV", cEv + 14, y, MID);
-		text(c, "Etapa", cSt + 8, y, MID);
+		text(c, "Boost", cSt + 4, y, MID);
 		text(c, "Total", cTot - textRenderer.getWidth("Total"), y, MID);
 		y += 10;
 		boolean physical = S.move == null || S.move.category() != DamageEngine.Category.SPECIAL;
@@ -437,9 +468,10 @@ public class DamageCalcScreen extends Screen {
 			text(c, String.valueOf(s.base[i]), cBase, y + 1, DARK);
 			stepper(c, cIv, y - 1, "", s.ivs[i], 1, 31, 0, 31, mx, my, v -> s.ivs[st] = v);
 			stepper(c, cEv, y - 1, "", s.evs[i], 4, 252, 0, 252, mx, my, v -> s.evs[st] = v);
-			if (i > 0) stepperSigned(c, cSt, y - 1, s.stages[i], mx, my, v -> s.stages[st] = v);
-			String tot = String.valueOf(s.stat(i));
-			text(c, tot, cTot - textRenderer.getWidth(tot), y + 1, col);
+			if (i > 0) comboBox(c, combo(k + "boost" + i).at(cSt, y - 1, 32), mx, my);
+			String tot = String.valueOf(boosted(s, i));
+			int totCol = i > 0 && s.stages[i] > 0 ? UP : i > 0 && s.stages[i] < 0 ? DOWN : col;
+			text(c, tot, cTot - textRenderer.getWidth(tot), y + 1, totCol);
 			y += ROW - 1;
 		}
 		int evTotal = 0;
@@ -504,12 +536,25 @@ public class DamageCalcScreen extends Screen {
 		hits.add(new Hit(cb.x, cb.y, cb.x + cb.w, cb.y + 12, () -> openCombo(cb)));
 	}
 
+	private int listRows() {
+		return open != null && open.compact ? 13 : LIST_ROWS;
+	}
+
 	private void openCombo(Combo cb) {
 		open = cb;
 		query = "";
 		listScroll = 0;
 		listSel = 0;
 		refilter();
+		// Marca la opción actual
+		String cur = cb.current.get();
+		for (int i = 0; i < filtered.size(); i++) {
+			if (filtered.get(i).label().equals(cur)) {
+				listSel = i;
+				listScroll = Math.max(0, Math.min(i - listRows() / 2, filtered.size() - listRows()));
+				break;
+			}
+		}
 		beep(1.8f);
 	}
 
@@ -534,7 +579,7 @@ public class DamageCalcScreen extends Screen {
 			filtered = starts;
 		}
 		listSel = Math.min(listSel, Math.max(0, filtered.size() - 1));
-		listScroll = Math.max(0, Math.min(listScroll, Math.max(0, filtered.size() - LIST_ROWS)));
+		listScroll = Math.max(0, Math.min(listScroll, Math.max(0, filtered.size() - listRows())));
 	}
 
 	private void pick(Opt o) {
@@ -546,8 +591,8 @@ public class DamageCalcScreen extends Screen {
 
 	private void drawOpenCombo(DrawContext c, int mx, int my) {
 		if (open == null) return;
-		int rows = Math.min(LIST_ROWS, Math.max(1, filtered.size()));
-		listW = Math.max(open.w, 170);
+		int rows = Math.min(listRows(), Math.max(1, filtered.size()));
+		listW = open.compact ? open.w + 16 : Math.max(open.w, 170);
 		listH = 14 + rows * 11 + 2;
 		listX = Math.min(open.x, x0 + W - listW);
 		listY = open.y + 13;
@@ -559,7 +604,7 @@ public class DamageCalcScreen extends Screen {
 		c.fill(listX + 1, listY + 1, listX + listW - 1, listY + listH - 1, LIGHT);
 		// Línea de búsqueda
 		c.fill(listX + 2, listY + 2, listX + listW - 2, listY + 13, PALE);
-		String q = query.isEmpty() ? "Escribe para buscar…" : query;
+		String q = query.isEmpty() ? (open.compact ? "" : "Escribe para buscar…") : query;
 		boolean caret = (System.currentTimeMillis() / 500) % 2 == 0;
 		text(c, "⌕ " + q + (caret && !query.isEmpty() ? "_" : ""), listX + 4, listY + 4, query.isEmpty() ? MID : DARK);
 		if (filtered.isEmpty()) {
@@ -735,7 +780,7 @@ public class DamageCalcScreen extends Screen {
 	@Override
 	public boolean mouseScrolled(double mx, double my, double horizontal, double vertical) {
 		if (open != null) {
-			int rows = Math.min(LIST_ROWS, filtered.size());
+			int rows = Math.min(listRows(), filtered.size());
 			listScroll = Math.max(0, Math.min(Math.max(0, filtered.size() - rows), listScroll - (int) Math.signum(vertical) * 3));
 			return true;
 		}
@@ -773,7 +818,7 @@ public class DamageCalcScreen extends Screen {
 				}
 				case GLFW.GLFW_KEY_DOWN -> {
 					listSel = Math.min(filtered.size() - 1, listSel + 1);
-					if (listSel >= listScroll + LIST_ROWS) listScroll = listSel - LIST_ROWS + 1;
+					if (listSel >= listScroll + listRows()) listScroll = listSel - listRows() + 1;
 				}
 				case GLFW.GLFW_KEY_UP -> {
 					listSel = Math.max(0, listSel - 1);
