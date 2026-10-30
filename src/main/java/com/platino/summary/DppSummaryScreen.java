@@ -677,6 +677,11 @@ public class DppSummaryScreen extends Screen {
 	}
 
 	private static final int SWAP_ROW = 15;
+	/** Barra de desplazamiento de la lista: zona de clic y arrastre. */
+	private int barX1, barX2, barY1, barY2, barMax;
+	private boolean barVisible, draggingBar;
+	private double dragOffset;
+	private int knobY, knobH;
 
 	private int swapVisible(int rh) {
 		return (rh - 40) / SWAP_ROW;
@@ -718,12 +723,21 @@ public class DppSummaryScreen extends Screen {
 			}));
 		}
 		// Barra de desplazamiento
-		if (swapOptions.size() > vis) {
+		barVisible = swapOptions.size() > vis;
+		if (barVisible) {
 			int th = h - 26, sy = y + 22;
-			c.fill(x + w - 8, sy, x + w - 5, sy + th - 4, 0xFFE0B0A8);
-			int kh = Math.max(10, (th - 4) * vis / swapOptions.size());
-			int ky = sy + (th - 4 - kh) * swapScroll / Math.max(1, swapOptions.size() - vis);
-			c.fill(x + w - 8, ky, x + w - 5, ky + kh, 0xFFE05850);
+			barMax = swapOptions.size() - vis;
+			int kh = Math.max(12, (th - 4) * vis / swapOptions.size());
+			int ky = sy + (th - 4 - kh) * swapScroll / Math.max(1, barMax);
+			barX1 = x + w - 10;
+			barX2 = x + w - 2;
+			barY1 = sy;
+			barY2 = sy + th - 4;
+			knobH = kh;
+			knobY = ky;
+			boolean hot = draggingBar || (mx >= barX1 && mx < barX2 && my >= ky && my < ky + kh);
+			c.fill(x + w - 8, sy, x + w - 4, sy + th - 4, 0xFFE0B0A8);
+			c.fill(x + w - 9, ky, x + w - 3, ky + kh, hot ? 0xFFF07068 : 0xFFE05850);
 		}
 		c.getMatrices().pop();
 	}
@@ -854,6 +868,14 @@ public class DppSummaryScreen extends Screen {
 
 	@Override
 	public boolean mouseClicked(double mx, double my, int button) {
+		if (button == 0 && page == Page.MOVES && swapSlot >= 0 && barVisible && !partyMenu
+				&& mx >= barX1 && mx < barX2 && my >= barY1 && my < barY2) {
+			draggingBar = true;
+			// Clic en el pomo: se agarra donde está; clic en la guía: el pomo salta ahí
+			dragOffset = (my >= knobY && my < knobY + knobH) ? my - knobY : knobH / 2.0;
+			dragBarTo(my);
+			return true;
+		}
 		if (button == 0) {
 			// Lo último dibujado (botones pequeños, ventanas superpuestas) tiene prioridad
 			List<Hit> list = new ArrayList<>(hits);
@@ -866,6 +888,31 @@ public class DppSummaryScreen extends Screen {
 			}
 		}
 		return super.mouseClicked(mx, my, button);
+	}
+
+	private void dragBarTo(double my) {
+		int range = (barY2 - barY1) - knobH;
+		if (range <= 0) return;
+		double t = (my - dragOffset - barY1) / range;
+		swapScroll = (int) Math.round(Math.max(0, Math.min(1, t)) * barMax);
+	}
+
+	@Override
+	public boolean mouseDragged(double mx, double my, int button, double dx, double dy) {
+		if (draggingBar && button == 0) {
+			dragBarTo(my);
+			return true;
+		}
+		return super.mouseDragged(mx, my, button, dx, dy);
+	}
+
+	@Override
+	public boolean mouseReleased(double mx, double my, int button) {
+		if (button == 0 && draggingBar) {
+			draggingBar = false;
+			return true;
+		}
+		return super.mouseReleased(mx, my, button);
 	}
 
 	@Override
