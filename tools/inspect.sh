@@ -65,3 +65,12 @@ if [ -n "$CJAR" ] && [ -f "$CJAR" ]; then
     grep -iE 'item/(battle|medicine|healing)|PartySelect|BagItem|UseItem|partyselect' inspect/cobblemon-files.txt | grep class | head -40;
   } > inspect/battle-bag.txt 2>&1
 fi
+# --- Séptima ronda: cómo sabe Cobblemon qué objetos se usan en combate
+if [ -n "$CJAR" ] && [ -f "$CJAR" ]; then
+  { grep -iE 'item/.*Potion.*\.class' inspect/cobblemon-files.txt | head;
+    for c in com.cobblemon.mod.common.battles.BagItems com.cobblemon.mod.common.item.battle.BagItemLike com.cobblemon.mod.common.item.battle.SimpleBagItemLike; do echo "==== $c"; javap -p -cp "$CJAR" $c; done;
+    P=$(grep -iE 'item/interactive/PotionItem\.class|item/PotionItem\.class' inspect/cobblemon-files.txt | head -1 | sed 's/\.class$//; s#/#.#g');
+    echo "==== $P"; [ -n "$P" ] && javap -p -cp "$CJAR" "$P" | head -15;
+    javap -p -c -cp "$CJAR" com.cobblemon.mod.common.battles.BagItems | grep -E 'invoke|instanceof|getstatic' | head -40;
+  } > inspect/bagitems.txt 2>&1
+fi
