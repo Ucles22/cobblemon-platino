@@ -263,42 +263,52 @@ public class PoketchScreen extends Screen {
 		} catch (Throwable e) {
 			slots = List.of();
 		}
-		// Como en DPPt: 2 columnas x 3 filas, retrato sobre una barra de vida larga
-		int cw = (SW - 24) / 2, ch = (SH - 6) / 3;
+		// Como en DPPt: 2 columnas x 3 filas; retrato, nombre, nivel, cápsula de objeto y barra de vida
+		int cw = (SW - 18) / 2, ch = (SH - 6) / 3;
 		for (int i = 0; i < 6; i++) {
-			int x = sx + 8 + (i % 2) * (cw + 8), y = sy + 3 + (i / 2) * ch;
+			int x = sx + 6 + (i % 2) * (cw + 6), y = sy + 3 + (i / 2) * ch;
 			Pokemon pk = i < slots.size() ? slots.get(i) : null;
-			int barY = y + ch - 12;
-			// Barra (marco oscuro, fondo medio, relleno con la vida actual)
+			int barY = y + ch - 13;
+			// Barra: borde oscuro, fondo claro y relleno oscuro con la vida actual
 			Draw.round(c, x, barY, x + cw, barY + 9, p[1]);
-			c.fill(x + 2, barY + 2, x + cw - 2, barY + 7, p[2]);
-			if (pk == null) continue;
+			c.fill(x + 1, barY + 1, x + cw - 1, barY + 8, p[3]);
+			if (pk == null) {
+				centered(c, "- - -", x + cw / 2, y + 8, p[2]);
+				continue;
+			}
 			int max = Math.max(1, pk.getMaxHealth());
 			float ratio = Math.max(0, Math.min(1, pk.getCurrentHealth() / (float) max));
 			int fw = Math.round((cw - 4) * ratio);
-			if (fw > 0) c.fill(x + 2, barY + 2, x + 2 + fw, barY + 7, p[1]);
+			if (fw > 0) c.fill(x + 2, barY + 2, x + 2 + fw, barY + 7, ratio > 0.2f ? p[2] : p[1]);
+			if (fw > 0) c.fill(x + 2, barY + 2, x + 2 + fw, barY + 3, p[1]);
 
-			// Retrato centrado con filtro LCD
-			int px = x + cw / 2 - 14, py = barY - 22;
+			// Retrato con filtro LCD (el filtro va por delante del modelo 3D)
+			int px = x, py = y + 1;
 			PartyHud.drawPortrait(c, pk, i, px - 1, py - 1, 0f);
 			c.draw();
-			c.fill(px + 1, py + 1, px + 19, py + 19, (0x88 << 24) | (p[0] & 0xFFFFFF));
-			c.fill(px + 1, py + 1, px + 19, py + 19, (0x30 << 24) | (p[1] & 0xFFFFFF));
+			c.getMatrices().push();
+			c.getMatrices().translate(0, 0, 400);
+			c.fill(px + 1, py + 1, px + 19, py + 19, (0x99 << 24) | (p[0] & 0xFFFFFF));
+			c.fill(px + 1, py + 1, px + 19, py + 19, (0x40 << 24) | (p[1] & 0xFFFFFF));
+			c.getMatrices().pop();
 
-			// Icono de objeto equipado (cápsula LCD, como en DPPt)
+			// Nombre y nivel
 			boolean holds;
 			try {
 				holds = !pk.heldItem().isEmpty();
 			} catch (Throwable t) {
 				holds = false;
 			}
+			int textW = cw - 23 - (holds ? 10 : 0);
+			text(c, Draw.fit(pk.getDisplayName(false).getString(), textW), x + 22, y + 2, p[1]);
+			text(c, pk.isFainted() ? "DEB" : "Nv" + pk.getLevel(), x + 22, y + 12, p[1]);
+			// Cápsula de objeto equipado (como en DPPt)
 			if (holds) {
-				int ix = px + 24, iy = barY - 12;
+				int ix = x + cw - 8, iy = y + 8;
 				Draw.round(c, ix, iy, ix + 8, iy + 11, p[1]);
 				c.fill(ix + 1, iy + 1, ix + 7, iy + 4, p[3]);
 				c.fill(ix + 1, iy + 5, ix + 7, iy + 10, p[2]);
 			}
-			if (pk.isFainted()) text(c, "DEB", x + 2, py + 2, p[1]);
 		}
 	}
 

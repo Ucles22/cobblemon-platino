@@ -22,10 +22,10 @@ import java.util.List;
 
 /** Barra de equipo estilo Platino (paneles azules con retrato, nombre, nivel y PS). */
 public final class PartyHud {
-	private static final int W = 114;
-	private static final int H = 26;
-	private static final int CW = 70; // ancho compacto
-	private static final int GAP = 2;
+	private static final int W = 100;
+	private static final int H = 27;
+	private static final int CW = 74; // ancho compacto
+	private static final int GAP = 1;
 
 	private static MethodHandle portrait;
 	private static boolean portraitFailed;
@@ -68,7 +68,7 @@ public final class PartyHud {
 			if (!compact) drawPortrait(c, p, i, x + 2, y + 2, partialTicks);
 			int tx = compact ? x + 4 : x + 26;
 			drawDetails(c, p, x, y, w, h, tx, compact);
-			drawHeldItem(c, p, compact ? x + w - 14 : x + 13, compact ? y + 1 : y + 12);
+			drawHeldSlot(c, p, compact ? x + w - 12 : x + w - 14, compact ? y + 2 : y + 2, compact ? 10 : 12);
 		}
 	}
 
@@ -92,51 +92,60 @@ public final class PartyHud {
 	}
 
 	private static void drawDetails(DrawContext c, Pokemon p, int x, int y, int w, int h, int tx, boolean compact) {
-		String lv = "Nv" + p.getLevel();
-		String name = Draw.fit(p.getDisplayName(false).getString(), (x + w - 4 - Draw.width(lv) - 8) - tx);
+		int slotW = compact ? 12 : 16; // hueco de la casilla del objeto a la derecha
+		String name = Draw.fit(p.getDisplayName(false).getString(), (x + w - slotW - 9) - tx);
 		Draw.dsText(c, name, tx, y + 3, 0xFFFFFFFF, 0xFF203048);
 		int gx = tx + Draw.width(name) + 1;
 		Gender g = p.getGender();
 		if (g == Gender.MALE) Draw.dsText(c, "♂", gx, y + 3, 0xFF88C8FF, 0xFF203048);
 		else if (g == Gender.FEMALE) Draw.dsText(c, "♀", gx, y + 3, 0xFFFFA8C8, 0xFF203048);
-		Draw.dsText(c, lv, x + w - 4 - Draw.width(lv), y + 3, 0xFFFFFFFF, 0xFF203048);
 
-		// Barra de PS
 		int max = Math.max(1, p.getMaxHealth());
 		float ratio = p.getCurrentHealth() / (float) max;
-		int barY = compact ? y + h - 6 : y + 13;
-		int barX = tx;
-		PersistentStatusContainer st = p.getStatus();
-		if (st != null && st.getStatus() != null && !compact) {
-			int bw = Draw.statusBadge(c, st.getStatus().getShowdownName(), tx, barY - 1);
-			if (bw > 0) barX = tx + bw + 2;
-		}
+		String lv = "Nv" + p.getLevel();
 		if (compact) {
-			c.fill(barX, barY, x + w - 4, barY + 3, Draw.OUTLINE);
-			int fw = Math.round((x + w - 5 - barX - 1) * Math.max(0, Math.min(1, ratio)));
+			int barY = y + h - 5;
+			c.fill(tx, barY, x + w - 4, barY + 3, Draw.OUTLINE);
+			int fw = Math.round((x + w - 5 - tx - 1) * Math.max(0, Math.min(1, ratio)));
 			int col = ratio > 0.5f ? Draw.HP_GREEN : ratio > 0.2f ? Draw.HP_YELLOW : Draw.HP_RED;
-			if (fw > 0) c.fill(barX + 1, barY + 1, barX + 1 + fw, barY + 2, col);
+			if (fw > 0) c.fill(tx + 1, barY + 1, tx + 1 + fw, barY + 2, col);
+			small(c, lv, x + w - slotW - 3 - Math.round(Draw.width(lv) * 0.6f), y + 4, 0xFFE8F0F8);
 		} else {
+			int barY = y + 12;
+			int barX = tx;
+			PersistentStatusContainer st = p.getStatus();
+			if (st != null && st.getStatus() != null) {
+				int bw = Draw.statusBadge(c, st.getStatus().getShowdownName(), tx, barY - 1);
+				if (bw > 0) barX = tx + bw + 2;
+			}
 			Draw.hpBar(c, barX, barY, x + w - 4 - barX, ratio, false);
-			// PS pequeños bajo la barra
+			// Fila inferior: nivel a la izquierda, PS a la derecha (letra pequeña)
+			small(c, lv, tx, y + 20.5f, 0xFFFFF0C0);
 			String hp = p.getCurrentHealth() + "/" + max;
-			c.getMatrices().push();
-			c.getMatrices().translate(x + w - 4 - Draw.width(hp) * 0.6f, y + 20.5f, 0);
-			c.getMatrices().scale(0.6f, 0.6f, 1f);
-			c.drawText(Draw.font(), hp, 0, 0, 0xFFE8F0F8, false);
-			c.getMatrices().pop();
+			small(c, hp, x + w - 4 - Draw.width(hp) * 0.6f, y + 20.5f, 0xFFE8F0F8);
 		}
 
 		// Icono de nota
 		if (Notes.has(p.getUuid())) {
-			if (compact) Draw.dsText(c, "✎", x + w - 9, y + 2, Draw.GOLD, 0xFF6A4A00);
-			else Draw.dsText(c, "✎", tx, y + 17, Draw.GOLD, 0xFF6A4A00);
+			int nx = compact ? x + 1 : x + 2;
+			Draw.dsText(c, "✎", nx, y + h - 10, Draw.GOLD, 0xFF6A4A00);
 		}
 	}
 
+	private static void small(DrawContext c, String s, float x, float y, int color) {
+		c.getMatrices().push();
+		c.getMatrices().translate(x, y, 0);
+		c.getMatrices().scale(0.6f, 0.6f, 1f);
+		c.drawText(Draw.font(), s, 0, 0, color, false);
+		c.getMatrices().pop();
+	}
+
 	/** Llama a la función de retrato de Cobblemon (drawPosablePortrait$default), igual que hace su propia barra. */
-	/** Icono real del objeto equipado, pequeño, en la esquina del retrato. */
-	static void drawHeldItem(DrawContext c, Pokemon p, int x, int y) {
+	/** Casilla del objeto equipado (como la del HUD original de Cobblemon) con el icono real dentro. */
+	static void drawHeldSlot(DrawContext c, Pokemon p, int x, int y, int size) {
+		Draw.round(c, x, y, x + size, y + size, 0xFF203858);
+		c.fill(x + 1, y + 1, x + size - 1, y + size - 1, 0xFF2C4C78);
+		c.fill(x + 1, y + 1, x + size - 1, y + 2, 0xFF1C3458);
 		ItemStack held;
 		try {
 			held = p.heldItem();
@@ -144,10 +153,10 @@ public final class PartyHud {
 			return;
 		}
 		if (held == null || held.isEmpty()) return;
-		Draw.round(c, x - 1, y - 1, x + 12, y + 12, 0xC0F8F0D0);
+		float scale = (size - 2) / 16f;
 		c.getMatrices().push();
-		c.getMatrices().translate(x, y, 150);
-		c.getMatrices().scale(0.7f, 0.7f, 1f);
+		c.getMatrices().translate(x + 1, y + 1, 150);
+		c.getMatrices().scale(scale, scale, 1f);
 		c.drawItem(held, 0, 0);
 		c.getMatrices().pop();
 	}
