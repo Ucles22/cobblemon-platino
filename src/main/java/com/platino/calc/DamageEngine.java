@@ -9,7 +9,33 @@ public final class DamageEngine {
 
 	public enum Category { PHYSICAL, SPECIAL, STATUS }
 
-	public enum Weather { NONE, SUN, RAIN }
+	public enum Weather {
+		NONE("Sin clima"), SUN("Sol"), RAIN("Lluvia");
+		public final String label;
+		Weather(String label) { this.label = label; }
+	}
+
+	public enum Terrain {
+		NONE("Sin campo"), ELECTRIC("Campo Eléctrico"), PSYCHIC("Campo Psíquico"), GRASSY("Campo de Hierba"), MISTY("Campo de Niebla");
+		public final String label;
+		Terrain(String label) { this.label = label; }
+	}
+
+	public enum Screens {
+		NONE("Sin pantallas"), REFLECT("Reflejo"), LIGHT_SCREEN("Pantalla Luz"), AURORA_VEIL("Velo Aurora");
+		public final String label;
+		Screens(String label) { this.label = label; }
+	}
+
+	/** Condiciones del combate. */
+	public static final class Field {
+		public boolean crit;
+		public Weather weather = Weather.NONE;
+		public Terrain terrain = Terrain.NONE;
+		public Screens screens = Screens.NONE;
+		/** % de PS actuales del defensor (1-100). */
+		public int defHpPercent = 100;
+	}
 
 	/** Objetos con efecto en el daño (el servidor no tiene objetos custom). */
 	public enum Item {
@@ -87,15 +113,15 @@ public final class DamageEngine {
 
 	public record Move(String name, String type, Category category, int power) {}
 
-	public record Result(int min, int max, int defenderHp, float effectiveness, String note) {
+	public record Result(int min, int max, int defenderHp, int currentHp, float effectiveness, String note) {
 		public float minPct() { return defenderHp <= 0 ? 0 : min * 100f / defenderHp; }
 		public float maxPct() { return defenderHp <= 0 ? 0 : max * 100f / defenderHp; }
 
-		/** "KO en 2 golpes", "Posible KO en 1"… */
+		/** "KO en 2 golpes", "Posible KO en 1"… (sobre los PS actuales). */
 		public String koText() {
 			if (max <= 0) return effectiveness == 0 ? "No le afecta" : "Sin daño";
-			int hitsMax = (int) Math.ceil(defenderHp / (double) max);
-			int hitsMin = min <= 0 ? 99 : (int) Math.ceil(defenderHp / (double) min);
+			int hitsMax = (int) Math.ceil(currentHp / (double) max);
+			int hitsMin = min <= 0 ? 99 : (int) Math.ceil(currentHp / (double) min);
 			if (hitsMax == hitsMin) return hitsMax == 1 ? "¡KO de un golpe!" : "KO en " + hitsMax + " golpes";
 			return "Posible KO en " + hitsMax + " (seguro en " + Math.min(hitsMin, 99) + ")";
 		}
@@ -110,10 +136,14 @@ public final class DamageEngine {
 		return (int) Math.ceil(v - 0.5);
 	}
 
-	public static Result calc(Side atk, Side def, Move move, boolean crit, Weather weather, boolean screen, boolean defFullHp) {
+	public static Result calc(Side atk, Side def, Move move, Field f) {
+		boolean crit = f.crit;
+		Weather weather = f.weather;
+		boolean defFullHp = f.defHpPercent >= 100;
 		int hp = def.stat(0);
+		int cur = Math.max(1, (int) Math.floor(hp * Math.max(1, Math.min(100, f.defHpPercent)) / 100.0));
 		if (move == null || move.category() == Category.STATUS || move.power() <= 0) {
-			return new Result(0, 0, hp, 1f, "Movimiento de estado");
+			return new Result(0, 0, hp, cur, 1f, "Movimiento de estado");
 		}
 		boolean physical = move.category() == Category.PHYSICAL;
 		String mt = move.type();
@@ -121,10 +151,10 @@ public final class DamageEngine {
 
 		// Inmunidades por habilidad
 		String immune = immunity(dAb, mt);
-		if (immune != null) return new Result(0, 0, hp, 0f, immune);
+		if (immune != null) return new Result(0, 0, hp, cur, 0f, immune);
 
 		float eff = TypeEff.multiplier(mt, def.type1, def.type2);
-		if (eff == 0f) return new Result(0, 0, hp, 0f, "Inmune por tipo");
+		if (eff == 0f) return new Result(0, 0, hp, cur, 0f, "Inmune por tipo");
 
 		// Potencia
 		double power = move.power();
@@ -132,6 +162,20 @@ public final class DamageEngine {
 		if (atk.item == Item.MUSCLE_BAND && physical) power *= 1.1;
 		if (atk.item == Item.WISE_GLASSES && !physical) power *= 1.1;
 		if (atk.item.boostType != null && atk.item.boostType.equals(mt)) power *= 1.2;
+		// Campos (se supone que ambos están en el suelo salvo tipo Volador o Levitación)
+		boolean atkGrounded = !"flying".equals(atk.type1) && !"flying".equals(atk.type2) && !aAb.equals("levitate");
+		boolean defGrounded = !"flying".equals(def.type1) && !"flying".equals(def.type2) && !dAb.equals("levitate");
+		if (atkGrounded) {
+			if (f.terrain == Terrain.ELECTRIC && mt.equals("electric")) power *= 5325 / 4096.0;
+			if (f.terrain == Terrain.PSYCHIC && mt.equals("psychic")) power *= 5325 / 4096.0;
+			if (f.terrain == Terrain.GRASSY && mt.equals("grass")) power *= 5325 / 4096.0;
+		}
+		if (defGrounded) {
+			if (f.terrain == Terrain.MISTY && mt.equals("dragon")) power *= 0.5;
+			String mn = norm(move.name());
+			if (f.terrain == Terrain.GRASSY && (mn.equals("earthquake") || mn.equals("terremoto") || mn.equals("bulldoze")
+					|| mn.equals("terratemblor") || mn.equals("magnitude") || mn.equals("magnitud"))) power *= 0.5;
+		}
 		power = Math.max(1, pokeRound(power));
 
 		// Ataque
@@ -169,7 +213,8 @@ public final class DamageEngine {
 			dmg = Math.floor(dmg * eff);
 			if (physical && atk.burned && !aAb.equals("guts")) dmg = Math.floor(dmg * 0.5);
 			double other = 1.0;
-			if (screen && !crit) other *= 0.5;
+			boolean screenHit = f.screens == Screens.AURORA_VEIL || (physical ? f.screens == Screens.REFLECT : f.screens == Screens.LIGHT_SCREEN);
+			if (screenHit && !crit) other *= 0.5;
 			if (eff > 1f && (dAb.equals("filter") || dAb.equals("solidrock") || dAb.equals("prismarmor"))) other *= 0.75;
 			if (defFullHp && (dAb.equals("multiscale") || dAb.equals("shadowshield"))) other *= 0.5;
 			if (eff > 1f && atk.item == Item.EXPERT_BELT) other *= 4915 / 4096.0;
@@ -179,7 +224,7 @@ public final class DamageEngine {
 			min = Math.min(min, v);
 			max = Math.max(max, v);
 		}
-		return new Result(min, max, hp, eff, null);
+		return new Result(min, max, hp, cur, eff, null);
 	}
 
 	private static String immunity(String ab, String type) {
