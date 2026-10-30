@@ -20,7 +20,7 @@ import java.util.Random;
 
 /** Pokéreloj estilo Diamante/Perla/Platino: varias aplicaciones que se cambian con los botones rojos. */
 public class PoketchScreen extends Screen {
-	public enum App { CLOCK, TEAM, STEPS, COIN, TYPES, CALENDAR, CALC }
+	public enum App { CLOCK, TEAM, STEPS, COIN, TYPES, CALENDAR, CALC, DAMAGE }
 
 	// Dispositivo
 	private static final int DW = 232, DH = 176;
@@ -110,6 +110,7 @@ public class PoketchScreen extends Screen {
 			case TYPES -> drawTypes(c, sx, sy, mouseX, mouseY);
 			case CALENDAR -> drawCalendar(c, sx, sy, mouseX, mouseY);
 			case CALC -> drawCalc(c, sx, sy, mouseX, mouseY);
+			case DAMAGE -> drawDamage(c, sx, sy, mouseX, mouseY);
 		}
 		c.disableScissor();
 		c.getMatrices().pop();
@@ -489,6 +490,25 @@ public class PoketchScreen extends Screen {
 				beep(1.8f);
 			}));
 		}
+	}
+
+	// ---------------------------------------------------------------- Calculadora de daño
+
+	private void drawDamage(DrawContext c, int sx, int sy, int mx, int my) {
+		int[] p = GREEN;
+		centered(c, "CALCULADORA", sx + SW / 2, sy + 14, p[1]);
+		centered(c, "DE DAÑO", sx + SW / 2, sy + 26, p[1]);
+		// Icono: espada contra escudo
+		int cx = sx + SW / 2, cy = sy + 62;
+		for (int i = 0; i < 16; i++) c.fill(cx - 22 + i, cy - 10 + i, cx - 19 + i, cy - 7 + i, p[1]);
+		c.fill(cx - 24, cy - 2, cx - 14, cy + 1, p[1]);
+		Draw.round(c, cx + 4, cy - 12, cx + 24, cy + 10, p[1]);
+		c.fill(cx + 6, cy - 10, cx + 22, cy + 8, p[2]);
+		c.fill(cx + 13, cy - 10, cx + 15, cy + 8, p[1]);
+		centered(c, "Especies del servidor,", cx, sy + 84, p[2]);
+		centered(c, "IVs, EVs, objetos…", cx, sy + 95, p[2]);
+		lcdButton(c, cx - 40, sy + 110, cx + 40, sy + 136, "ABRIR", mx, my,
+				() -> MinecraftClient.getInstance().setScreen(new com.platino.calc.DamageCalcScreen(this)));
 	}
 
 	// ---------------------------------------------------------------- Calculadora
