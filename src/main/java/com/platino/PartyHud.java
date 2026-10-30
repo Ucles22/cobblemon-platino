@@ -68,7 +68,7 @@ public final class PartyHud {
 			if (!compact) drawPortrait(c, p, i, x + 2, y + 2, partialTicks);
 			int tx = compact ? x + 4 : x + 26;
 			drawDetails(c, p, x, y, w, h, tx, compact);
-			drawHeldSlot(c, p, compact ? x + w - 12 : x + w - 14, compact ? y + 2 : y + 2, compact ? 10 : 12);
+			drawHeldItem(c, p, compact ? x + 1 : x + 2, y + h - (compact ? 9 : 11), compact ? 8 : 10);
 		}
 	}
 
@@ -92,7 +92,7 @@ public final class PartyHud {
 	}
 
 	private static void drawDetails(DrawContext c, Pokemon p, int x, int y, int w, int h, int tx, boolean compact) {
-		int slotW = compact ? 12 : 16; // hueco de la casilla del objeto a la derecha
+		int slotW = 0;
 		String name = Draw.fit(p.getDisplayName(false).getString(), (x + w - slotW - 9) - tx);
 		Draw.dsText(c, name, tx, y + 3, 0xFFFFFFFF, 0xFF203048);
 		int gx = tx + Draw.width(name) + 1;
@@ -125,10 +125,9 @@ public final class PartyHud {
 			small(c, hp, x + w - 4 - Draw.width(hp) * 0.6f, y + 20.5f, 0xFFE8F0F8);
 		}
 
-		// Icono de nota
+		// Icono de nota, a la derecha del nombre
 		if (Notes.has(p.getUuid())) {
-			int nx = compact ? x + 1 : x + 2;
-			Draw.dsText(c, "✎", nx, y + h - 10, Draw.GOLD, 0xFF6A4A00);
+			Draw.dsText(c, "✎", x + w - 10, y + 3, Draw.GOLD, 0xFF6A4A00);
 		}
 	}
 
@@ -141,11 +140,8 @@ public final class PartyHud {
 	}
 
 	/** Llama a la función de retrato de Cobblemon (drawPosablePortrait$default), igual que hace su propia barra. */
-	/** Casilla del objeto equipado (como la del HUD original de Cobblemon) con el icono real dentro. */
-	static void drawHeldSlot(DrawContext c, Pokemon p, int x, int y, int size) {
-		Draw.round(c, x, y, x + size, y + size, 0xFF203858);
-		c.fill(x + 1, y + 1, x + size - 1, y + size - 1, 0xFF2C4C78);
-		c.fill(x + 1, y + 1, x + size - 1, y + 2, 0xFF1C3458);
+	/** Objeto equipado en pequeño en la esquina inferior izquierda del retrato (como en el menú de equipo de DPPt). */
+	static void drawHeldItem(DrawContext c, Pokemon p, int x, int y, int size) {
 		ItemStack held;
 		try {
 			held = p.heldItem();
@@ -153,9 +149,9 @@ public final class PartyHud {
 			return;
 		}
 		if (held == null || held.isEmpty()) return;
-		float scale = (size - 2) / 16f;
+		float scale = size / 16f;
 		c.getMatrices().push();
-		c.getMatrices().translate(x + 1, y + 1, 150);
+		c.getMatrices().translate(x, y, 200);
 		c.getMatrices().scale(scale, scale, 1f);
 		c.drawItem(held, 0, 0);
 		c.getMatrices().pop();
