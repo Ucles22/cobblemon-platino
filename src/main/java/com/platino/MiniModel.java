@@ -25,8 +25,8 @@ import java.util.UUID;
  */
 public final class MiniModel {
 	private static final Map<UUID, FloatingState> STATES = new HashMap<>();
-	/** De frente, mirándote (el Resumen usa 325° de giro para verlo a tres cuartos). */
-	private static final Quaternionf ROTATION = QuaternionUtilsKt.fromEulerXYZDegrees(new Quaternionf(), new Vector3f(8f, 0f, 0f));
+	/** Casi de frente, con un ligero giro (15°) para que conserve volumen; el Resumen usa 35°. */
+	private static final Quaternionf ROTATION = QuaternionUtilsKt.fromEulerXYZDegrees(new Quaternionf(), new Vector3f(10f, 345f, 0f));
 	private static MethodHandle draw;
 	private static boolean failed;
 
@@ -47,7 +47,7 @@ public final class MiniModel {
 
 			float k = size / 66f;
 			MatrixStack m = c.getMatrices();
-			c.enableScissor(x, y, x + size, y + size);
+			c.enableScissor(x - size / 6, y - 2, x + size + size / 6, y + size + 2);
 			m.push();
 			try {
 				m.translate(x + size * 0.5, y - 10 * k, 250);

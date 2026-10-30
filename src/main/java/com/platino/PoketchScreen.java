@@ -263,50 +263,49 @@ public class PoketchScreen extends Screen {
 		} catch (Throwable e) {
 			slots = List.of();
 		}
-		// Como en DPPt: 2 columnas x 3 filas; retrato, nombre, nivel, cápsula de objeto y barra de vida
-		int cw = (SW - 18) / 2, ch = (SH - 6) / 3;
+		// 2 columnas x 3 filas. Cada hueco: modelo a la izquierda; nombre, nivel y barra a su derecha
+		int cw = (SW - 14) / 2, ch = (SH - 4) / 3, model = 30, block = 34;
 		for (int i = 0; i < 6; i++) {
-			int x = sx + 6 + (i % 2) * (cw + 6), y = sy + 3 + (i / 2) * ch;
+			int x = sx + 5 + (i % 2) * (cw + 4), y = sy + 2 + (i / 2) * ch;
+			int top = y + (ch - block) / 2;
 			Pokemon pk = i < slots.size() ? slots.get(i) : null;
-			int barY = y + ch - 13;
-			// Barra: borde oscuro, fondo claro y relleno oscuro con la vida actual
-			Draw.round(c, x, barY, x + cw, barY + 9, p[1]);
-			c.fill(x + 1, barY + 1, x + cw - 1, barY + 8, p[3]);
+			// Separador entre filas
+			if (i < 4) c.fill(x + 2, y + ch - 1, x + cw - 2, y + ch, p[2]);
+			int tx = x + model + 3, bx2 = x + cw - 2;
 			if (pk == null) {
-				centered(c, "- - -", x + cw / 2, y + 8, p[2]);
+				centered(c, "- - -", x + cw / 2, top + 12, p[2]);
 				continue;
 			}
-			int max = Math.max(1, pk.getMaxHealth());
-			float ratio = Math.max(0, Math.min(1, pk.getCurrentHealth() / (float) max));
-			int fw = Math.round((cw - 4) * ratio);
-			if (fw > 0) c.fill(x + 2, barY + 2, x + 2 + fw, barY + 7, ratio > 0.2f ? p[2] : p[1]);
-			if (fw > 0) c.fill(x + 2, barY + 2, x + 2 + fw, barY + 3, p[1]);
-
-			// Mini modelo 3D quieto, a color (si fallara, se usa el retrato)
-			int px = x, py = y;
-			if (!MiniModel.failed()) {
-				MiniModel.draw(c, pk, px, py, 22);
-			} else {
-				PartyHud.drawPortrait(c, pk, i, px - 1, py - 1, 0f);
-			}
+			// Mini modelo (si fallara, retrato)
+			if (!MiniModel.failed()) MiniModel.draw(c, pk, x, top + 2, model);
+			else PartyHud.drawPortrait(c, pk, i, x + 4, top + 6, 0f);
 			c.draw();
 
-			// Nombre y nivel
 			boolean holds;
 			try {
 				holds = !pk.heldItem().isEmpty();
 			} catch (Throwable t) {
 				holds = false;
 			}
-			int textW = cw - 23 - (holds ? 10 : 0);
-			text(c, Draw.fit(pk.getDisplayName(false).getString(), textW), x + 22, y + 2, p[1]);
-			text(c, pk.isFainted() ? "DEB" : "Nv" + pk.getLevel(), x + 22, y + 12, p[1]);
-			// Cápsula de objeto equipado (como en DPPt)
+			text(c, Draw.fit(pk.getDisplayName(false).getString(), bx2 - tx), tx, top + 2, p[1]);
+			text(c, pk.isFainted() ? "DEB" : "Nv" + pk.getLevel(), tx, top + 13, p[1]);
+			// Cápsula de objeto equipado, a la derecha del nivel
 			if (holds) {
-				int ix = x + cw - 8, iy = y + 8;
+				int ix = bx2 - 8, iy = top + 11;
 				Draw.round(c, ix, iy, ix + 8, iy + 11, p[1]);
 				c.fill(ix + 1, iy + 1, ix + 7, iy + 4, p[3]);
 				c.fill(ix + 1, iy + 5, ix + 7, iy + 10, p[2]);
+			}
+			// Barra de vida justo debajo
+			int max = Math.max(1, pk.getMaxHealth());
+			float ratio = Math.max(0, Math.min(1, pk.getCurrentHealth() / (float) max));
+			int barY = top + 25;
+			Draw.round(c, tx, barY, bx2, barY + 8, p[1]);
+			c.fill(tx + 1, barY + 1, bx2 - 1, barY + 7, p[3]);
+			int fw = Math.round((bx2 - tx - 4) * ratio);
+			if (fw > 0) {
+				c.fill(tx + 2, barY + 2, tx + 2 + fw, barY + 6, ratio > 0.2f ? p[2] : p[1]);
+				c.fill(tx + 2, barY + 2, tx + 2 + fw, barY + 3, p[1]);
 			}
 		}
 	}
