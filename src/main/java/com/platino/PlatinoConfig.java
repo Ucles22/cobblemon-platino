@@ -25,6 +25,11 @@ public class PlatinoConfig {
 	public int battleMenuOffsetY = 0;
 	/** Barra de equipo estilo Platino (sustituye la de Cobblemon). */
 	public boolean partyHud = true;
+
+	/** Pokéreloj: última aplicación abierta, pasos y días marcados en el calendario. */
+	public int poketchApp = 0;
+	public long poketchSteps = 0;
+	public java.util.List<String> poketchMarks = new java.util.ArrayList<>();
 	/** Inventario de Minecraft estilo Platino. */
 	public boolean inventoryTheme = true;
 	/** Recolorear PC, Resumen, equipo y botones de combate de Cobblemon (reinicia para aplicar). */
@@ -70,6 +75,7 @@ public class PlatinoConfig {
 		if (loaded == null) return defaults;
 		if (loaded.palette == null) loaded.palette = defaults.palette;
 		if (loaded.battleMenuSide == null) loaded.battleMenuSide = defaults.battleMenuSide;
+		if (loaded.poketchMarks == null) loaded.poketchMarks = new java.util.ArrayList<>();
 		return loaded;
 	}
 }

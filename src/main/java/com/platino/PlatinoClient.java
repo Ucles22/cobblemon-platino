@@ -35,6 +35,11 @@ public class PlatinoClient implements ClientModInitializer {
 	public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	private static KeyBinding notesKey;
 	private static KeyBinding cardKey;
+	private static KeyBinding poketchKey;
+	private static double stepDistance;
+	private static double lastX, lastZ;
+	private static boolean hasLast;
+	private static int unsavedSteps;
 
 	@Override
 	public void onInitializeClient() {
@@ -46,6 +51,15 @@ public class PlatinoClient implements ClientModInitializer {
 				InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_N, "category.cobbleplatino"));
 		cardKey = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.cobbleplatino.card",
 				InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_K, "category.cobbleplatino"));
+		poketchKey = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.cobbleplatino.poketch",
+				InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_P, "category.cobbleplatino"));
+		ClientTickEvents.END_CLIENT_TICK.register(client -> {
+			while (poketchKey.wasPressed()) {
+				if (client.currentScreen == null) client.setScreen(new PoketchScreen());
+			}
+			countSteps(client);
+			if (pendingPoketch > 0 && --pendingPoketch == 0) client.setScreen(new PoketchScreen());
+		});
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (cardKey.wasPressed()) {
 				if (client.currentScreen == null) openCard();
@@ -163,8 +177,12 @@ public class PlatinoClient implements ClientModInitializer {
 						+ " puntos=" + ServerStats.points + " clan=" + ServerStats.clan));
 				return 1;
 			})));
+			root.then(ClientCommandManager.literal("pokereloj").executes(ctx -> {
+				pendingPoketch = 2;
+				return 1;
+			}));
 			root.executes(ctx -> {
-				ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino " + version() + "] /platino ficha · combate · paleta · recargar"));
+				ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino " + version() + "] /platino ficha · pokereloj · combate · paleta · recargar"));
 				return 1;
 			});
 			dispatcher.register(root.then(pal).then(ClientCommandManager.literal("recargar").executes(ctx -> {
@@ -176,7 +194,7 @@ public class PlatinoClient implements ClientModInitializer {
 		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> client.execute(() -> {
 			ServerStats.reset();
 			if (client.player != null) {
-				client.player.sendMessage(Text.literal("§6[Cobblemon Platino " + version() + "]§f K = Ficha de Entrenador · N = Notas"
+				client.player.sendMessage(Text.literal("§6[Cobblemon Platino " + version() + "]§f K = Ficha · P = Pokéreloj · N = Notas"
 						+ (DiosesmonBridge.isPresent() ? " · marcador DiosesMon OK" : "")), false);
 			}
 		}));
@@ -186,6 +204,40 @@ public class PlatinoClient implements ClientModInitializer {
 	}
 
 	private static int pendingCard = 0;
+	private static int pendingPoketch = 0;
+
+	public static boolean isPoketchKey(int keyCode, int scanCode) {
+		return poketchKey != null && poketchKey.matchesKey(keyCode, scanCode);
+	}
+
+	/** Podómetro del Pokéreloj: 1 paso por cada bloque recorrido a pie. */
+	private static void countSteps(MinecraftClient client) {
+		var player = client.player;
+		if (player == null) {
+			hasLast = false;
+			if (unsavedSteps > 0) {
+				unsavedSteps = 0;
+				PlatinoConfig.save();
+			}
+			return;
+		}
+		double x = player.getX(), z = player.getZ();
+		if (hasLast && player.isOnGround() && !player.hasVehicle() && !player.getAbilities().flying) {
+			double d = Math.hypot(x - lastX, z - lastZ);
+			if (d < 2.0) stepDistance += d; // ignora teletransportes
+			while (stepDistance >= 1.0) {
+				stepDistance -= 1.0;
+				PlatinoConfig.get().poketchSteps++;
+				if (++unsavedSteps >= 50) {
+					unsavedSteps = 0;
+					PlatinoConfig.save();
+				}
+			}
+		}
+		lastX = x;
+		lastZ = z;
+		hasLast = true;
+	}
 
 	private static void openCard() {
 		MinecraftClient mc = MinecraftClient.getInstance();

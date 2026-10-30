@@ -8,6 +8,8 @@ Mod **solo de cliente** que da a Cobblemon una interfaz inspirada en **Pokémon 
 - **PC, Resumen y botones de combate de Cobblemon:** recoloreados en memoria con la paleta Platino.
 - **Notas:** tecla **N** (Pokémon seleccionado) o botón **✎ Notas** en el Resumen. Se guardan en `config/cobbleplatino_notas.json`.
 
+- **Pokéreloj (P):** reloj (hora del PC), equipo con vida actual, podómetro, lanzamonedas, indicador de eficacia de tipos, calendario (del PC, con días marcables) y calculadora. Los botones rojos (o la rueda / flechas ↑↓) cambian de aplicación. También con `/platino pokereloj`.
+
 Configuración: `config/cobbleplatino.json` (activar/desactivar cada parte, mover cajas y barra, modo compacto).
 
 Requiere: Fabric API, Cobblemon 1.7.x, Fabric Language Kotlin.

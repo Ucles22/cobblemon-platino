@@ -133,7 +133,7 @@ public final class PartyHud {
 	}
 
 	/** Llama a la función de retrato de Cobblemon (drawPosablePortrait$default), igual que hace su propia barra. */
-	private static void drawPortrait(DrawContext c, Pokemon p, int index, int px, int py, float partialTicks) {
+	static void drawPortrait(DrawContext c, Pokemon p, int index, int px, int py, float partialTicks) {
 		if (portraitFailed) return;
 		try {
 			if (portrait == null) {
