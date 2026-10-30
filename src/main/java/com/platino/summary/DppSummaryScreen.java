@@ -43,6 +43,20 @@ import java.util.Locale;
 public class DppSummaryScreen extends Screen {
 	/** true mientras se abre el Resumen original de Cobblemon a propósito. */
 	public static boolean bypass;
+	/** Pantalla a la que volver al cerrar la próxima ficha que se abra (PC, menú de equipo). */
+	public static Screen nextParent;
+	private final Screen parent = takeParent();
+
+	private static Screen takeParent() {
+		Screen s = nextParent;
+		nextParent = null;
+		return s;
+	}
+
+	@Override
+	public void close() {
+		MinecraftClient.getInstance().setScreen(parent);
+	}
 
 	private static final int W = 400, H = 252, LW = 138;
 	private static int lastPage = 0;

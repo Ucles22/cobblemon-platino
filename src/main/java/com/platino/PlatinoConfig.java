@@ -40,6 +40,8 @@ public class PlatinoConfig {
 	public boolean screensTheme = true;
 	/** Pantalla de datos del Pokémon estilo Diamante/Perla en vez del Resumen de Cobblemon (/platino resumen). */
 	public boolean dppSummary = true;
+	/** PC estilo Diamante/Perla en vez del de Cobblemon (/platino pc). */
+	public boolean dppPc = true;
 	/** Paleta de las pantallas de Cobblemon: diamante, perla, platino u original. Cambiar con /platino paleta. */
 	public String palette = "diamante";
 

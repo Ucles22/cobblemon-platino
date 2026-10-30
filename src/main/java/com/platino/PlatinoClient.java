@@ -214,6 +214,17 @@ public class PlatinoClient implements ClientModInitializer {
 				}));
 			}
 			root.then(resumen);
+			var pcNode = ClientCommandManager.literal("pc");
+			for (String state : new String[]{"on", "off"}) {
+				pcNode.then(ClientCommandManager.literal(state).executes(ctx -> {
+					PlatinoConfig.get().dppPc = state.equals("on");
+					PlatinoConfig.save();
+					ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino] PC estilo DP "
+							+ (state.equals("on") ? "ACTIVADO" : "DESACTIVADO (se usa el de Cobblemon)")));
+					return 1;
+				}));
+			}
+			root.then(pcNode);
 			root.then(ClientCommandManager.literal("bolsa").executes(ctx -> {
 				pendingBag = 2;
 				return 1;
@@ -227,7 +238,7 @@ public class PlatinoClient implements ClientModInitializer {
 				return 1;
 			}));
 			root.executes(ctx -> {
-				ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino " + version() + "] /platino ficha · pokereloj · bolsa · equipo · resumen · combate · paleta · recargar"));
+				ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino " + version() + "] /platino ficha · pokereloj · bolsa · equipo · resumen · pc · combate · paleta · recargar"));
 				return 1;
 			});
 			dispatcher.register(root.then(pal).then(ClientCommandManager.literal("recargar").executes(ctx -> {

@@ -17,7 +17,10 @@ import java.util.Collection;
 public abstract class SummaryOpenMixin {
 	@Inject(method = "open", at = @At("HEAD"), cancellable = true, remap = false)
 	private void platino$open(Collection<? extends Pokemon> party, boolean editable, int selection, CallbackInfo ci) {
-		if (DppSummaryScreen.bypass || !PlatinoConfig.get().dppSummary) return;
+		if (DppSummaryScreen.bypass || !PlatinoConfig.get().dppSummary) {
+			DppSummaryScreen.nextParent = null;
+			return;
+		}
 		if (party == null || party.stream().allMatch(p -> p == null)) return;
 		try {
 			MinecraftClient.getInstance().setScreen(new DppSummaryScreen(party, editable, selection));

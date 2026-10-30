@@ -11,7 +11,8 @@
 		"BattleGeneralSelectionMixin",
 		"BattleGUIMixin",
 		"BattleMessagePaneMixin",
-		"SummaryOpenMixin"
+		"SummaryOpenMixin",
+		"PcScreenMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

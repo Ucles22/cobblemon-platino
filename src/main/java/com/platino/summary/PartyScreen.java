@@ -289,6 +289,7 @@ public class PartyScreen extends Screen {
 			case DATOS -> {
 				menuSlot = -1;
 				if (p == null) return;
+				DppSummaryScreen.nextParent = this;
 				Summary.Companion.open(cp.getSlots(), true, slot);
 			}
 			case MOVER -> {
