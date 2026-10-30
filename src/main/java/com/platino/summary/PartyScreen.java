@@ -231,7 +231,13 @@ public class PartyScreen extends Screen {
 	private void drawMenu(DrawContext c, ClientParty cp, int mx, int my) {
 		Option[] opts = Option.values();
 		int mw = 74, ih = 16, mh = opts.length * ih + 8;
-		int x = x0 + W - mw - 6, y = y0 + H - 44 - mh;
+		// Justo debajo, a la derecha del Pokémon elegido
+		int sx = x0 + 6 + (menuSlot % 2) * (CW + 8);
+		int sy = y0 + 6 + (menuSlot / 2) * (CH + 4) + (menuSlot % 2) * 8;
+		int x = sx + CW - mw + 12, y = sy + CH - 6;
+		if (y + mh > height - 2) y = sy - mh + 6;
+		x = Math.max(2, Math.min(x, width - mw - 2));
+		y = Math.max(2, y);
 		c.getMatrices().push();
 		c.getMatrices().translate(0, 0, 200);
 		Draw.panel(c, x, y, x + mw, y + mh, 0xFF484858, 0xFFF8F8F8);
