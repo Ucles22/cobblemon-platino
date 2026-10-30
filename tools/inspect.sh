@@ -95,3 +95,11 @@ fi
 if [ -n "$CJAR" ] && [ -f "$CJAR" ]; then
   javap -p -c -constants -cp "$CJAR" com.cobblemon.mod.common.client.gui.pc.StorageSlot | grep -E '^  [a-z]|ldc|bipush|sipush|fconst|dconst|Vector3f|Quaternion|drawProfile|translate|scale|PoseType' | head -80 > inspect/pc-slot.txt 2>&1
 fi
+# --- Décima ronda: dibujo completo de las casillas del PC y del equipo del Resumen
+if [ -n "$CJAR" ] && [ -f "$CJAR" ]; then
+  { echo "==== StorageSlot.renderSlot";
+    javap -p -c -constants -cp "$CJAR" com.cobblemon.mod.common.client.gui.pc.StorageSlot | awk '/public final void renderSlot/{f=1} f{print} /drawProfilePokemon/{if(f){exit}}' | grep -vE 'aload|astore|checkcast|dup$|pop$';
+    echo "==== PartySlotWidget";
+    javap -p -c -constants -cp "$CJAR" com.cobblemon.mod.common.client.gui.summary.widgets.PartySlotWidget | awk '/renderWidget/{f=1} f{print} /drawProfilePokemon/{if(f){exit}}' | grep -vE 'aload|astore|checkcast|dup$|pop$';
+  } > inspect/slot-render.txt 2>&1
+fi
