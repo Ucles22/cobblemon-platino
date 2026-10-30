@@ -194,6 +194,17 @@ public class PlatinoClient implements ClientModInitializer {
 						+ " puntos=" + ServerStats.points + " clan=" + ServerStats.clan));
 				return 1;
 			})));
+			var resumen = ClientCommandManager.literal("resumen");
+			for (String state : new String[]{"on", "off"}) {
+				resumen.then(ClientCommandManager.literal(state).executes(ctx -> {
+					PlatinoConfig.get().dppSummary = state.equals("on");
+					PlatinoConfig.save();
+					ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino] Ficha de Pokémon estilo DP "
+							+ (state.equals("on") ? "ACTIVADA" : "DESACTIVADA (se usa la de Cobblemon)")));
+					return 1;
+				}));
+			}
+			root.then(resumen);
 			root.then(ClientCommandManager.literal("bolsa").executes(ctx -> {
 				pendingBag = 2;
 				return 1;
@@ -203,7 +214,7 @@ public class PlatinoClient implements ClientModInitializer {
 				return 1;
 			}));
 			root.executes(ctx -> {
-				ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino " + version() + "] /platino ficha · pokereloj · bolsa · combate · paleta · recargar"));
+				ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino " + version() + "] /platino ficha · pokereloj · bolsa · resumen · combate · paleta · recargar"));
 				return 1;
 			});
 			dispatcher.register(root.then(pal).then(ClientCommandManager.literal("recargar").executes(ctx -> {

@@ -38,6 +38,8 @@ public class PlatinoConfig {
 	public boolean inventoryTheme = true;
 	/** Recolorear PC, Resumen, equipo y botones de combate de Cobblemon (reinicia para aplicar). */
 	public boolean screensTheme = true;
+	/** Pantalla de datos del Pokémon estilo Diamante/Perla en vez del Resumen de Cobblemon (/platino resumen). */
+	public boolean dppSummary = true;
 	/** Paleta de las pantallas de Cobblemon: diamante, perla, platino u original. Cambiar con /platino paleta. */
 	public String palette = "diamante";
 
