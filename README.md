@@ -10,6 +10,10 @@ Mod **solo de cliente** que da a Cobblemon una interfaz inspirada en **Pokémon 
 
 - **Pokéreloj (P):** reloj (hora del PC), equipo con vida actual, podómetro, lanzamonedas, indicador de eficacia de tipos, calendario (del PC, con días marcables) y calculadora. Los botones rojos (o la rueda / flechas ↑↓) cambian de aplicación. También con `/platino pokereloj`.
 
+- **Menú DPPt (Esc):** POKéDEX, POKéMON, BOLSA, FICHA, POKéRELOJ, OPCIONES y MENÚ JUEGO (el menú de pausa normal). `/platino menu off` para volver al de siempre.
+- **Bolsa (I):** objetos por bolsillos (Objetos, Medicinas, Poké Balls, MT/MO, Bayas, Combate, Obj. clave, Varios). "A LA MANO" pone el objeto en tu mano.
+- **Pitido de vida baja:** en combate, con tu Pokémon en rojo. `/platino combate pitido off` para quitarlo.
+
 Configuración: `config/cobbleplatino.json` (activar/desactivar cada parte, mover cajas y barra, modo compacto).
 
 Requiere: Fabric API, Cobblemon 1.7.x, Fabric Language Kotlin.

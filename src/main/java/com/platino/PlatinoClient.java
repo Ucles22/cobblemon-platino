@@ -36,6 +36,7 @@ public class PlatinoClient implements ClientModInitializer {
 	private static KeyBinding notesKey;
 	private static KeyBinding cardKey;
 	private static KeyBinding poketchKey;
+	private static KeyBinding bagKey;
 	private static double stepDistance;
 	private static double lastX, lastZ;
 	private static boolean hasLast;
@@ -53,6 +54,15 @@ public class PlatinoClient implements ClientModInitializer {
 				InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_K, "category.cobbleplatino"));
 		poketchKey = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.cobbleplatino.poketch",
 				InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_P, "category.cobbleplatino"));
+		bagKey = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.cobbleplatino.bag",
+				InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_I, "category.cobbleplatino"));
+		ClientTickEvents.END_CLIENT_TICK.register(client -> {
+			while (bagKey.wasPressed()) {
+				if (client.currentScreen == null) client.setScreen(new BagScreen());
+			}
+			LowHpAlarm.tick(client);
+			if (pendingBag > 0 && --pendingBag == 0) client.setScreen(new BagScreen());
+		});
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (poketchKey.wasPressed()) {
 				if (client.currentScreen == null) client.setScreen(new PoketchScreen());
@@ -127,16 +137,17 @@ public class PlatinoClient implements ClientModInitializer {
 				}));
 			}
 			var combate = ClientCommandManager.literal("combate");
-			for (String part : new String[]{"menu", "texto"}) {
+			for (String part : new String[]{"menu", "texto", "pitido"}) {
 				var node = ClientCommandManager.literal(part);
 				for (String state : new String[]{"on", "off"}) {
 					node.then(ClientCommandManager.literal(state).executes(ctx -> {
 						boolean on = state.equals("on");
 						if (part.equals("menu")) PlatinoConfig.get().battleMenu = on;
-						else PlatinoConfig.get().battleText = on;
+						else if (part.equals("texto")) PlatinoConfig.get().battleText = on;
+						else PlatinoConfig.get().lowHpBeep = on;
 						PlatinoConfig.save();
 						ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino] "
-								+ (part.equals("menu") ? "Menú de combate DS" : "Cuadro de texto DS")
+								+ (part.equals("menu") ? "Menú de combate DS" : part.equals("texto") ? "Cuadro de texto DS" : "Pitido de vida baja")
 								+ (on ? " ACTIVADO" : " DESACTIVADO")));
 						return 1;
 					}));
@@ -177,12 +188,24 @@ public class PlatinoClient implements ClientModInitializer {
 						+ " puntos=" + ServerStats.points + " clan=" + ServerStats.clan));
 				return 1;
 			})));
+			root.then(ClientCommandManager.literal("bolsa").executes(ctx -> {
+				pendingBag = 2;
+				return 1;
+			}));
+			for (String state : new String[]{"on", "off"}) {
+				root.then(ClientCommandManager.literal("menu").then(ClientCommandManager.literal(state).executes(ctx -> {
+					PlatinoConfig.get().pauseMenu = state.equals("on");
+					PlatinoConfig.save();
+					ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino] Menú de pausa DPPt " + (state.equals("on") ? "ACTIVADO" : "DESACTIVADO")));
+					return 1;
+				})));
+			}
 			root.then(ClientCommandManager.literal("pokereloj").executes(ctx -> {
 				pendingPoketch = 2;
 				return 1;
 			}));
 			root.executes(ctx -> {
-				ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino " + version() + "] /platino ficha · pokereloj · combate · paleta · recargar"));
+				ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino " + version() + "] /platino ficha · pokereloj · bolsa · menu · combate · paleta · recargar"));
 				return 1;
 			});
 			dispatcher.register(root.then(pal).then(ClientCommandManager.literal("recargar").executes(ctx -> {
@@ -194,7 +217,7 @@ public class PlatinoClient implements ClientModInitializer {
 		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> client.execute(() -> {
 			ServerStats.reset();
 			if (client.player != null) {
-				client.player.sendMessage(Text.literal("§6[Cobblemon Platino " + version() + "]§f K = Ficha · P = Pokéreloj · N = Notas"
+				client.player.sendMessage(Text.literal("§6[Cobblemon Platino " + version() + "]§f Esc = Menú · I = Bolsa · K = Ficha · P = Pokéreloj · N = Notas"
 						+ (DiosesmonBridge.isPresent() ? " · marcador DiosesMon OK" : "")), false);
 			}
 		}));
@@ -205,6 +228,11 @@ public class PlatinoClient implements ClientModInitializer {
 
 	private static int pendingCard = 0;
 	private static int pendingPoketch = 0;
+	private static int pendingBag = 0;
+
+	public static boolean isBagKey(int keyCode, int scanCode) {
+		return bagKey != null && bagKey.matchesKey(keyCode, scanCode);
+	}
 
 	public static boolean isPoketchKey(int keyCode, int scanCode) {
 		return poketchKey != null && poketchKey.matchesKey(keyCode, scanCode);

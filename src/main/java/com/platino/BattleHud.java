@@ -59,7 +59,11 @@ public final class BattleHud {
 		float target = !bp.isHpFlat() ? bp.getHpValue() : max > 0 ? bp.getHpValue() / max : 0f;
 		float cur = Math.max(0, Math.min(1, target));
 
-		int border = hovered ? Draw.GOLD : Draw.OUTLINE;
+		// Vida baja (≤20 %): borde rojo parpadeante y pitido, como en DPPt
+		boolean low = ally && cur > 0f && cur <= 0.2f;
+		if (low) LowHpAlarm.mark();
+		boolean blinkOn = (System.currentTimeMillis() / 350) % 2 == 0;
+		int border = hovered ? Draw.GOLD : (low && blinkOn) ? 0xFFE83030 : Draw.OUTLINE;
 		// Sombra
 		Draw.round(c, x + 2, y + 2, x + W + 2, y + h + 2, 0x60000000);
 		Draw.panelGradient(c, x, y, x + W, y + h, border, Draw.CREAM, Draw.CREAM_DARK);
