@@ -30,6 +30,7 @@ import com.cobblemon.mod.common.api.storage.party.PartyPosition;
 import com.cobblemon.mod.common.client.CobblemonClient;
 import com.cobblemon.mod.common.client.storage.ClientParty;
 import com.cobblemon.mod.common.net.messages.server.BenchMovePacket;
+import com.cobblemon.mod.common.net.messages.server.pokemon.update.SetNicknamePacket;
 import com.cobblemon.mod.common.net.messages.server.RequestMoveSwapPacket;
 import com.cobblemon.mod.common.net.messages.server.storage.party.MovePartyPokemonPacket;
 import com.cobblemon.mod.common.net.messages.server.storage.party.SwapPartyPokemonPacket;
@@ -83,6 +84,9 @@ public class DppSummaryScreen extends Screen {
 	private List<MoveTemplate> swapOptions = List.of();
 	/** Submenú para ordenar el equipo y hueco elegido (-1 = ninguno). */
 	private boolean partyMenu;
+	/** Edición del mote: null = no se está editando. */
+	private String nickBuffer;
+	private static final int NICK_MAX = 12;
 	private int partyPick = -1;
 	private String toast;
 	private long toastUntil;
@@ -221,8 +225,24 @@ public class DppSummaryScreen extends Screen {
 		// Placa de nombre naranja
 		Draw.panelGradient(c, x + 2, y + 2, x + w - 2, y + 18, 0xFFB87820, 0xFFF8D080, 0xFFF0B048);
 		Draw.tinyBall(c, x + 6, y + 6);
-		String name = Draw.fit(p.getDisplayName(false).getString().toUpperCase(Locale.ROOT), w - 34);
-		Draw.dsText(c, name, x + 16, y + 6, 0xFFFFFFFF, 0xFF905018);
+		boolean nickEditable = canEdit(p);
+		if (nickBuffer != null) {
+			// Campo de texto del mote
+			Draw.round(c, x + 15, y + 4, x + w - 30, y + 16, 0xFFF8F8F0);
+			String shown = Draw.fit(nickBuffer, w - 50);
+			Draw.dsText(c, shown, x + 18, y + 6, 0xFF303038, 0xFFD8D8D0);
+			if ((System.currentTimeMillis() / 400) % 2 == 0) c.fill(x + 18 + Draw.width(shown), y + 5, x + 19 + Draw.width(shown), y + 15, 0xFF303038);
+			button(c, x + w - 28, y + 4, x + w - 16, y + 16, "✔", mx, my, 0xFFC8F0C0, () -> commitNick(p));
+		} else {
+			String name = Draw.fit(p.getDisplayName(false).getString().toUpperCase(Locale.ROOT), w - (nickEditable ? 46 : 34));
+			Draw.dsText(c, name, x + 16, y + 6, 0xFFFFFFFF, 0xFF905018);
+			if (nickEditable) {
+				button(c, x + w - 28, y + 4, x + w - 16, y + 16, "✎", mx, my, 0xFFF8E8C0, () -> {
+					var nick = p.getNickname();
+					nickBuffer = nick == null ? "" : nick.getString();
+				});
+			}
+		}
 		Gender g = p.getGender();
 		if (g == Gender.MALE) Draw.dsText(c, "♂", x + w - 12, y + 6, 0xFF3070F0, 0xFFA8C8F8);
 		else if (g == Gender.FEMALE) Draw.dsText(c, "♀", x + w - 12, y + 6, 0xFFF04870, 0xFFF8B8C8);
@@ -851,6 +871,7 @@ public class DppSummaryScreen extends Screen {
 	private void switchPokemon(int dir) {
 		if (party.size() < 2) return;
 		index = Math.floorMod(index + dir, party.size());
+		nickBuffer = null;
 		selectedMove = -1;
 		swapSlot = -1;
 		beep(1.4f);
@@ -928,7 +949,45 @@ public class DppSummaryScreen extends Screen {
 	}
 
 	@Override
+	public boolean charTyped(char chr, int modifiers) {
+		if (nickBuffer != null) {
+			addNickChars(String.valueOf(chr));
+			return true;
+		}
+		return super.charTyped(chr, modifiers);
+	}
+
+	private void addNickChars(String text) {
+		for (int cp : text.codePoints().toArray()) {
+			if (nickBuffer.codePointCount(0, nickBuffer.length()) >= NICK_MAX) break;
+			if (Character.isISOControl(cp) || cp == '§') continue;
+			nickBuffer += new String(Character.toChars(cp));
+		}
+	}
+
+	/** Envía el mote al servidor (vacío = quitar el mote), igual que el Resumen de Cobblemon. */
+	private void commitNick(Pokemon p) {
+		if (nickBuffer == null || p == null) return;
+		String nick = nickBuffer.trim();
+		nickBuffer = null;
+		new SetNicknamePacket(p.getUuid(), true, nick).sendToServer();
+		beep(1.9f);
+		toast(nick.isEmpty() ? "Mote eliminado." : "Mote cambiado a " + nick + ".");
+	}
+
+	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+		if (nickBuffer != null) {
+			if (keyCode == GLFW.GLFW_KEY_ESCAPE) nickBuffer = null;
+			else if (keyCode == GLFW.GLFW_KEY_ENTER || keyCode == GLFW.GLFW_KEY_KP_ENTER) commitNick(pk());
+			else if (keyCode == GLFW.GLFW_KEY_BACKSPACE && !nickBuffer.isEmpty())
+				nickBuffer = nickBuffer.substring(0, nickBuffer.offsetByCodePoints(nickBuffer.length(), -1));
+			else if (keyCode == GLFW.GLFW_KEY_V && Screen.hasControlDown()) {
+				String clip = MinecraftClient.getInstance().keyboard.getClipboard();
+				if (clip != null) addNickChars(clip);
+			}
+			return true;
+		}
 		if (keyCode == GLFW.GLFW_KEY_ESCAPE && (partyMenu || swapSlot >= 0)) {
 			partyMenu = false;
 			swapSlot = -1;
