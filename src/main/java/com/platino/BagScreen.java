@@ -194,9 +194,9 @@ public class BagScreen extends Screen {
 		int nx1 = x + 8, nx2 = x + LIST_X - 6, ny = y + 102;
 		Draw.panel(c, nx1, ny, nx2, ny + 16, 0xFF303840, 0xFFF8F8F8);
 		String name = pk.label;
-		Draw.dsText(c, name, (nx1 + nx2) / 2 - Draw.width(name) / 2, ny + 4, 0xFF404040, 0xFFC8C8C8);
-		Draw.dsText(c, "◀", nx1 + 4, ny + 4, pk.color, 0xFF404040);
-		Draw.dsText(c, "▶", nx2 - 10, ny + 4, pk.color, 0xFF404040);
+		Draw.dsText(c, name, (nx1 + nx2) / 2 - Draw.width(name) / 2, ny + 4, 0xFF303038, 0xFFC8C8C8);
+		Draw.dsText(c, "◀", nx1 + 4, ny + 4, pk.color, 0xFF303038);
+		Draw.dsText(c, "▶", nx2 - 10, ny + 4, pk.color, 0xFF303038);
 		// Iconos de bolsillos
 		Pocket[] all = Pocket.values();
 		for (int i = 0; i < all.length; i++) {
@@ -227,8 +227,8 @@ public class BagScreen extends Screen {
 			String cnt = "×" + g.count();
 			String nm = Draw.fit(g.stack().getName().getString(), lx2 - lx1 - 50 - Draw.width(cnt));
 			boolean dim = inBattle() && !usableInBattle(g.stack());
-			Draw.dsText(c, nm, lx1 + 33, ry + 5, dim ? 0xFFA0A0A0 : 0xFF404040, 0xFFC8C8C8);
-			Draw.dsText(c, cnt, lx2 - 8 - Draw.width(cnt), ry + 5, 0xFF404040, 0xFFC8C8C8);
+			Draw.dsText(c, nm, lx1 + 33, ry + 5, dim ? 0xFFA0A0A0 : 0xFF303038, 0xFFC8C8C8);
+			Draw.dsText(c, cnt, lx2 - 8 - Draw.width(cnt), ry + 5, 0xFF303038, 0xFFC8C8C8);
 			if (sel && (System.currentTimeMillis() / 400) % 2 == 0) Draw.dsText(c, "▶", lx1 + 5, ry + 5, 0xFFE03030, 0xFFF0A0A0);
 		}
 		// Barra de desplazamiento
