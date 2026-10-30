@@ -263,51 +263,59 @@ public class PoketchScreen extends Screen {
 		} catch (Throwable e) {
 			slots = List.of();
 		}
-		// 2 columnas x 3 filas. Cada hueco: modelo a la izquierda; nombre, nivel y barra a su derecha
-		int cw = (SW - 14) / 2, ch = (SH - 4) / 3, model = 30, block = 34;
+		// Como el Pokéreloj de DPPt: 2 columnas x 3 filas, el Pokémon grande "de pie" sobre una barra larga
+		// y la cápsula de objeto a la derecha. Nombre y nivel en letra pequeña en la columna derecha.
+		int cw = (SW - 14) / 2, ch = (SH - 4) / 3, model = 40;
 		for (int i = 0; i < 6; i++) {
 			int x = sx + 5 + (i % 2) * (cw + 4), y = sy + 2 + (i / 2) * ch;
-			int top = y + (ch - block) / 2;
 			Pokemon pk = i < slots.size() ? slots.get(i) : null;
-			// Separador entre filas
-			if (i < 4) c.fill(x + 2, y + ch - 1, x + cw - 2, y + ch, p[2]);
-			int tx = x + model + 3, bx2 = x + cw - 2;
-			if (pk == null) {
-				centered(c, "- - -", x + cw / 2, top + 12, p[2]);
-				continue;
+			int barY = y + ch - 12, bx1 = x + 3, bx2 = x + cw - 3;
+			// Barra de vida (borde oscuro, fondo claro, relleno con la vida actual)
+			Draw.round(c, bx1, barY, bx2, barY + 9, p[1]);
+			c.fill(bx1 + 1, barY + 1, bx2 - 1, barY + 8, p[3]);
+			if (pk == null) continue;
+			int max = Math.max(1, pk.getMaxHealth());
+			float ratio = Math.max(0, Math.min(1, pk.getCurrentHealth() / (float) max));
+			int fw = Math.round((bx2 - bx1 - 4) * ratio);
+			if (fw > 0) {
+				c.fill(bx1 + 2, barY + 2, bx1 + 2 + fw, barY + 7, ratio > 0.2f ? p[2] : p[1]);
+				c.fill(bx1 + 2, barY + 2, bx1 + 2 + fw, barY + 3, p[1]);
 			}
-			// Mini modelo (si fallara, retrato)
-			if (!MiniModel.failed()) MiniModel.draw(c, pk, x, top + 2, model);
-			else PartyHud.drawPortrait(c, pk, i, x + 4, top + 6, 0f);
+
+			// Modelo grande apoyado sobre la barra, en la parte izquierda-centro
+			int mx = x + 6, my = barY - model + 4;
+			if (!MiniModel.failed()) MiniModel.draw(c, pk, mx, my, model);
+			else PartyHud.drawPortrait(c, pk, i, mx + 10, barY - 21, 0f);
 			c.draw();
 
+			// Columna derecha: nombre y nivel pequeños + cápsula de objeto justo encima de la barra
+			int rx = x + 6 + model + 2, rw = x + cw - 3 - rx;
+			smallLcd(c, pk.getDisplayName(false).getString(), rx, y + 3, rw, p[1]);
+			smallLcd(c, pk.isFainted() ? "DEB" : "Nv" + pk.getLevel(), rx, y + 11, rw, p[1]);
 			boolean holds;
 			try {
 				holds = !pk.heldItem().isEmpty();
 			} catch (Throwable t) {
 				holds = false;
 			}
-			text(c, Draw.fit(pk.getDisplayName(false).getString(), bx2 - tx), tx, top + 2, p[1]);
-			text(c, pk.isFainted() ? "DEB" : "Nv" + pk.getLevel(), tx, top + 13, p[1]);
-			// Cápsula de objeto equipado, a la derecha del nivel
 			if (holds) {
-				int ix = bx2 - 8, iy = top + 11;
+				int ix = bx2 - 9, iy = barY - 13;
 				Draw.round(c, ix, iy, ix + 8, iy + 11, p[1]);
 				c.fill(ix + 1, iy + 1, ix + 7, iy + 4, p[3]);
 				c.fill(ix + 1, iy + 5, ix + 7, iy + 10, p[2]);
 			}
-			// Barra de vida justo debajo
-			int max = Math.max(1, pk.getMaxHealth());
-			float ratio = Math.max(0, Math.min(1, pk.getCurrentHealth() / (float) max));
-			int barY = top + 25;
-			Draw.round(c, tx, barY, bx2, barY + 8, p[1]);
-			c.fill(tx + 1, barY + 1, bx2 - 1, barY + 7, p[3]);
-			int fw = Math.round((bx2 - tx - 4) * ratio);
-			if (fw > 0) {
-				c.fill(tx + 2, barY + 2, tx + 2 + fw, barY + 6, ratio > 0.2f ? p[2] : p[1]);
-				c.fill(tx + 2, barY + 2, tx + 2 + fw, barY + 3, p[1]);
-			}
 		}
+	}
+
+	/** Texto LCD pequeño (70 %), recortado al ancho disponible. */
+	private void smallLcd(DrawContext c, String s, int x, int y, int maxW, int color) {
+		float k = 0.7f;
+		String fit = Draw.fit(s, Math.round(maxW / k));
+		c.getMatrices().push();
+		c.getMatrices().translate(x, y, 300);
+		c.getMatrices().scale(k, k, 1f);
+		c.drawText(textRenderer, fit, 0, 0, color, false);
+		c.getMatrices().pop();
 	}
 
 	// ---------------------------------------------------------------- Contador de pasos

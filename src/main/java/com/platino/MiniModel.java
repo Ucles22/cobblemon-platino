@@ -20,13 +20,13 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Modelo 3D completo del Pokémon en miniatura y quieto, con el mismo método que usa el Resumen de Cobblemon
- * (recuadro 66 px, escala 2.0, giro 325°), reducido al tamaño pedido.
+ * Modelo 3D del Pokémon en miniatura y quieto, dibujado igual que en las casillas del PC de Cobblemon
+ * (recuadro 25 px, escala 2.5, giro 13°/35°), ampliado o reducido al tamaño pedido.
  */
 public final class MiniModel {
 	private static final Map<UUID, FloatingState> STATES = new HashMap<>();
-	/** Casi de frente, con un ligero giro (15°) para que conserve volumen; el Resumen usa 35°. */
-	private static final Quaternionf ROTATION = QuaternionUtilsKt.fromEulerXYZDegrees(new Quaternionf(), new Vector3f(10f, 345f, 0f));
+	/** Mismo ángulo que las casillas del PC de Cobblemon (13°, 35°, 0°). */
+	private static final Quaternionf ROTATION = QuaternionUtilsKt.fromEulerXYZDegrees(new Quaternionf(), new Vector3f(13f, 35f, 0f));
 	private static MethodHandle draw;
 	private static boolean failed;
 
@@ -45,16 +45,16 @@ public final class MiniModel {
 			FloatingState state = STATES.computeIfAbsent(p.getUuid(), id -> new FloatingState());
 			state.setCurrentAspects(p.getAspects());
 
-			float k = size / 66f;
+			// Igual que StorageSlot del PC: recuadro de 25 px, translate(12.5, 1), escala 2.5 y tamaño de modelo 4.5
+			float k = size / 25f;
 			MatrixStack m = c.getMatrices();
-			c.enableScissor(x - size / 6, y - 2, x + size + size / 6, y + size + 2);
+			c.enableScissor(x, y, x + size, y + size);
 			m.push();
 			try {
-				m.translate(x + size * 0.5, y - 10 * k, 250);
-				m.scale(2f * k, 2f * k, 2f * k);
-				// Mismos valores por defecto que el Resumen (máscara 8136), pero con tiempo 0 = imagen fija
-				draw.invoke(p.asRenderablePokemon(), m, ROTATION, (PoseType) null, (PosableState) state, 0f, 0f,
-						false, false, 0f, 0f, 0f, 0f, 0f, 0f, 8136, null);
+				m.translate(x + size * 0.5, y + k, 250);
+				m.scale(2.5f * k, 2.5f * k, 1f);
+				draw.invoke(p.asRenderablePokemon(), m, ROTATION, (PoseType) null, (PosableState) state, 0f, 4.5f,
+						false, false, 0f, 0f, 0f, 0f, 0f, 0f, 32648, null);
 			} finally {
 				m.pop();
 				c.disableScissor();
