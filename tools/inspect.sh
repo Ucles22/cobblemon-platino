@@ -103,3 +103,18 @@ if [ -n "$CJAR" ] && [ -f "$CJAR" ]; then
     javap -p -c -constants -cp "$CJAR" com.cobblemon.mod.common.client.gui.summary.widgets.PartySlotWidget | awk '/renderWidget/{f=1} f{print} /drawProfilePokemon/{if(f){exit}}' | grep -vE 'aload|astore|checkcast|dup$|pop$';
   } > inspect/slot-render.txt 2>&1
 fi
+# --- Undécima ronda: datos para la calculadora de daño
+if [ -n "$CJAR" ] && [ -f "$CJAR" ]; then
+  for c in com.cobblemon.mod.common.api.pokemon.PokemonSpecies com.cobblemon.mod.common.pokemon.Species com.cobblemon.mod.common.pokemon.FormData \
+           com.cobblemon.mod.common.api.pokemon.stats.Stats com.cobblemon.mod.common.api.pokemon.stats.Stat \
+           com.cobblemon.mod.common.api.moves.Moves com.cobblemon.mod.common.api.moves.MoveTemplate com.cobblemon.mod.common.api.moves.categories.DamageCategories com.cobblemon.mod.common.api.moves.categories.DamageCategory \
+           com.cobblemon.mod.common.api.moves.MoveSet com.cobblemon.mod.common.api.moves.Move \
+           com.cobblemon.mod.common.api.pokemon.Natures com.cobblemon.mod.common.pokemon.Nature \
+           com.cobblemon.mod.common.api.abilities.AbilityPool com.cobblemon.mod.common.api.abilities.PotentialAbility com.cobblemon.mod.common.api.abilities.AbilityTemplate com.cobblemon.mod.common.api.abilities.Ability \
+           com.cobblemon.mod.common.pokemon.IVs com.cobblemon.mod.common.pokemon.EVs com.cobblemon.mod.common.api.pokemon.stats.PokemonStatContainer \
+           com.cobblemon.mod.common.api.types.ElementalTypes com.cobblemon.mod.common.api.types.ElementalType ; do
+    echo "==== $c"; javap -p -cp "$CJAR" "$c" 2>&1 | grep -E 'public' | grep -vE 'lambda|access\$|\$default|Codec|encode|decode|saveTo|loadFrom|toNbt|fromNbt|toJson|fromJson|Buffer|Struct|Molang|Mo[A-Z]' | head -60
+  done > inspect/calc-api.txt 2>&1
+  { for c in com.cobblemon.mod.common.pokemon.Pokemon; do javap -p -cp "$CJAR" "$c" | grep -E 'public final .* (getIvs|getEvs|getNature|getMintedNature|getEffectiveNature|getMoveSet|getAbility|getStat|getAttack|getDefence|getSpecialAttack|getSpecialDefence|getSpeed|getTypes|getPrimaryType|getSecondaryType)\('; done; } >> inspect/calc-api.txt 2>&1
+  grep -E 'item/(held|battle)/|HeldItem|ChoiceItem|item/.*(Band|Specs|Orb|Belt|Vest|Eviolite)' inspect/cobblemon-files.txt | grep class | head -30 >> inspect/calc-api.txt
+fi
