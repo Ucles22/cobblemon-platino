@@ -293,6 +293,18 @@ public class PlatinoMenuScreen extends Screen {
 				}
 			}
 		}
-		PokedexGUI.Companion.open$default(PokedexGUI.Companion, dex, type, null, null, 0b1100, null);
+		try {
+			PokedexGUI.Companion.open(dex, type, null, null);
+		} catch (NullPointerException e) {
+			// Si Cobblemon no acepta nulos, se usa su versión con valores por defecto
+			try {
+				var m = PokedexGUI.Companion.class.getMethod("open$default", PokedexGUI.Companion.class,
+						dex.getClass(), PokedexType.class, net.minecraft.util.Identifier.class,
+						net.minecraft.util.math.BlockPos.class, int.class, Object.class);
+				m.invoke(null, PokedexGUI.Companion, dex, type, null, null, 0b1100, null);
+			} catch (ReflectiveOperationException ex) {
+				throw new RuntimeException(ex);
+			}
+		}
 	}
 }
