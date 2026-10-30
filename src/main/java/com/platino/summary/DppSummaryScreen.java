@@ -205,7 +205,6 @@ public class DppSummaryScreen extends Screen {
 			case MARKS -> drawMarks(c, p, rx, ry, rw, rh);
 		}
 		if (page == Page.MOVES && swapSlot >= 0) drawSwapList(c, p, rx, ry, rw, rh, mouseX, mouseY);
-		if (partyMenu) drawPartyMenu(c, mouseX, mouseY);
 		if (toast != null && System.currentTimeMillis() < toastUntil) {
 			int tw = Draw.width(toast) + 16;
 			c.getMatrices().push();
@@ -270,14 +269,10 @@ public class DppSummaryScreen extends Screen {
 		}
 		// Ordenar equipo
 		if (canEdit(p) && party.size() > 1) {
-			button(c, x + 10, py + ps + 15, x + w - 10, py + ps + 28, "⇅ Ordenar equipo", mx, my, 0xFFB8D8F8, () -> {
-				if (inBattle()) {
-					toast("No se puede durante un combate.");
-					return;
-				}
-				partyMenu = true;
-				partyPick = -1;
-				swapSlot = -1;
+			button(c, x + 10, py + ps + 15, x + w - 10, py + ps + 28, "⇅ Equipo", mx, my, 0xFFB8D8F8, () -> {
+				ClientParty cp = clientParty();
+				int slot = cp == null ? 0 : Math.max(0, cp.getPosition(p.getUuid()));
+				MinecraftClient.getInstance().setScreen(new PartyScreen(this, slot));
 			});
 		}
 		// Objeto
@@ -760,80 +755,6 @@ public class DppSummaryScreen extends Screen {
 			c.fill(x + w - 9, ky, x + w - 3, ky + kh, hot ? 0xFFF07068 : 0xFFE05850);
 		}
 		c.getMatrices().pop();
-	}
-
-	// ---------------------------------------------------------------- Ordenar equipo
-
-	private void drawPartyMenu(DrawContext c, int mx, int my) {
-		ClientParty cp = clientParty();
-		if (cp == null) {
-			partyMenu = false;
-			return;
-		}
-		c.getMatrices().push();
-		c.getMatrices().translate(0, 0, 300);
-		c.fill(x0, y0, x0 + W, y0 + H, 0x90101018);
-		hits.add(new Hit(x0, y0, x0 + W, y0 + H, () -> {}));
-		int mw = 260, mh = 200, x = x0 + (W - mw) / 2, y = y0 + (H - mh) / 2;
-		Draw.panel(c, x, y, x + mw, y + mh, 0xFF283048, 0xFF5898D0);
-		c.fillGradient(x + 1, y + 1, x + mw - 1, y + 17, 0xFF78C0F0, 0xFF3880C8);
-		Draw.dsText(c, "ORDENAR EQUIPO", x + 8, y + 5, 0xFFFFFFFF, 0xFF203048);
-		button(c, x + mw - 60, y + 3, x + mw - 5, y + 15, "Cerrar", mx, my, 0xFFF8F8F0, () -> partyMenu = false);
-		List<Pokemon> slots = cp.getSlots();
-		int cw = (mw - 18) / 2, ch = 46;
-		for (int i = 0; i < 6; i++) {
-			int sx = x + 6 + (i % 2) * (cw + 6), sy = y + 22 + (i / 2) * (ch + 4) + (i % 2) * 8;
-			Pokemon q = i < slots.size() ? slots.get(i) : null;
-			boolean picked = i == partyPick;
-			boolean hover = mx >= sx && mx < sx + cw && my >= sy && my < sy + ch;
-			int border = picked ? Draw.GOLD : 0xFF203858;
-			int top = q == null ? 0xFF406080 : picked ? 0xFF78C0F0 : hover ? 0xFF68A8E0 : 0xFF5898D0;
-			int bottom = q == null ? 0xFF305070 : picked ? 0xFF3880C8 : 0xFF3068A8;
-			Draw.panelGradient(c, sx, sy, sx + cw, sy + ch, border, top, bottom);
-			if (q != null) {
-				Draw.round(c, sx + 3, sy + 3, sx + 43, sy + ch - 3, 0xFFD8E8F8);
-				c.draw();
-				MiniModel.draw(c, q, sx + 4, sy + 4, 38);
-				c.draw();
-				Draw.dsText(c, Draw.fit(q.getDisplayName(false).getString(), cw - 52), sx + 47, sy + 6, 0xFFFFFFFF, 0xFF203048);
-				Draw.dsText(c, "Nv." + q.getLevel(), sx + 47, sy + 18, 0xFFFFF0C0, 0xFF203048);
-				Draw.hpBar(c, sx + 47, sy + 32, cw - 52, q.getCurrentHealth() / (float) Math.max(1, q.getMaxHealth()), false);
-			} else {
-				Draw.dsText(c, "Vacío", sx + cw / 2 - Draw.width("Vacío") / 2, sy + ch / 2 - 4, 0xFFB0C8E0, 0xFF203048);
-			}
-			int slot = i;
-			hits.add(new Hit(sx, sy, sx + cw, sy + ch, () -> pickPartySlot(cp, slot)));
-		}
-		String hint = partyPick < 0 ? "Elige un Pokémon y luego su nuevo sitio." : "Ahora elige con quién se cambia.";
-		Draw.dsText(c, hint, x + mw / 2 - Draw.width(hint) / 2, y + mh - 14, 0xFFFFFFFF, 0xFF203048);
-		c.getMatrices().pop();
-	}
-
-	private void pickPartySlot(ClientParty cp, int slot) {
-		List<Pokemon> slots = cp.getSlots();
-		Pokemon target = slot < slots.size() ? slots.get(slot) : null;
-		if (partyPick < 0) {
-			if (target == null) return;
-			partyPick = slot;
-			beep(1.7f);
-			return;
-		}
-		if (partyPick == slot) {
-			partyPick = -1;
-			return;
-		}
-		Pokemon from = slots.get(partyPick);
-		if (from == null) {
-			partyPick = -1;
-			return;
-		}
-		if (target == null) {
-			new MovePartyPokemonPacket(from.getUuid(), new PartyPosition(partyPick), new PartyPosition(slot)).sendToServer();
-		} else {
-			new SwapPartyPokemonPacket(from.getUuid(), new PartyPosition(partyPick), target.getUuid(), new PartyPosition(slot)).sendToServer();
-		}
-		beep(1.9f);
-		partyPick = -1;
 	}
 
 	// ---------------------------------------------------------------- Controles

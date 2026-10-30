@@ -149,3 +149,11 @@ if [ -n "$CJAR" ] && [ -f "$CJAR" ]; then
     javap -p -c -cp "$CJAR" com.cobblemon.mod.common.client.gui.pc.StorageWidget | grep -E '^  [a-z].*\(|Packet\."<init>"|PCPosition\."<init>"|PartyPosition\."<init>"' | head -80
   } > inspect/pc-api.txt 2>&1
 fi
+# --- Decimocuarta ronda: abrir/cerrar PC
+if [ -n "$CJAR" ] && [ -f "$CJAR" ]; then
+  { echo "==== PCGUI methods"; javap -p -c -cp "$CJAR" com.cobblemon.mod.common.client.gui.pc.PCGUI | awk '/ (closeNormally|close|removed|keyPressed|tick|lambda\$init\$0|init\$lambda\$0)\(/{f=1} f{print} f&&/^$/{f=0}' | grep -E '^  [a-z]|invoke|new |getstatic' | head -120
+    for c in com.cobblemon.mod.common.client.net.storage.pc.OpenPCHandler com.cobblemon.mod.common.client.net.storage.pc.ClosePCHandler com.cobblemon.mod.common.client.gui.pasture.PasturePCGUIConfiguration; do
+      echo "==== $c"; javap -p -c -cp "$CJAR" "$c" | grep -E '^  [a-z]|invoke|new |getstatic' | head -60; done
+    echo "==== PCGUI lambdas"; javap -p -c -cp "$CJAR" com.cobblemon.mod.common.client.gui.pc.PCGUI | awk '/ (init\$lambda)/{f=1} f{print} f&&/^$/{f=0}' | grep -E '^  [a-z]|invoke|new ' | head -60
+  } > inspect/pc-open.txt 2>&1
+fi

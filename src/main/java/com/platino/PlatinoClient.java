@@ -38,6 +38,7 @@ public class PlatinoClient implements ClientModInitializer {
 	private static KeyBinding cardKey;
 	private static KeyBinding poketchKey;
 	private static KeyBinding bagKey;
+	private static KeyBinding partyKey;
 	private static double stepDistance;
 	private static double lastX, lastZ;
 	private static boolean hasLast;
@@ -57,6 +58,14 @@ public class PlatinoClient implements ClientModInitializer {
 				InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_P, "category.cobbleplatino"));
 		bagKey = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.cobbleplatino.bag",
 				InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_I, "category.cobbleplatino"));
+		partyKey = KeyBindingHelper.registerKeyBinding(new KeyBinding("key.cobbleplatino.party",
+				InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_O, "category.cobbleplatino"));
+		ClientTickEvents.END_CLIENT_TICK.register(client -> {
+			while (partyKey.wasPressed()) {
+				if (client.currentScreen == null) client.setScreen(new com.platino.summary.PartyScreen(null));
+			}
+			if (pendingParty > 0 && --pendingParty == 0) client.setScreen(new com.platino.summary.PartyScreen(null));
+		});
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
 			while (bagKey.wasPressed()) {
 				if (client.currentScreen == null) client.setScreen(new BagScreen());
@@ -209,12 +218,16 @@ public class PlatinoClient implements ClientModInitializer {
 				pendingBag = 2;
 				return 1;
 			}));
+			root.then(ClientCommandManager.literal("equipo").executes(ctx -> {
+				pendingParty = 2;
+				return 1;
+			}));
 			root.then(ClientCommandManager.literal("pokereloj").executes(ctx -> {
 				pendingPoketch = 2;
 				return 1;
 			}));
 			root.executes(ctx -> {
-				ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino " + version() + "] /platino ficha · pokereloj · bolsa · resumen · combate · paleta · recargar"));
+				ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino " + version() + "] /platino ficha · pokereloj · bolsa · equipo · resumen · combate · paleta · recargar"));
 				return 1;
 			});
 			dispatcher.register(root.then(pal).then(ClientCommandManager.literal("recargar").executes(ctx -> {
@@ -238,6 +251,7 @@ public class PlatinoClient implements ClientModInitializer {
 	private static int pendingCard = 0;
 	private static int pendingPoketch = 0;
 	private static int pendingBag = 0;
+	private static int pendingParty = 0;
 	private static int pendingUse = 0;
 
 	/** Usa el objeto de la mano en 2 ticks (cuando la Bolsa ya se ha cerrado). */
