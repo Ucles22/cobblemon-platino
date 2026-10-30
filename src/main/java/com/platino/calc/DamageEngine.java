@@ -10,7 +10,7 @@ public final class DamageEngine {
 	public enum Category { PHYSICAL, SPECIAL, STATUS }
 
 	public enum Weather {
-		NONE("Sin clima"), SUN("Sol"), RAIN("Lluvia");
+		NONE("Sin clima"), SUN("Sol"), RAIN("Lluvia"), SAND("Tormenta de arena"), SNOW("Nieve");
 		public final String label;
 		Weather(String label) { this.label = label; }
 	}
@@ -21,18 +21,13 @@ public final class DamageEngine {
 		Terrain(String label) { this.label = label; }
 	}
 
-	public enum Screens {
-		NONE("Sin pantallas"), REFLECT("Reflejo"), LIGHT_SCREEN("Pantalla Luz"), AURORA_VEIL("Velo Aurora");
-		public final String label;
-		Screens(String label) { this.label = label; }
-	}
-
 	/** Condiciones del combate. */
 	public static final class Field {
 		public boolean crit;
 		public Weather weather = Weather.NONE;
 		public Terrain terrain = Terrain.NONE;
-		public Screens screens = Screens.NONE;
+		/** Pantallas (se pueden marcar varias). */
+		public boolean reflect, lightScreen, auroraVeil;
 		/** % de PS actuales del defensor (1-100). */
 		public int defHpPercent = 100;
 	}
@@ -100,7 +95,8 @@ public final class DamageEngine {
 		public String natureName = "Seria";
 		public String ability = "";
 		public Item item = Item.NONE;
-		public int atkStage = 0, defStage = 0;
+		/** Cambios de estadísticas (-6..+6) por estadística, mismo orden que las stats (el 0, PS, no se usa). */
+		public int[] stages = {0, 0, 0, 0, 0, 0};
 		public boolean burned = false;
 
 		public int stat(int i) {
@@ -180,8 +176,8 @@ public final class DamageEngine {
 
 		// Ataque
 		int aIdx = physical ? 1 : 3, dIdx = physical ? 2 : 4;
-		int aStage = crit ? Math.max(0, atk.atkStage) : atk.atkStage;
-		int dStage = crit ? Math.min(0, def.defStage) : def.defStage;
+		int aStage = crit ? Math.max(0, atk.stages[aIdx]) : atk.stages[aIdx];
+		int dStage = crit ? Math.min(0, def.stages[dIdx]) : def.stages[dIdx];
 		double a = Math.floor(atk.stat(aIdx) * stageMul(aStage));
 		if (physical && (aAb.equals("hugepower") || aAb.equals("purepower"))) a *= 2;
 		if (physical && aAb.equals("guts") && atk.burned) a *= 1.5;
@@ -193,6 +189,9 @@ public final class DamageEngine {
 		// Defensa
 		double d = Math.floor(def.stat(dIdx) * stageMul(dStage));
 		if (!physical && def.item == Item.ASSAULT_VEST) d *= 1.5;
+		// Arena: +50% Def. Esp. a los tipo Roca. Nieve: +50% Defensa a los tipo Hielo.
+		if (weather == Weather.SAND && !physical && ("rock".equals(def.type1) || "rock".equals(def.type2))) d *= 1.5;
+		if (weather == Weather.SNOW && physical && ("ice".equals(def.type1) || "ice".equals(def.type2))) d *= 1.5;
 		if (def.item == Item.EVIOLITE) d *= 1.5;
 		d = Math.max(1, Math.floor(d));
 
@@ -213,7 +212,7 @@ public final class DamageEngine {
 			dmg = Math.floor(dmg * eff);
 			if (physical && atk.burned && !aAb.equals("guts")) dmg = Math.floor(dmg * 0.5);
 			double other = 1.0;
-			boolean screenHit = f.screens == Screens.AURORA_VEIL || (physical ? f.screens == Screens.REFLECT : f.screens == Screens.LIGHT_SCREEN);
+			boolean screenHit = f.auroraVeil || (physical ? f.reflect : f.lightScreen);
 			if (screenHit && !crit) other *= 0.5;
 			if (eff > 1f && (dAb.equals("filter") || dAb.equals("solidrock") || dAb.equals("prismarmor"))) other *= 0.75;
 			if (defFullHp && (dAb.equals("multiscale") || dAb.equals("shadowshield"))) other *= 0.5;

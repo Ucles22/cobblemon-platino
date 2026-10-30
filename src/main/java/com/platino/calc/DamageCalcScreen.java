@@ -105,6 +105,10 @@ public class DamageCalcScreen extends Screen {
 
 	@Override
 	public void close() {
+		if (editing != null) {
+			editing = null;
+			return;
+		}
 		if (open != null) {
 			closeCombo();
 			return;
@@ -170,6 +174,21 @@ public class DamageCalcScreen extends Screen {
 		return new Opt((known ? "★ " : "") + m.display(), m.search(), extra, m);
 	}
 
+	private static List<Opt> partyOpts() {
+		List<Opt> out = new ArrayList<>();
+		try {
+			for (Pokemon p : CobblemonClient.INSTANCE.getStorage().getParty().getSlots()) {
+				if (p == null) continue;
+				String name = p.getDisplayName(false).getString();
+				String types = TypeEff.label(CalcData.typeId(p.getPrimaryType()))
+						+ (p.getSecondaryType() != null ? "/" + TypeEff.label(CalcData.typeId(p.getSecondaryType())) : "");
+				out.add(new Opt(name + "  Nv" + p.getLevel(), CalcData.fold(name + " " + p.getSpecies().getName()), types, p));
+			}
+		} catch (Throwable ignored) {
+		}
+		return out;
+	}
+
 	private static <E extends Enum<E>> List<Opt> enumOpts(E[] values, java.util.function.Function<E, String> label) {
 		List<Opt> out = new ArrayList<>();
 		for (E e : values) out.add(new Opt(label.apply(e), CalcData.fold(label.apply(e)), "", e));
@@ -200,8 +219,8 @@ public class DamageCalcScreen extends Screen {
 				() -> S.field.weather.label, o -> S.field.weather = (DamageEngine.Weather) o));
 		combos.add(new Combo("terrain", () -> enumOpts(DamageEngine.Terrain.values(), t -> t.label),
 				() -> S.field.terrain.label, o -> S.field.terrain = (DamageEngine.Terrain) o));
-		combos.add(new Combo("screens", () -> enumOpts(DamageEngine.Screens.values(), t -> t.label),
-				() -> S.field.screens.label, o -> S.field.screens = (DamageEngine.Screens) o));
+		combos.add(new Combo("aparty", DamageCalcScreen::partyOpts, () -> "", o -> fillFromPokemon(true, (Pokemon) o)));
+		combos.add(new Combo("dparty", DamageCalcScreen::partyOpts, () -> "", o -> fillFromPokemon(false, (Pokemon) o)));
 	}
 
 	private Combo combo(String id) {
@@ -236,17 +255,7 @@ public class DamageCalcScreen extends Screen {
 
 	// ---------------------------------------------------------------- Rellenar desde equipo / rival
 
-	private void fillFromParty(boolean atk) {
-		List<Pokemon> party = new ArrayList<>();
-		try {
-			for (Pokemon p : CobblemonClient.INSTANCE.getStorage().getParty().getSlots()) if (p != null) party.add(p);
-		} catch (Throwable ignored) {
-		}
-		if (party.isEmpty()) return;
-		int cur = ((atk ? S.partyCursorAtk : S.partyCursorDef) + 1) % party.size();
-		if (atk) S.partyCursorAtk = cur;
-		else S.partyCursorDef = cur;
-		Pokemon p = party.get(cur);
+	private void fillFromPokemon(boolean atk, Pokemon p) {
 		DamageEngine.Side s = atk ? S.atk : S.def;
 		var form = p.getForm();
 		String display = p.getSpecies().getTranslatedName().getString();
@@ -254,6 +263,7 @@ public class DamageCalcScreen extends Screen {
 		CalcData.SpeciesEntry sp = new CalcData.SpeciesEntry(display, CalcData.fold(display), CalcData.stats(form.getBaseStats()),
 				CalcData.typeId(p.getPrimaryType()), CalcData.typeId(p.getSecondaryType()), CalcData.abilities(form.getAbilities()));
 		applySpecies(atk, sp);
+		s.stages = new int[6];
 		s.level = p.getLevel();
 		for (int i = 0; i < 6; i++) {
 			s.ivs[i] = statValue(p.getIvs(), i, 31);
@@ -371,7 +381,10 @@ public class DamageCalcScreen extends Screen {
 		int third = (W - 16 - 8) / 3;
 		comboBox(c, combo("weather").at(x0 + 8, y, third), mx, my);
 		comboBox(c, combo("terrain").at(x0 + 12 + third, y, third), mx, my);
-		comboBox(c, combo("screens").at(x0 + 16 + 2 * third, y, third), mx, my);
+		int sx = x0 + 16 + 2 * third;
+		toggle(c, sx, y + 2, "Reflejo", S.field.reflect, mx, my, () -> S.field.reflect = !S.field.reflect);
+		toggle(c, sx + 50, y + 2, "Pant. Luz", S.field.lightScreen, mx, my, () -> S.field.lightScreen = !S.field.lightScreen);
+		toggle(c, sx + 106, y + 2, "Velo Aurora", S.field.auroraVeil, mx, my, () -> S.field.auroraVeil = !S.field.auroraVeil);
 		y += ROW + 4;
 
 		drawResult(c, x0 + 6, y, W - 12, y0 + H - 4 - y);
@@ -388,7 +401,8 @@ public class DamageCalcScreen extends Screen {
 
 		text(c, atk ? "ATACANTE" : "DEFENSOR", x, y + 2, DARK);
 		int bx = x + w;
-		button(c, bx - 50, y, bx, y + 11, "Equipo ▸", mx, my, () -> fillFromParty(atk));
+		Combo party = combo(k + "party").at(bx - 170, y, 170);
+		button(c, bx - 50, y, bx, y + 11, "Equipo ▾", mx, my, () -> openCombo(party));
 		if (!atk && CobblemonClient.INSTANCE.getBattle() != null) button(c, bx - 88, y, bx - 54, y + 11, "Rival", mx, my, this::fillFromBattle);
 		y += ROW + 1;
 
@@ -405,10 +419,11 @@ public class DamageCalcScreen extends Screen {
 		y += ROW + 3;
 
 		// Tabla de estadísticas: nombre | base | IV | EV | total
-		int cBase = x + 54, cIv = x + 76, cEv = x + 120, cTot = x + w;
+		int cBase = x + 52, cIv = x + 72, cEv = x + 112, cSt = x + 152, cTot = x + w;
 		text(c, "Base", cBase, y, MID);
 		text(c, "IV", cIv + 14, y, MID);
-		text(c, "EV", cEv + 18, y, MID);
+		text(c, "EV", cEv + 14, y, MID);
+		text(c, "Etapa", cSt + 8, y, MID);
 		text(c, "Total", cTot - textRenderer.getWidth("Total"), y, MID);
 		y += 10;
 		boolean physical = S.move == null || S.move.category() != DamageEngine.Category.SPECIAL;
@@ -422,6 +437,7 @@ public class DamageCalcScreen extends Screen {
 			text(c, String.valueOf(s.base[i]), cBase, y + 1, DARK);
 			stepper(c, cIv, y - 1, "", s.ivs[i], 1, 31, 0, 31, mx, my, v -> s.ivs[st] = v);
 			stepper(c, cEv, y - 1, "", s.evs[i], 4, 252, 0, 252, mx, my, v -> s.evs[st] = v);
+			if (i > 0) stepperSigned(c, cSt, y - 1, s.stages[i], mx, my, v -> s.stages[st] = v);
 			String tot = String.valueOf(s.stat(i));
 			text(c, tot, cTot - textRenderer.getWidth(tot), y + 1, col);
 			y += ROW - 1;
@@ -432,11 +448,9 @@ public class DamageCalcScreen extends Screen {
 		y += ROW;
 
 		if (atk) {
-			stepper(c, x, y, "Etapa", s.atkStage, 1, 6, -6, 6, mx, my, v -> s.atkStage = v);
-			toggle(c, x + 84, y + 1, "Quemado", s.burned, mx, my, () -> s.burned = !s.burned);
+			toggle(c, x, y + 1, "Quemado", s.burned, mx, my, () -> s.burned = !s.burned);
 		} else {
-			stepper(c, x, y, "Etapa", s.defStage, 1, 6, -6, 6, mx, my, v -> s.defStage = v);
-			stepper(c, x + 84, y, "PS %", S.field.defHpPercent, 1, 10, 1, 100, mx, my, v -> S.field.defHpPercent = v);
+			stepper(c, x, y, "PS %", S.field.defHpPercent, 1, 10, 1, 100, mx, my, v -> S.field.defHpPercent = v);
 		}
 		return y + ROW;
 	}
@@ -446,7 +460,7 @@ public class DamageCalcScreen extends Screen {
 		c.fill(x + 2, y + 2, x + w - 2, y + h - 2, LIGHT);
 		if (S.atkSp == null || S.defSp == null || S.move == null) {
 			text(c, "Elige atacante, defensor y movimiento.", x + 8, y + 7, DARK);
-			text(c, "\"Equipo ▸\" rellena con tus Pokémon" + (CobblemonClient.INSTANCE.getBattle() != null ? "; \"Rival\" con el rival." : "."), x + 8, y + 19, MID);
+			text(c, "\"Equipo ▾\" rellena con tus Pokémon" + (CobblemonClient.INSTANCE.getBattle() != null ? "; \"Rival\" con el rival." : "."), x + 8, y + 19, MID);
 			return;
 		}
 		DamageEngine.Result r = DamageEngine.calc(S.atk, S.def, S.move.toMove(), S.field);
@@ -618,10 +632,57 @@ public class DamageCalcScreen extends Screen {
 		int vw = 18;
 		button(c, lx, y, lx + 9, y + 11, "-", mx, my,
 				() -> set.set(Math.max(min, value - (Screen.hasShiftDown() ? big : small))));
-		text(c, v, lx + 10 + (vw - textRenderer.getWidth(v)) / 2, y + 2, DARK);
+		valueCell(c, lx + 10, y, vw, v, min, max, set);
 		button(c, lx + 10 + vw, y, lx + 19 + vw, y + 11, "+", mx, my,
 				() -> set.set(Math.min(max, value + (Screen.hasShiftDown() ? big : small))));
 		wheelTargets.add(new Wheel(lx + 10, y, lx + 10 + vw, y + 11, d -> set.set(Math.max(min, Math.min(max, value + d * small)))));
+	}
+
+	/** Etapa de estadística -6..+6 (con signo). */
+	private void stepperSigned(DrawContext c, int x, int y, int value, int mx, int my, IntSet set) {
+		int vw = 18;
+		String v = value > 0 ? "+" + value : String.valueOf(value);
+		button(c, x, y, x + 9, y + 11, "-", mx, my, () -> set.set(Math.max(-6, value - (Screen.hasShiftDown() ? 6 : 1))));
+		valueCell(c, x + 10, y, vw, v, -6, 6, set);
+		button(c, x + 10 + vw, y, x + 19 + vw, y + 11, "+", mx, my, () -> set.set(Math.min(6, value + (Screen.hasShiftDown() ? 6 : 1))));
+		wheelTargets.add(new Wheel(x + 10, y, x + 10 + vw, y + 11, d -> set.set(Math.max(-6, Math.min(6, value + d)))));
+	}
+
+	/** Celda de número: clic para escribir el valor a mano (Enter confirma, Esc cancela). */
+	private void valueCell(DrawContext c, int x, int y, int w, String shown, int min, int max, IntSet set) {
+		boolean editingThis = editing != null && editing.x() == x && editing.y() == y;
+		if (editingThis) {
+			Draw.round(c, x - 1, y, x + w + 1, y + 11, DARK);
+			c.fill(x, y + 1, x + w, y + 10, PALE);
+			String b = editBuffer + ((System.currentTimeMillis() / 400) % 2 == 0 ? "_" : "");
+			text(c, b, x + (w - textRenderer.getWidth(b)) / 2, y + 2, DARK);
+			editing = new Edit(x, y, min, max, set); // se actualiza el destino por si cambió
+		} else {
+			text(c, shown, x + (w - textRenderer.getWidth(shown)) / 2, y + 2, DARK);
+			hits.add(new Hit(x, y, x + w, y + 11, () -> {
+				commitEdit();
+				editing = new Edit(x, y, min, max, set);
+				editBuffer = "";
+			}));
+		}
+	}
+
+	private record Edit(int x, int y, int min, int max, IntSet set) {}
+
+	private Edit editing;
+	private String editBuffer = "";
+
+	private void commitEdit() {
+		if (editing == null) return;
+		Edit e = editing;
+		editing = null;
+		if (editBuffer.isEmpty() || editBuffer.equals("-") || editBuffer.equals("+")) return;
+		try {
+			int v = Integer.parseInt(editBuffer.replace("+", ""));
+			e.set().set(Math.max(e.min(), Math.min(e.max(), v)));
+			beep(1.6f);
+		} catch (NumberFormatException ignored) {
+		}
 	}
 
 	private record Wheel(int x1, int y1, int x2, int y2, IntSet onScroll) {}
@@ -637,6 +698,20 @@ public class DamageCalcScreen extends Screen {
 
 	@Override
 	public boolean mouseClicked(double mx, double my, int button) {
+		if (editing != null) {
+			Edit before = editing;
+			commitEdit();
+			// Si se pulsa otra celda, su acción abre la nueva edición más abajo
+			if (button == 0) {
+				for (Hit h : new ArrayList<>(hits)) {
+					if (h.contains(mx, my) && !(h.x1() == before.x() && h.y1() == before.y())) {
+						h.action().run();
+						return true;
+					}
+				}
+			}
+			return true;
+		}
 		if (open != null) {
 			if (mx >= listX && mx < listX + listW && my >= listY + 14 && my < listY + listH) {
 				int idx = listScroll + (int) ((my - listY - 14) / 11);
@@ -675,6 +750,18 @@ public class DamageCalcScreen extends Screen {
 
 	@Override
 	public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+		if (editing != null) {
+			switch (keyCode) {
+				case GLFW.GLFW_KEY_ENTER, GLFW.GLFW_KEY_KP_ENTER, GLFW.GLFW_KEY_TAB -> commitEdit();
+				case GLFW.GLFW_KEY_ESCAPE -> editing = null;
+				case GLFW.GLFW_KEY_BACKSPACE -> {
+					if (!editBuffer.isEmpty()) editBuffer = editBuffer.substring(0, editBuffer.length() - 1);
+				}
+				default -> {
+				}
+			}
+			return true;
+		}
 		if (open != null) {
 			switch (keyCode) {
 				case GLFW.GLFW_KEY_ESCAPE -> closeCombo();
@@ -706,6 +793,11 @@ public class DamageCalcScreen extends Screen {
 
 	@Override
 	public boolean charTyped(char chr, int modifiers) {
+		if (editing != null) {
+			boolean sign = (chr == '-' || chr == '+') && editBuffer.isEmpty() && editing.min() < 0;
+			if ((Character.isDigit(chr) || sign) && editBuffer.length() < 4) editBuffer += chr;
+			return true;
+		}
 		if (open != null && chr >= ' ') {
 			if (query.length() < 32) {
 				query += chr;
