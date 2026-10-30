@@ -81,3 +81,9 @@ if [ -n "$CJAR" ] && [ -f "$CJAR" ]; then
     echo "==== PoseType"; javap -p -cp "$CJAR" com.cobblemon.mod.common.entity.PoseType | grep 'static final' | head -20;
   } > inspect/model-widget.txt 2>&1
 fi
+# --- Octava ronda: cómo dibuja el Resumen el modelo completo
+if [ -n "$CJAR" ] && [ -f "$CJAR" ]; then
+  { javap -p -cp "$CJAR" com.cobblemon.mod.common.entity.PoseType | grep 'static final com.cobblemon.mod.common.entity.PoseType ';
+    javap -p -c -constants -cp "$CJAR" com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget | awk '/renderPKM|renderWidget/{f=1} f' | grep -E '^  [a-z]|ldc|bipush|sipush|fconst|dconst|getstatic|invoke' | head -90;
+  } > inspect/model-widget.txt 2>&1
+fi
