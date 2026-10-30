@@ -56,3 +56,12 @@ if [ -n "$MJAR" ] && [ -f "$MJAR" ]; then
   javap -p -cp "$MJAR" net.minecraft.client.MinecraftClient | grep -iE 'openGameMenu|setScreen' > inspect/mc-menu.txt
   javap -p -cp "$MJAR" net.minecraft.client.gui.screen.Screen | grep -iE 'getTooltipFromItem' >> inspect/mc-menu.txt
 fi
+# --- Sexta ronda: qué hace la opción Bag en combate y cómo se usan objetos
+if [ -n "$CJAR" ] && [ -f "$CJAR" ]; then
+  { javap -p -c -cp "$CJAR" com.cobblemon.mod.common.client.gui.battle.subscreen.BattleGeneralActionSelection | awk '/lambda/{f=1} f' | grep -E 'lambda|invoke|getstatic' | head -80;
+    echo "==== BattleGUI.close / minimize";
+    javap -p -c -cp "$CJAR" com.cobblemon.mod.common.client.gui.battle.BattleGUI | awk '/ (close|minimizeBattle)\(/{f=1} f{print} f&&/^$/{f=0}' | grep -E '^  [a-z]|invoke|putfield|getfield' | head -40;
+    echo "==== clases de uso de objetos";
+    grep -iE 'item/(battle|medicine|healing)|PartySelect|BagItem|UseItem|partyselect' inspect/cobblemon-files.txt | grep class | head -40;
+  } > inspect/battle-bag.txt 2>&1
+fi
