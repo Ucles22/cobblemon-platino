@@ -218,6 +218,7 @@ public class DppSummaryScreen extends Screen {
 			case STATS -> drawStatsPage(c, p, rx, ry, rw);
 			case MARKS -> drawMarks(c, p, rx, ry, rw, rh, mouseX, mouseY);
 		}
+		if (page == Page.MARKS && markTip != null) drawTip(c, markTip, mouseX, mouseY);
 		if (page == Page.MOVES && swapSlot >= 0) drawSwapList(c, p, rx, ry, rw, rh, mouseX, mouseY);
 		if (toast != null && System.currentTimeMillis() < toastUntil) {
 			int tw = Draw.width(toast) + 16;
@@ -624,6 +625,7 @@ public class DppSummaryScreen extends Screen {
 	}
 
 	private void drawMarks(DrawContext c, Pokemon p, int x, int y, int w, int h, int mx, int my) {
+		markTip = null;
 		List<Object> marks = new ArrayList<>();
 		try {
 			marks.addAll(p.getMarks());
@@ -661,11 +663,30 @@ public class DppSummaryScreen extends Screen {
 					tip.add(Text.literal(sb.toString()).formatted(net.minecraft.util.Formatting.GRAY));
 				}
 			}
-			c.getMatrices().push();
-			c.getMatrices().translate(0, 0, 300);
-			c.drawTooltip(textRenderer, tip, mx, my);
-			c.getMatrices().pop();
+			markTip = tip;
 		}
+	}
+
+	/** Recuadro de nombre de la marca bajo el ratón (se dibuja al final, por encima de todo). */
+	private List<Text> markTip;
+
+	private void drawTip(DrawContext c, List<Text> lines, int mx, int my) {
+		int w = 0;
+		for (Text t : lines) w = Math.max(w, textRenderer.getWidth(t));
+		int h = lines.size() * 10 + 6;
+		int x = mx + 10, y = my - h - 4;
+		if (x + w + 8 > width) x = mx - w - 14;
+		if (y < 2) y = my + 12;
+		c.draw();
+		c.getMatrices().push();
+		c.getMatrices().translate(0, 0, 500);
+		c.fill(x, y, x + w + 8, y + h, 0xF0100010);
+		c.fill(x + 1, y + 1, x + w + 7, y + 2, 0xFF5000A0);
+		c.fill(x + 1, y + h - 2, x + w + 7, y + h - 1, 0xFF28007F);
+		c.fill(x + 1, y + 1, x + 2, y + h - 1, 0xFF5000A0);
+		c.fill(x + w + 6, y + 1, x + w + 7, y + h - 1, 0xFF28007F);
+		for (int i = 0; i < lines.size(); i++) c.drawText(textRenderer, lines.get(i), x + 4, y + 4 + i * 10, 0xFFFFFFFF, true);
+		c.getMatrices().pop();
 	}
 
 	private static String markText(Object mark, String method) {
