@@ -25,6 +25,8 @@ import java.util.UUID;
  */
 public final class MiniModel {
 	private static final Map<UUID, FloatingState> STATES = new HashMap<>();
+	/** Pokémon cuyo modelo ya ha completado la pose de perfil (a partir de ahí se dibuja quieto). */
+	private static final java.util.Set<UUID> SETTLED = new java.util.HashSet<>();
 	/** Mismo ángulo que las casillas del PC de Cobblemon (13°, 35°, 0°). */
 	private static final Quaternionf ROTATION = QuaternionUtilsKt.fromEulerXYZDegrees(new Quaternionf(), new Vector3f(13f, 35f, 0f));
 	private static MethodHandle draw;
@@ -41,7 +43,10 @@ public final class MiniModel {
 						float.class, float.class, float.class, float.class, float.class, float.class, int.class, Object.class);
 				draw = MethodHandles.lookup().findStatic(PokemonGuiUtilsKt.class, "drawProfilePokemon$default", type);
 			}
-			if (STATES.size() > 64) STATES.clear();
+			if (STATES.size() > 64) {
+				STATES.clear();
+				SETTLED.clear();
+			}
 			FloatingState state = STATES.computeIfAbsent(p.getUuid(), id -> new FloatingState());
 			state.setCurrentAspects(p.getAspects());
 
@@ -53,7 +58,10 @@ public final class MiniModel {
 			try {
 				m.translate(x + size * 0.5, y + k, 250);
 				m.scale(2.5f * k, 2.5f * k, 1f);
-				draw.invoke(p.asRenderablePokemon(), m, ROTATION, (PoseType) null, (PosableState) state, 0f, 4.5f,
+				// La 1ª vez se avanza el tiempo (2 s) para que el modelo complete la pose de perfil, como en el PC;
+				// después se pasa 0 y se queda quieto en esa pose.
+				float ticks = SETTLED.add(p.getUuid()) ? 40f : 0f;
+				draw.invoke(p.asRenderablePokemon(), m, ROTATION, (PoseType) null, (PosableState) state, ticks, 4.5f,
 						false, false, 0f, 0f, 0f, 0f, 0f, 0f, 32648, null);
 			} finally {
 				m.pop();
