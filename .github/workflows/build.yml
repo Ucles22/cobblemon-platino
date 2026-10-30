@@ -25,7 +25,20 @@ jobs:
           git rm -rq --cached . ; git add -f inspect
           git commit -qm "inspect" && git push -f origin ci-inspect
           git checkout -q -f ${{ github.sha }}
-      - run: gradle build
+      - name: Compilar
+        shell: bash
+        run: |
+          set -o pipefail
+          gradle build 2>&1 | tee build.log
+      - name: Guardar log si falla
+        if: failure()
+        shell: bash
+        run: |
+          cp build.log /tmp/build.log || true
+          git config user.name "ci"; git config user.email "ci@users.noreply.github.com"
+          git fetch -q origin ci-inspect && git checkout -q -f FETCH_HEAD
+          mkdir -p inspect && cp /tmp/build.log inspect/build-failure.log
+          git add -f inspect && git commit -qm "build log" && git push -q origin HEAD:ci-inspect || true
       - name: Guardar refmap para verificación
         if: hashFiles('tools/INSPECT') != ''
         run: |

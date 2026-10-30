@@ -177,7 +177,7 @@ public class PoketchScreen extends Screen {
 
 	private static void beep(float pitch) {
 		MinecraftClient.getInstance().getSoundManager()
-				.play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, pitch, 0.5f));
+				.play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK.value(), pitch, 0.5f));
 	}
 
 	private void text(DrawContext c, String s, int x, int y, int color) {
