@@ -27,8 +27,6 @@ public final class MiniModel {
 	private static final Map<UUID, FloatingState> STATES = new HashMap<>();
 	/** Pokémon cuyo modelo ya ha completado la pose de perfil (a partir de ahí se dibuja quieto). */
 	private static final java.util.Set<UUID> SETTLED = new java.util.HashSet<>();
-	/** Mismo ángulo que las casillas del PC de Cobblemon (13°, 35°, 0°). */
-	private static final Quaternionf ROTATION = QuaternionUtilsKt.fromEulerXYZDegrees(new Quaternionf(), new Vector3f(13f, 35f, 0f));
 	private static MethodHandle draw;
 	private static boolean failed;
 
@@ -61,7 +59,10 @@ public final class MiniModel {
 				// La 1ª vez se avanza el tiempo (2 s) para que el modelo complete la pose de perfil, como en el PC;
 				// después se pasa 0 y se queda quieto en esa pose.
 				float ticks = SETTLED.add(p.getUuid()) ? 40f : 0f;
-				draw.invoke(p.asRenderablePokemon(), m, ROTATION, (PoseType) null, (PosableState) state, ticks, 4.5f,
+				// Giro nuevo en cada dibujo, como hace StorageSlot del PC: (13°, 35°, 0°).
+				// Cobblemon modifica el cuaternión que recibe, así que no se puede reutilizar entre fotogramas.
+				Quaternionf rotation = QuaternionUtilsKt.fromEulerXYZDegrees(new Quaternionf(), new Vector3f(13f, 35f, 0f));
+				draw.invoke(p.asRenderablePokemon(), m, rotation, (PoseType) null, (PosableState) state, ticks, 4.5f,
 						false, false, 0f, 0f, 0f, 0f, 0f, 0f, 32648, null);
 			} finally {
 				m.pop();
