@@ -16,6 +16,8 @@ import java.util.UUID;
 /** Cajas de combate estilo Pokémon Platino (tu Pokémon arriba a la izquierda, el rival arriba a la derecha, como Cobblemon). */
 public final class BattleHud {
 	public static final int W = 132;
+	/** Texto gris oscuro (no negro puro), nítido y sin sombra. */
+	private static final int TXT = 0xFF484C50;
 
 	private BattleHud() {}
 
@@ -63,7 +65,7 @@ public final class BattleHud {
 		boolean low = ally && cur > 0f && cur <= 0.2f;
 		if (low) LowHpAlarm.mark();
 		boolean blinkOn = (System.currentTimeMillis() / 350) % 2 == 0;
-		int border = hovered ? Draw.GOLD : (low && blinkOn) ? 0xFFE83030 : 0xFF333A38;
+		int border = hovered ? Draw.GOLD : (low && blinkOn) ? 0xFFE83030 : 0xFF5A6268;
 
 		// Caja blanca de una pieza como en DPPt: borde oscuro, filo gris claro, pestaña gris al lado de la
 		// pantalla y punta hacia el centro. La barra de PS (con "PS" en rojo) va dentro de la caja.
@@ -87,43 +89,35 @@ public final class BattleHud {
 		int right = x + W - (ally ? 6 : 9);
 		// Nombre + sexo (texto oscuro con sombra gris, como en DS)
 		String name = Draw.fit(bp.getDisplayName().getString().toUpperCase(java.util.Locale.ROOT), W - 58);
-		Draw.dsText(c, name, ix, y + 4, 0xFF383430, 0xFFB0ACA4);
+		c.drawText(Draw.font(), name, ix, y + 4, TXT, false);
 		Gender g = bp.getGender();
 
 		// Sexo + "Nv" pequeño + número, a la derecha
 		String lvNum = String.valueOf(bp.getLevel());
 		int lvx = right - Draw.width(lvNum);
-		Draw.dsText(c, lvNum, lvx, y + 4, 0xFF383430, 0xFFB0ACA4);
-		c.getMatrices().push();
-		c.getMatrices().translate(lvx - 11, y + 6, 0);
-		c.getMatrices().scale(0.75f, 0.75f, 1f);
-		c.drawText(Draw.font(), "Nv", 0, 0, 0xFF383430, false);
-		c.getMatrices().pop();
-		if (g == Gender.MALE) Draw.dsText(c, "♂", lvx - 19, y + 4, 0xFF3088F8, 0xFFA8C8F8);
-		else if (g == Gender.FEMALE) Draw.dsText(c, "♀", lvx - 19, y + 4, 0xFFF05070, 0xFFF8B8C8);
+		c.drawText(Draw.font(), lvNum, lvx, y + 4, TXT, false);
+		int nvx = lvx - Draw.width("Nv") - 1;
+		c.drawText(Draw.font(), "Nv", nvx, y + 4, 0xFFC04848, false);
+		if (g == Gender.MALE) c.drawText(Draw.font(), "♂", nvx - 9, y + 4, 0xFF3088F8, false);
+		else if (g == Gender.FEMALE) c.drawText(Draw.font(), "♀", nvx - 9, y + 4, 0xFFE84870, false);
 
 		// Capturado (rival salvaje): ball pequeña bajo el nombre
 		if (!ally && dexState != null && dexState.equalsIgnoreCase("CAUGHT")) {
-			Draw.tinyBall(c, ix, y + 16);
+			Draw.tinyBall(c, ix + Math.min(Draw.width(name) + 3, W - 70), y + 4);
 		}
 
 		// Barra de PS: cápsula oscura con "PS" en rojo y la vida dentro
 		int stripY = y + 16;
 		PersistentStatus st = bp.getStatus();
-		int used = st != null ? Draw.statusBadge(c, st.getShowdownName(), ix + (ally ? 0 : 10), stripY - 1) : 0;
-		int barW = Math.min(W - 40, 86);
+		int used = st != null ? Draw.statusBadge(c, st.getShowdownName(), ix, stripY) : 0;
+		int barW = ally ? 86 : 68;
 		int sx = right - barW;
 		Draw.batch(c, () -> {
-			Draw.round(c, sx, stripY, right, stripY + 8, 0xFF3A3633);
+			Draw.round(c, sx, stripY, right, stripY + 9, 0xFF4A4E52);
 			// "PS" sobre fondo granate
-			c.fill(sx + 1, stripY + 1, sx + 15, stripY + 7, 0xFF5A2C30);
-			c.getMatrices().push();
-			c.getMatrices().translate(sx + 3, stripY + 1.5f, 0);
-			c.getMatrices().scale(0.75f, 0.75f, 1f);
-			c.drawText(Draw.font(), "PS", 0, 0, 0xFFF89880, false);
-			c.getMatrices().pop();
+			c.fill(sx + 1, stripY + 1, sx + 15, stripY + 8, 0xFFB83838);
 			int bx = sx + 16, bw = right - 1 - bx;
-			c.fill(bx, stripY + 1, bx + bw, stripY + 7, 0xFF505858);
+			c.fill(bx, stripY + 1, bx + bw, stripY + 8, 0xFF6A7070);
 			int fw = Math.round(bw * cur);
 			if (cur > 0 && fw < 1) fw = 1;
 			int col, hi;
@@ -131,32 +125,35 @@ public final class BattleHud {
 			else if (cur > 0.2f) { col = 0xFFC8A008; hi = 0xFFF8E038; }
 			else { col = 0xFFA82818; hi = 0xFFF85838; }
 			if (fw > 0) {
-				c.fill(bx, stripY + 1, bx + fw, stripY + 7, col);
+				c.fill(bx, stripY + 1, bx + fw, stripY + 8, col);
 				c.fill(bx, stripY + 2, bx + fw, stripY + 4, hi);
 			}
 		});
+
+		c.drawText(Draw.font(), "PS", sx + 2, stripY + 1, 0xFFFFF0E8, false);
+		if (!ally) {
+			// % de PS del rival a la izquierda de la barra
+			String pct = Math.round(cur * 100) + "%";
+			c.drawText(Draw.font(), pct, sx - 3 - Draw.width(pct), stripY + 1, TXT, false);
+		}
 
 		if (ally) {
 			// PS numéricos y barra de EXP azul en la parte baja de la misma caja
 			if (bp.isHpFlat()) {
 				String hp = Math.round(bp.getHpValue()) + "/" + Math.round(max);
-				Draw.dsText(c, hp, right - Draw.width(hp), y + 26, 0xFF383430, 0xFFB0ACA4);
+				c.drawText(Draw.font(), hp, right - Draw.width(hp), y + 27, TXT, false);
 			}
 			Pokemon own = findOwn(bp.getUuid());
 			if (own != null) {
 				float er = Math.max(0, Math.min(1, expRatio(own)));
 				int ey = y + h - 6;
 				Draw.batch(c, () -> {
-					c.fill(x + 6, ey, x + W - 4, ey + 3, 0xFF3A3633);
+					c.fill(x + 6, ey, x + W - 4, ey + 3, 0xFF4A4E52);
 					c.fill(x + 7, ey + 1, x + W - 5, ey + 2, 0xFF505858);
 					int ew = Math.round((W - 12) * er);
 					if (ew > 0) c.fill(x + 7, ey + 1, x + 7 + ew, ey + 2, Draw.EXP_BLUE);
 				});
-				c.getMatrices().push();
-				c.getMatrices().translate(ix, y + 28, 0);
-				c.getMatrices().scale(0.75f, 0.75f, 1f);
-				c.drawText(Draw.font(), "EXP", 0, 0, 0xFF3070C0, false);
-				c.getMatrices().pop();
+				c.drawText(Draw.font(), "EXP", ix, y + 27, 0xFF3878C8, false);
 			}
 		}
 

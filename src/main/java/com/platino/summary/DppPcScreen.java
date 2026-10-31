@@ -265,7 +265,9 @@ public class DppPcScreen extends Screen {
 			Spot spot = new Spot(-1, i);
 			boolean over = mx >= sx && mx < sx + pc2 && my >= sy && my < sy + 30;
 			if (over && p != null) hover = p;
-			drawCell(c, p, spot, sx, sy, Math.min(pc2, 30), over);
+			int cs = Math.min(pc2 - 2, 28);
+			if (over) Draw.round(c, sx, sy, sx + pc2, sy + 30, held != null ? 0x80F8E080 : 0x60FFFFFF);
+			drawCell(c, p, spot, sx + (pc2 - cs) / 2, sy + (30 - cs) / 2, cs, false); // centrado en su hueco
 			hits.add(new Hit(sx, sy, sx + pc2, sy + 30, () -> clickSpot(spot)));
 		}
 		int ry = py + 20 + pgh + 4;
