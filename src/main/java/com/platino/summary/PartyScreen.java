@@ -30,7 +30,7 @@ public class PartyScreen extends Screen {
 	private static final int W = 324, H = 222, CW = 152, CH = 46;
 
 	private enum Option {
-		DATOS("DATOS"), MOVER("MOVER"), NOTAS("NOTAS"), SALIR("SALIR");
+		DATOS(com.platino.Tr.t("DATOS")), MOVER(com.platino.Tr.t("MOVER")), NOTAS(com.platino.Tr.t("NOTAS")), SALIR(com.platino.Tr.t("SALIR"));
 		final String label;
 
 		Option(String label) {
@@ -61,7 +61,7 @@ public class PartyScreen extends Screen {
 	}
 
 	public PartyScreen(Screen parent, int cursor) {
-		super(Text.literal("Equipo"));
+		super(Text.literal(com.platino.Tr.t("Equipo")));
 		this.parent = parent;
 		this.cursor = Math.max(0, Math.min(5, cursor));
 	}
@@ -147,17 +147,17 @@ public class PartyScreen extends Screen {
 		c.fill(x0 + 9, by + 3, x0 + W - 73, by + 29, 0xFFF8F8F8);
 		String text;
 		if (message != null && System.currentTimeMillis() < messageUntil) text = message;
-		else if (moveFrom >= 0) text = "¿Adónde quieres moverlo?";
+		else if (moveFrom >= 0) text = com.platino.Tr.t("¿Adónde quieres moverlo?");
 		else if (menuSlot >= 0) {
 			Pokemon p = at(cp, menuSlot);
-			text = "¿Qué hacer con " + (p == null ? "?" : p.getDisplayName(false).getString()) + "?";
-		} else text = "Elige un POKéMON.";
+			text = com.platino.Tr.t("¿Qué hacer con ") + (p == null ? "?" : p.getDisplayName(false).getString()) + "?";
+		} else text = com.platino.Tr.t("Elige un POKéMON.");
 		Draw.dsText(c, Draw.fit(text, W - 90), x0 + 14, by + 12, 0xFF303038, 0xFFD0D0D8);
 		boolean exitSel = cursor == 6 && menuSlot < 0;
 		boolean exitHover = mx >= x0 + W - 64 && mx < x0 + W - 6 && my >= by && my < by + 32;
 		Draw.panelGradient(c, x0 + W - 64, by, x0 + W - 6, by + 32, exitSel ? Draw.GOLD : 0xFF682820,
 				exitHover || exitSel ? 0xFFF08878 : 0xFFE06050, 0xFFB83828);
-		String exit = moveFrom >= 0 ? "ANULAR" : "SALIR";
+		String exit = moveFrom >= 0 ? com.platino.Tr.t("ANULAR") : com.platino.Tr.t("SALIR");
 		Draw.dsText(c, exit, x0 + W - 35 - Draw.width(exit) / 2, by + 12, 0xFFFFFFFF, 0xFF682820);
 		hits.add(new Hit(x0 + W - 64, by, x0 + W - 6, by + 32, this::pressExit));
 
@@ -210,7 +210,7 @@ public class PartyScreen extends Screen {
 			if (bw > 0) barX = tx + bw + 2;
 		}
 		Draw.hpBar(c, barX, y + 16, x + CW - 5 - barX, p.getCurrentHealth() / (float) max, true);
-		Draw.dsText(c, "Nv." + p.getLevel(), tx, y + 31, 0xFFFFFFFF, 0xFF284868);
+		Draw.dsText(c, com.platino.Tr.t("Nv.") + p.getLevel(), tx, y + 31, 0xFFFFFFFF, 0xFF284868);
 		String hp = p.getCurrentHealth() + "/" + max;
 		Draw.dsText(c, hp, x + CW - 6 - Draw.width(hp), y + 31, 0xFFFFFFFF, 0xFF284868);
 
@@ -300,7 +300,7 @@ public class PartyScreen extends Screen {
 			}
 			case MOVER -> {
 				if (inBattle()) {
-					say("No se puede durante un combate.");
+					say(com.platino.Tr.t("No se puede durante un combate."));
 					return;
 				}
 				menuSlot = -1;

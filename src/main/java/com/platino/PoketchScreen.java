@@ -32,9 +32,9 @@ public class PoketchScreen extends Screen {
 	private static final int[] GRAY = {0xFFD8D8D8, 0xFF383838, 0xFF909090, 0xFFF0F0F0};
 	private static final int[] BLUE = {0xFF98ACE0, 0xFF202C58, 0xFF6878B8, 0xFFC8D4F4};
 
-	private static final String[] MONTHS = {"ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO",
-			"AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"};
-	private static final String[] DAYS = {"LUN", "MAR", "MIÉ", "JUE", "VIE", "SÁB", "DOM"};
+	private static final String[] MONTHS = {com.platino.Tr.t("ENERO"), com.platino.Tr.t("FEBRERO"), com.platino.Tr.t("MARZO"), com.platino.Tr.t("ABRIL"), com.platino.Tr.t("MAYO"), com.platino.Tr.t("JUNIO"), com.platino.Tr.t("JULIO"),
+			com.platino.Tr.t("AGOSTO"), com.platino.Tr.t("SEPTIEMBRE"), com.platino.Tr.t("OCTUBRE"), com.platino.Tr.t("NOVIEMBRE"), com.platino.Tr.t("DICIEMBRE")};
+	private static final String[] DAYS = {com.platino.Tr.t("LUN"), com.platino.Tr.t("MAR"), com.platino.Tr.t("MIÉ"), com.platino.Tr.t("JUE"), com.platino.Tr.t("VIE"), com.platino.Tr.t("SÁB"), com.platino.Tr.t("DOM")};
 	private static final int[] SEGMENTS = {0b0111111, 0b0000110, 0b1011011, 0b1001111, 0b1100110,
 			0b1101101, 0b1111101, 0b0000111, 0b1111111, 0b1101111};
 
@@ -65,7 +65,7 @@ public class PoketchScreen extends Screen {
 	private YearMonth calMonth = YearMonth.now();
 
 	public PoketchScreen() {
-		super(Text.literal("Pokéreloj"));
+		super(Text.literal(com.platino.Tr.t("Pokéreloj")));
 		App[] apps = App.values();
 		app = apps[Math.floorMod(PlatinoConfig.get().poketchApp, apps.length)];
 	}
@@ -292,7 +292,7 @@ public class PoketchScreen extends Screen {
 			// Columna derecha: nombre y nivel pequeños + cápsula de objeto justo encima de la barra
 			int rx = x + 6 + model + 2, rw = x + cw - 3 - rx;
 			smallLcd(c, pk.getDisplayName(false).getString(), rx, y + 3, rw, p[1]);
-			smallLcd(c, pk.isFainted() ? "DEB" : "Nv" + pk.getLevel(), rx, y + 11, rw, p[1]);
+			smallLcd(c, pk.isFainted() ? com.platino.Tr.t("DEB") : com.platino.Tr.t("Nv") + pk.getLevel(), rx, y + 11, rw, p[1]);
 			boolean holds;
 			try {
 				holds = !pk.heldItem().isEmpty();
@@ -334,7 +334,7 @@ public class PoketchScreen extends Screen {
 		for (int i = 0; i < steps.length(); i++) {
 			digit(c, bx1 + 10 + i * (w + gap), by1 + 8, w, h, t, maskFor(steps.charAt(i)), p[1], p[3]);
 		}
-		centered(c, "PASOS", sx + SW / 2, by2 + 6, p[1]);
+		centered(c, com.platino.Tr.t("PASOS"), sx + SW / 2, by2 + 6, p[1]);
 		int cx = sx + SW / 2;
 		lcdButton(c, cx - 15, by2 + 20, cx + 15, by2 + 48, "C", mx, my, () -> {
 			PlatinoConfig.get().poketchSteps = 0;
@@ -391,9 +391,9 @@ public class PoketchScreen extends Screen {
 			coinFlips++;
 			beep(1.2f);
 		}));
-		String msg = flipping ? "…" : coinFlips == 0 ? "Toca la moneda" : coinHeads ? "¡CARA!" : "¡CRUZ!";
+		String msg = flipping ? "…" : coinFlips == 0 ? com.platino.Tr.t("Toca la moneda") : coinHeads ? com.platino.Tr.t("¡CARA!") : com.platino.Tr.t("¡CRUZ!");
 		centered(c, msg, cx, sy + 22, p[1]);
-		if (!flipping && coinFlips > 0) centered(c, "Tiradas: " + coinFlips, cx, sy + 38, p[2]);
+		if (!flipping && coinFlips > 0) centered(c, com.platino.Tr.t("Tiradas: ") + coinFlips, cx, sy + 38, p[2]);
 	}
 
 	private static void ellipse(DrawContext c, int cx, int cy, int rx, int ry, int color) {
@@ -408,7 +408,7 @@ public class PoketchScreen extends Screen {
 	private void drawTypes(DrawContext c, int sx, int sy, int mx, int my) {
 		int[] p = GRAY;
 		int n = TypeChart.NAMES.length;
-		text(c, "DEFENSOR", sx + 96, sy + 4, p[2]);
+		text(c, com.platino.Tr.t("DEFENSOR"), sx + 96, sy + 4, p[2]);
 		selector(c, sx + 86, sy + 14, sx + SW - 4, TypeChart.NAMES[typeDef1], mx, my,
 				() -> typeDef1 = Math.floorMod(typeDef1 - 1, n), () -> typeDef1 = Math.floorMod(typeDef1 + 1, n));
 		selector(c, sx + 86, sy + 36, sx + SW - 4, typeDef2 < 0 ? "- - -" : TypeChart.NAMES[typeDef2], mx, my,
@@ -423,7 +423,7 @@ public class PoketchScreen extends Screen {
 		ellipse(c, sx + 136, sy + 80, 30, 10, p[2]);
 		ellipse(c, sx + 136, sy + 76, 16, 14, p[1]);
 
-		text(c, "ATAQUE", sx + 10, sy + 80, p[2]);
+		text(c, com.platino.Tr.t("ATAQUE"), sx + 10, sy + 80, p[2]);
 		selector(c, sx + 4, sy + 90, sx + 92, TypeChart.NAMES[typeAttack], mx, my,
 				() -> typeAttack = Math.floorMod(typeAttack - 1, n), () -> typeAttack = Math.floorMod(typeAttack + 1, n));
 
@@ -496,8 +496,8 @@ public class PoketchScreen extends Screen {
 
 	private void drawDamage(DrawContext c, int sx, int sy, int mx, int my) {
 		int[] p = GREEN;
-		centered(c, "CALCULADORA", sx + SW / 2, sy + 14, p[1]);
-		centered(c, "DE DAÑO", sx + SW / 2, sy + 26, p[1]);
+		centered(c, com.platino.Tr.t("CALCULADORA"), sx + SW / 2, sy + 14, p[1]);
+		centered(c, com.platino.Tr.t("DE DAÑO"), sx + SW / 2, sy + 26, p[1]);
 		// Icono: espada contra escudo
 		int cx = sx + SW / 2, cy = sy + 62;
 		for (int i = 0; i < 16; i++) c.fill(cx - 22 + i, cy - 10 + i, cx - 19 + i, cy - 7 + i, p[1]);
@@ -505,9 +505,9 @@ public class PoketchScreen extends Screen {
 		Draw.round(c, cx + 4, cy - 12, cx + 24, cy + 10, p[1]);
 		c.fill(cx + 6, cy - 10, cx + 22, cy + 8, p[2]);
 		c.fill(cx + 13, cy - 10, cx + 15, cy + 8, p[1]);
-		centered(c, "Especies del servidor,", cx, sy + 84, p[2]);
-		centered(c, "IVs, EVs, objetos…", cx, sy + 95, p[2]);
-		lcdButton(c, cx - 40, sy + 110, cx + 40, sy + 136, "ABRIR", mx, my,
+		centered(c, com.platino.Tr.t("Especies del servidor,"), cx, sy + 84, p[2]);
+		centered(c, com.platino.Tr.t("IVs, EVs, objetos…"), cx, sy + 95, p[2]);
+		lcdButton(c, cx - 40, sy + 110, cx + 40, sy + 136, com.platino.Tr.t("ABRIR"), mx, my,
 				() -> MinecraftClient.getInstance().setScreen(new com.platino.calc.DamageCalcScreen(this)));
 	}
 

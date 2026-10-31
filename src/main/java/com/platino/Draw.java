@@ -127,7 +127,7 @@ public final class Draw {
 		if (label) {
 			// etiqueta "PS" dorada sobre fondo oscuro
 			round(c, x, y, x + 15, y + 7, OUTLINE);
-			c.drawText(font(), "PS", x + 2, y, GOLD, false);
+			c.drawText(font(), com.platino.Tr.t("PS"), x + 2, y, GOLD, false);
 			bx = x + 14;
 		}
 		int barX = bx;

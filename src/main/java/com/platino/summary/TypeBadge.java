@@ -18,12 +18,12 @@ public final class TypeBadge {
 			Map.entry("rock", 0xFFB8A038), Map.entry("ghost", 0xFF705898), Map.entry("dragon", 0xFF7038F8),
 			Map.entry("dark", 0xFF705848), Map.entry("steel", 0xFFA0A0C0), Map.entry("fairy", 0xFFE890B0));
 	private static final Map<String, String> LABELS = Map.ofEntries(
-			Map.entry("normal", "NORMAL"), Map.entry("fire", "FUEGO"), Map.entry("water", "AGUA"),
-			Map.entry("grass", "PLANTA"), Map.entry("electric", "ELÉC"), Map.entry("ice", "HIELO"),
-			Map.entry("fighting", "LUCHA"), Map.entry("poison", "VENENO"), Map.entry("ground", "TIERRA"),
-			Map.entry("flying", "VOLAD"), Map.entry("psychic", "PSÍQ"), Map.entry("bug", "BICHO"),
-			Map.entry("rock", "ROCA"), Map.entry("ghost", "FANTAS"), Map.entry("dragon", "DRAGÓN"),
-			Map.entry("dark", "SINIES"), Map.entry("steel", "ACERO"), Map.entry("fairy", "HADA"));
+			Map.entry("normal", "NORMAL"), Map.entry("fire", com.platino.Tr.t("FUEGO")), Map.entry("water", com.platino.Tr.t("AGUA")),
+			Map.entry("grass", com.platino.Tr.t("PLANTA")), Map.entry("electric", com.platino.Tr.t("ELÉC")), Map.entry("ice", com.platino.Tr.t("HIELO")),
+			Map.entry("fighting", com.platino.Tr.t("LUCHA")), Map.entry("poison", com.platino.Tr.t("VENENO")), Map.entry("ground", com.platino.Tr.t("TIERRA")),
+			Map.entry("flying", com.platino.Tr.t("VOLAD")), Map.entry("psychic", com.platino.Tr.t("PSÍQ")), Map.entry("bug", com.platino.Tr.t("BICHO")),
+			Map.entry("rock", com.platino.Tr.t("ROCA")), Map.entry("ghost", com.platino.Tr.t("FANTAS")), Map.entry("dragon", com.platino.Tr.t("DRAGÓN")),
+			Map.entry("dark", com.platino.Tr.t("SINIES")), Map.entry("steel", com.platino.Tr.t("ACERO")), Map.entry("fairy", com.platino.Tr.t("HADA")));
 
 	private TypeBadge() {}
 

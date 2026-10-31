@@ -23,9 +23,9 @@ public final class DsBattleMenu {
 	private DsBattleMenu() {}
 
 	private enum Btn {
-		FIGHT("LUCHAR", 16, 14, 160, 70, 0xFF781818, 0xFFF06060, 0xFFC83030, 0xFF681010),
-		BAG("BOLSA", 4, 76, 60, 108, 0xFF704008, 0xFFF8B838, 0xFFD88818, 0xFF603000),
-		RUN("HUIR", 64, 80, 112, 108, 0xFF183870, 0xFF68A0F8, 0xFF3068D0, 0xFF102858),
+		FIGHT(com.platino.Tr.t("LUCHAR"), 16, 14, 160, 70, 0xFF781818, 0xFFF06060, 0xFFC83030, 0xFF681010),
+		BAG(com.platino.Tr.t("BOLSA"), 4, 76, 60, 108, 0xFF704008, 0xFFF8B838, 0xFFD88818, 0xFF603000),
+		RUN(com.platino.Tr.t("HUIR"), 64, 80, 112, 108, 0xFF183870, 0xFF68A0F8, 0xFF3068D0, 0xFF102858),
 		PARTY("POKéMON", 116, 76, 172, 108, 0xFF185818, 0xFF68D068, 0xFF38A038, 0xFF0C400C);
 
 		final String label;
@@ -101,7 +101,7 @@ public final class DsBattleMenu {
 			BattleOptionTile t = tile(sel, b);
 			boolean available = t != null;
 			boolean hover = b.hit(mx, my);
-			String label = b == Btn.RUN && t != null && t.getResource().getPath().contains("forfeit") ? "RENDIRSE" : b.label;
+			String label = b == Btn.RUN && t != null && t.getResource().getPath().contains("forfeit") ? com.platino.Tr.t("RENDIRSE") : b.label;
 			boolean shake = b == blockedBtn && System.currentTimeMillis() < blockedUntil;
 			drawButton(c, b, label, available, hover, shake);
 		}
@@ -156,9 +156,9 @@ public final class DsBattleMenu {
 				blockedUntil = System.currentTimeMillis() + 350;
 				mc.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.BLOCK_NOTE_BLOCK_BASS, 0.6f));
 				String msg = switch (b) {
-					case BAG -> "¡No puedes usar la BOLSA en este combate!";
-					case RUN -> "¡No puedes huir de este combate!";
-					default -> "¡No puedes hacer eso ahora!";
+					case BAG -> com.platino.Tr.t("¡No puedes usar la BOLSA en este combate!");
+					case RUN -> com.platino.Tr.t("¡No puedes huir de este combate!");
+					default -> com.platino.Tr.t("¡No puedes hacer eso ahora!");
 				};
 				DsTextBox.flash(msg);
 				if (mc.player != null && !PlatinoConfig.get().battleText) mc.player.sendMessage(Text.literal(msg), true);

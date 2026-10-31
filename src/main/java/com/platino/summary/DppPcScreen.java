@@ -190,7 +190,7 @@ public class DppPcScreen extends Screen {
 		Draw.panel(c, x0, y0, x0 + W, y0 + H, 0xFF283048, 0xFF384868);
 		c.fillGradient(x0 + 1, y0 + 1, x0 + W - 1, y0 + 19, 0xFF68A0D8, 0xFF3060A8);
 		for (int yy = y0 + 4; yy < y0 + 18; yy += 4) c.fill(x0 + 1, yy, x0 + W - 1, yy + 1, 0x18FFFFFF);
-		Draw.dsText(c, "MOVER POKEMON", x0 + 8, y0 + 6, 0xFFFFFFFF, 0xFF203060);
+		Draw.dsText(c, com.platino.Tr.t("MOVER POKEMON"), x0 + 8, y0 + 6, 0xFFFFFFFF, 0xFF203060);
 		button(c, x0 + W - 92, y0 + 4, x0 + W - 22, y0 + 16, "Cobblemon ⇄", mx, my, 0xFFE8E8F0, this::openOriginal);
 		button(c, x0 + W - 18, y0 + 4, x0 + W - 5, y0 + 16, "×", mx, my, 0xFFE8E8F0, this::close);
 
@@ -243,7 +243,7 @@ public class DppPcScreen extends Screen {
 			drawCell(c, p, spot, sx, sy, CELL, over);
 			hits.add(new Hit(sx, sy, sx + CELL, sy + CELL, () -> clickSpot(spot)));
 		}
-		button(c, gx, gy + gh + 4, gx + bw, gy + gh + 18, wallPicker ? "Cerrar fondos" : "Cambiar fondo", mx, my, 0xFFD8E8F8, () -> {
+		button(c, gx, gy + gh + 4, gx + bw, gy + gh + 18, wallPicker ? com.platino.Tr.t("Cerrar fondos") : com.platino.Tr.t("Cambiar fondo"), mx, my, 0xFFD8E8F8, () -> {
 			wallPicker = !wallPicker;
 			wallScroll = 0;
 			boxName = null;
@@ -253,7 +253,7 @@ public class DppPcScreen extends Screen {
 		// ---- Equipo
 		int px = bx + bw + 6, py = by, pw = x0 + W - 4 - px;
 		Draw.panelGradient(c, px, py, px + pw, py + 18, 0xFF682820, 0xFFF08878, 0xFFD05040);
-		Draw.dsText(c, "EQUIPO", px + pw / 2 - Draw.width("EQUIPO") / 2, py + 5, 0xFFFFFFFF, 0xFF682820);
+		Draw.dsText(c, com.platino.Tr.t("EQUIPO"), px + pw / 2 - Draw.width(com.platino.Tr.t("EQUIPO")) / 2, py + 5, 0xFFFFFFFF, 0xFF682820);
 		int pgh = 3 * 34 + 8;
 		Draw.panel(c, px, py + 20, px + pw, py + 20 + pgh, 0xFF682820, 0xFFF8D0C8);
 		ClientParty cp = party();
@@ -272,7 +272,7 @@ public class DppPcScreen extends Screen {
 		}
 		int ry = py + 20 + pgh + 4;
 		boolean canRelease = held != null;
-		button(c, px, ry, px + pw, ry + 14, "Liberar", mx, my, canRelease ? 0xFFF8C8C0 : 0xFFD0D0D0, this::release);
+		button(c, px, ry, px + pw, ry + 14, com.platino.Tr.t("Liberar"), mx, my, canRelease ? 0xFFF8C8C0 : 0xFFD0D0D0, this::release);
 
 		// ---- Ficha grande
 		Pokemon shown = held != null ? heldPokemon : hover != null ? hover : preview;
@@ -284,9 +284,9 @@ public class DppPcScreen extends Screen {
 		Draw.panel(c, x0 + LW + 8, ty, x0 + W - 4, ty + 26, 0xFF484858, 0xFFF8F8F8);
 		String text;
 		if (message != null && System.currentTimeMillis() < messageUntil) text = message;
-		else if (releaseConfirm != null) text = "¿Seguro que quieres liberar a " + heldPokemon.getDisplayName(false).getString() + "?";
-		else if (held != null) text = "¿Dónde quieres dejar a " + heldPokemon.getDisplayName(false).getString() + "?";
-		else text = "Clic: coger · Clic dcho.: datos · Clic en el nombre: renombrar";
+		else if (releaseConfirm != null) text = com.platino.Tr.t("¿Seguro que quieres liberar a ") + heldPokemon.getDisplayName(false).getString() + "?";
+		else if (held != null) text = com.platino.Tr.t("¿Dónde quieres dejar a ") + heldPokemon.getDisplayName(false).getString() + "?";
+		else text = com.platino.Tr.t("Clic: coger · Clic dcho.: datos · Clic en el nombre: renombrar");
 		Draw.dsText(c, Draw.fit(text, W - LW - 24), x0 + LW + 14, ty + 9, 0xFF303038, 0xFFD0D0D8);
 
 		if (releaseConfirm != null) drawReleaseMenu(c, px, ry + 18, pw, mx, my);
@@ -353,7 +353,7 @@ public class DppPcScreen extends Screen {
 		if (p.getShiny()) Draw.dsText(c, "★", px + ps - 10, py + 3, 0xFFF8D030, 0xFF806010);
 
 		int ly = py + ps + 4;
-		line(c, x, ly, w, "Nv." + p.getLevel(), p.getSpecies().getTranslatedName().getString());
+		line(c, x, ly, w, com.platino.Tr.t("Nv.") + p.getLevel(), p.getSpecies().getTranslatedName().getString());
 		ly += 14;
 		Draw.round(c, x + 2, ly, x + w - 2, ly + 14, 0xFFF8F8F0);
 		int tx = x + w - 4;
@@ -366,16 +366,16 @@ public class DppPcScreen extends Screen {
 			ab = Text.translatable(p.getAbility().getDisplayName()).getString();
 		} catch (Throwable ignored) {
 		}
-		line(c, x, ly, w, "Natur.", nat);
+		line(c, x, ly, w, com.platino.Tr.t("Natur."), nat);
 		ly += 14;
-		line(c, x, ly, w, "Habil.", ab);
+		line(c, x, ly, w, com.platino.Tr.t("Habil."), ab);
 		ly += 14;
 		ItemStack item = ItemStack.EMPTY;
 		try {
 			item = p.heldItem();
 		} catch (Throwable ignored) {
 		}
-		line(c, x, ly, w, "Objeto", item.isEmpty() ? "Ninguno" : item.getName().getString());
+		line(c, x, ly, w, com.platino.Tr.t("Objeto"), item.isEmpty() ? com.platino.Tr.t("Ninguno") : item.getName().getString());
 		ly += 14;
 		int ivs = 0;
 		for (int i = 0; i < 6; i++) ivs += DppSummaryScreen.iv(p, i);
@@ -400,7 +400,7 @@ public class DppPcScreen extends Screen {
 	// ---------------------------------------------------------------- Acciones
 
 	private static String boxLabel(ClientBox cb, int box) {
-		return cb.getName() == null || cb.getName().getString().isBlank() ? "Caja " + (box + 1) : cb.getName().getString();
+		return cb.getName() == null || cb.getName().getString().isBlank() ? com.platino.Tr.t("Caja ") + (box + 1) : cb.getName().getString();
 	}
 
 	// ---------------------------------------------------------------- Menú de la caja, nombre y fondos
@@ -409,7 +409,7 @@ public class DppPcScreen extends Screen {
 		c.getMatrices().push();
 		c.getMatrices().translate(0, 0, 250);
 		hits.add(new Hit(0, 0, width, height, () -> boxMenu = false));
-		String[] opts = {"FONDO", "NOMBRE", "CANCELAR"};
+		String[] opts = {com.platino.Tr.t("FONDO"), com.platino.Tr.t("NOMBRE"), com.platino.Tr.t("CANCELAR")};
 		int ih = 16, mh = opts.length * ih + 8;
 		Draw.panel(c, x, y, x + w, y + mh, 0xFF484858, 0xFFF8F8F8);
 		for (int i = 0; i < opts.length; i++) {
@@ -443,7 +443,7 @@ public class DppPcScreen extends Screen {
 		boxName = null;
 		new RequestRenamePCBoxPacket(pc.getUuid(), box, n).sendToServer();
 		click();
-		say(n.isEmpty() ? "Nombre de la caja restablecido." : "Caja renombrada: " + n);
+		say(n.isEmpty() ? com.platino.Tr.t("Nombre de la caja restablecido.") : com.platino.Tr.t("Caja renombrada: ") + n);
 	}
 
 	private record WallOpt(PcWallpapers.Theme theme, Identifier texture, String label) {}
@@ -470,7 +470,7 @@ public class DppPcScreen extends Screen {
 		c.getMatrices().translate(0, 0, 600);
 		hits.add(new Hit(x - 2, y - 2, x + w + 2, y + h + 2, () -> {})); // dentro del selector, nada debajo
 		Draw.panel(c, x - 2, y - 2, x + w + 2, y + h + 2, 0xFF284868, 0xFFE8F0F8);
-		Draw.dsText(c, "Elige un fondo", x + 4, y + 2, 0xFF303038, 0xFFC8D8E8);
+		Draw.dsText(c, com.platino.Tr.t("Elige un fondo"), x + 4, y + 2, 0xFF303038, 0xFFC8D8E8);
 		List<WallOpt> opts = wallOptions();
 		int cw = (w - 8) / WCOLS;
 		int visRows = (h - 14) / WROW, rows = (opts.size() + WCOLS - 1) / WCOLS;
@@ -563,7 +563,7 @@ public class DppPcScreen extends Screen {
 			new RequestChangePCBoxWallpaperPacket(pc.getUuid(), box, o.texture(), alt).sendToServer();
 		} catch (Throwable t) {
 			com.platino.PlatinoClient.LOGGER.warn("[Cobblemon Platino] No se pudo cambiar el fondo", t);
-			say("No se pudo cambiar el fondo.");
+			say(com.platino.Tr.t("No se pudo cambiar el fondo."));
 		}
 	}
 
@@ -614,7 +614,7 @@ public class DppPcScreen extends Screen {
 			int count = 0;
 			for (Pokemon q : cp.getSlots()) if (q != null) count++;
 			if (count <= 1) {
-				say("No puedes quedarte sin Pokémon en el equipo.");
+				say(com.platino.Tr.t("No puedes quedarte sin Pokémon en el equipo."));
 				return;
 			}
 		}
@@ -646,12 +646,12 @@ public class DppPcScreen extends Screen {
 		c.getMatrices().translate(0, 0, 600);
 		hits.add(new Hit(0, 0, width, height, this::cancelRelease)); // clic fuera = NO
 		List<net.minecraft.text.OrderedText> q = textRenderer.wrapLines(
-				net.minecraft.text.StringVisitable.plain("¿Seguro que quieres liberarlo?"), w - 12);
+				net.minecraft.text.StringVisitable.plain(com.platino.Tr.t("¿Seguro que quieres liberarlo?")), w - 12);
 		int ih = 16, mh = 6 + q.size() * 10 + 4 + 2 * ih + 4;
 		Draw.panel(c, x, y, x + w, y + mh, 0xFF484858, 0xFFF8F8F8);
 		for (int i = 0; i < q.size(); i++) c.drawText(textRenderer, q.get(i), x + 6, y + 6 + i * 10, 0xFF303038, false);
 		int oy = y + 6 + q.size() * 10 + 4;
-		String[] opts = {"SÍ", "NO"};
+		String[] opts = {com.platino.Tr.t("SÍ"), "NO"};
 		for (int i = 0; i < 2; i++) {
 			int iy = oy + i * ih;
 			if (mx >= x && mx < x + w && my >= iy && my < iy + ih) confirmCursor = i;
@@ -676,7 +676,7 @@ public class DppPcScreen extends Screen {
 
 	private void release() {
 		if (held == null) {
-			say("Primero coge al Pokémon que quieres liberar.");
+			say(com.platino.Tr.t("Primero coge al Pokémon que quieres liberar."));
 			return;
 		}
 		releaseConfirm = held;
@@ -695,7 +695,7 @@ public class DppPcScreen extends Screen {
 			int count = 0;
 			if (cp != null) for (Pokemon q : cp.getSlots()) if (q != null) count++;
 			if (count <= 1) {
-				say("No puedes liberar a tu último Pokémon.");
+				say(com.platino.Tr.t("No puedes liberar a tu último Pokémon."));
 				releaseConfirm = null;
 				return;
 			}
@@ -703,7 +703,7 @@ public class DppPcScreen extends Screen {
 		} else {
 			new ReleasePCPokemonPacket(p.getUuid(), new PCPosition(held.box(), held.slot())).sendToServer();
 		}
-		say("Adiós, " + p.getDisplayName(false).getString() + "...");
+		say(com.platino.Tr.t("Adiós, ") + p.getDisplayName(false).getString() + "...");
 		held = null;
 		heldPokemon = null;
 		releaseConfirm = null;

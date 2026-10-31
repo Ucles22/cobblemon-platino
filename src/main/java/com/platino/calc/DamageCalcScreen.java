@@ -97,7 +97,7 @@ public class DamageCalcScreen extends Screen {
 	private int listX, listY, listW, listH;
 
 	public DamageCalcScreen(Screen parent) {
-		super(Text.literal("Calculadora de daño"));
+		super(Text.literal(com.platino.Tr.t("Calculadora de daño")));
 		this.parent = parent;
 	}
 
@@ -148,7 +148,7 @@ public class DamageCalcScreen extends Screen {
 	private static List<Opt> natureOpts() {
 		List<Opt> out = new ArrayList<>();
 		for (CalcData.NatureEntry n : CalcData.natures()) {
-			String extra = n.up() < 0 || n.up() == n.down() ? "neutra"
+			String extra = n.up() < 0 || n.up() == n.down() ? com.platino.Tr.t("neutra")
 					: "+" + CalcData.STAT_LABEL[n.up()] + " -" + CalcData.STAT_LABEL[n.down()];
 			out.add(new Opt(n.display(), CalcData.fold(n.display()), extra, n));
 		}
@@ -178,7 +178,7 @@ public class DamageCalcScreen extends Screen {
 	}
 
 	private static Opt moveOpt(CalcData.MoveEntry m, boolean known) {
-		String extra = TypeEff.label(m.type()) + " " + (m.category() == DamageEngine.Category.PHYSICAL ? "Fís" : "Esp") + " " + m.power();
+		String extra = TypeEff.label(m.type()) + " " + (m.category() == DamageEngine.Category.PHYSICAL ? com.platino.Tr.t("Fís") : com.platino.Tr.t("Esp")) + " " + m.power();
 		return new Opt((known ? "★ " : "") + m.display(), m.search(), extra, m);
 	}
 
@@ -190,7 +190,7 @@ public class DamageCalcScreen extends Screen {
 				String name = p.getDisplayName(false).getString();
 				String types = TypeEff.label(CalcData.typeId(p.getPrimaryType()))
 						+ (p.getSecondaryType() != null ? "/" + TypeEff.label(CalcData.typeId(p.getSecondaryType())) : "");
-				out.add(new Opt(name + "  Nv" + p.getLevel(), CalcData.fold(name + " " + p.getSpecies().getName()), types, p));
+				out.add(new Opt(name + com.platino.Tr.t("  Nv") + p.getLevel(), CalcData.fold(name + " " + p.getSpecies().getName()), types, p));
 			}
 		} catch (Throwable ignored) {
 		}
@@ -389,7 +389,7 @@ public class DamageCalcScreen extends Screen {
 		Draw.panelGradient(c, x0 - 6, y0 - 6, x0 + W + 6, y0 + H + 6, 0xFF7888A0, 0xFFE8EEF4, 0xFFC8D2DC);
 		Draw.panel(c, x0 - 2, y0 - 2, x0 + W + 2, y0 + H + 2, 0xFF404850, BG);
 
-		text(c, "CALCULADORA DE DAÑO", x0 + W / 2 - textRenderer.getWidth("CALCULADORA DE DAÑO") / 2, y0 + 4, DARK);
+		text(c, com.platino.Tr.t("CALCULADORA DE DAÑO"), x0 + W / 2 - textRenderer.getWidth(com.platino.Tr.t("CALCULADORA DE DAÑO")) / 2, y0 + 4, DARK);
 		button(c, x0 + W - 18, y0 + 2, x0 + W - 4, y0 + 13, "×", mx, my, this::close);
 
 		int cw = (W - 30) / 2;
@@ -401,21 +401,21 @@ public class DamageCalcScreen extends Screen {
 		// Movimiento y campo
 		int y = sideBottom + 4;
 		c.fill(x0 + 6, y - 2, x0 + W - 6, y - 1, MID);
-		text(c, "Movimiento", x0 + 8, y + 2, DARK);
+		text(c, com.platino.Tr.t("Movimiento"), x0 + 8, y + 2, DARK);
 		comboBox(c, combo("move").at(x0 + 64, y, cw - 56), mx, my);
 		if (S.move != null) {
-			String info = TypeEff.label(S.move.type()) + " · " + (S.move.category() == DamageEngine.Category.PHYSICAL ? "Físico" : "Especial")
-					+ " · Pot. " + S.move.power();
+			String info = TypeEff.label(S.move.type()) + " · " + (S.move.category() == DamageEngine.Category.PHYSICAL ? com.platino.Tr.t("Físico") : com.platino.Tr.t("Especial"))
+					+ com.platino.Tr.t(" · Pot. ") + S.move.power();
 			text(c, info, x0 + W - 8 - cw, y + 2, DARK);
 		}
-		toggle(c, x0 + W - 8 - 52, y + 1, "Crítico", S.field.crit, mx, my, () -> S.field.crit = !S.field.crit);
+		toggle(c, x0 + W - 8 - 52, y + 1, com.platino.Tr.t("Crítico"), S.field.crit, mx, my, () -> S.field.crit = !S.field.crit);
 		y += ROW + 3;
 		int third = (W - 16 - 8) / 3;
 		comboBox(c, combo("weather").at(x0 + 8, y, third), mx, my);
 		comboBox(c, combo("terrain").at(x0 + 12 + third, y, third), mx, my);
 		int sx = x0 + 16 + 2 * third;
-		toggle(c, sx, y + 2, "Reflejo", S.field.reflect, mx, my, () -> S.field.reflect = !S.field.reflect);
-		toggle(c, sx + 56, y + 2, "Pant. Luz", S.field.lightScreen, mx, my, () -> S.field.lightScreen = !S.field.lightScreen);
+		toggle(c, sx, y + 2, com.platino.Tr.t("Reflejo"), S.field.reflect, mx, my, () -> S.field.reflect = !S.field.reflect);
+		toggle(c, sx + 56, y + 2, com.platino.Tr.t("Pant. Luz"), S.field.lightScreen, mx, my, () -> S.field.lightScreen = !S.field.lightScreen);
 		y += ROW + 4;
 
 		drawResult(c, x0 + 6, y, W - 12, y0 + H - 4 - y);
@@ -430,11 +430,11 @@ public class DamageCalcScreen extends Screen {
 		CalcData.SpeciesEntry sp = atk ? S.atkSp : S.defSp;
 		String k = atk ? "a" : "d";
 
-		text(c, atk ? "ATACANTE" : "DEFENSOR", x, y + 2, DARK);
+		text(c, atk ? com.platino.Tr.t("ATACANTE") : com.platino.Tr.t("DEFENSOR"), x, y + 2, DARK);
 		int bx = x + w;
 		Combo party = combo(k + "party").at(bx - 170, y, 170);
-		button(c, bx - 50, y, bx, y + 11, "Equipo ▾", mx, my, () -> openCombo(party));
-		if (!atk && CobblemonClient.INSTANCE.getBattle() != null) button(c, bx - 88, y, bx - 54, y + 11, "Rival", mx, my, this::fillFromBattle);
+		button(c, bx - 50, y, bx, y + 11, com.platino.Tr.t("Equipo ▾"), mx, my, () -> openCombo(party));
+		if (!atk && CobblemonClient.INSTANCE.getBattle() != null) button(c, bx - 88, y, bx - 54, y + 11, com.platino.Tr.t("Rival"), mx, my, this::fillFromBattle);
 		y += ROW + 1;
 
 		comboBox(c, combo(k + "species").at(x, y, w), mx, my);
@@ -442,7 +442,7 @@ public class DamageCalcScreen extends Screen {
 		if (sp != null) text(c, TypeEff.label(s.type1) + (s.type2 != null ? " / " + TypeEff.label(s.type2) : ""), x + 2, y + 1, MID);
 		y += 11;
 
-		stepper(c, x, y, "Nv", s.level, 1, 10, 1, 100, mx, my, v -> s.level = v);
+		stepper(c, x, y, com.platino.Tr.t("Nv"), s.level, 1, 10, 1, 100, mx, my, v -> s.level = v);
 		comboBox(c, combo(k + "nature").at(x + 62, y, w - 62), mx, my);
 		y += ROW + 1;
 		comboBox(c, combo(k + "ability").at(x, y, w / 2 - 2), mx, my);
@@ -480,9 +480,9 @@ public class DamageCalcScreen extends Screen {
 		y += ROW;
 
 		if (atk) {
-			toggle(c, x, y + 1, "Quemado", s.burned, mx, my, () -> s.burned = !s.burned);
+			toggle(c, x, y + 1, com.platino.Tr.t("Quemado"), s.burned, mx, my, () -> s.burned = !s.burned);
 		} else {
-			stepper(c, x, y, "PS %", S.field.defHpPercent, 1, 10, 1, 100, mx, my, v -> S.field.defHpPercent = v);
+			stepper(c, x, y, com.platino.Tr.t("PS %"), S.field.defHpPercent, 1, 10, 1, 100, mx, my, v -> S.field.defHpPercent = v);
 		}
 		return y + ROW;
 	}
@@ -491,24 +491,24 @@ public class DamageCalcScreen extends Screen {
 		Draw.round(c, x, y, x + w, y + h, DARK);
 		c.fill(x + 2, y + 2, x + w - 2, y + h - 2, LIGHT);
 		if (S.atkSp == null || S.defSp == null || S.move == null) {
-			text(c, "Elige atacante, defensor y movimiento.", x + 8, y + 7, DARK);
-			text(c, "\"Equipo ▾\" rellena con tus Pokémon" + (CobblemonClient.INSTANCE.getBattle() != null ? "; \"Rival\" con el rival." : "."), x + 8, y + 19, MID);
+			text(c, com.platino.Tr.t("Elige atacante, defensor y movimiento."), x + 8, y + 7, DARK);
+			text(c, com.platino.Tr.t("\"Equipo ▾\" rellena con tus Pokémon") + (CobblemonClient.INSTANCE.getBattle() != null ? com.platino.Tr.t("; \"Rival\" con el rival.") : "."), x + 8, y + 19, MID);
 			return;
 		}
 		DamageEngine.Result r = DamageEngine.calc(S.atk, S.def, S.move.toMove(), S.field);
 		if (r.max() == 0) {
-			text(c, r.note() != null ? r.note() : "Sin daño", x + 8, y + 7, DARK);
+			text(c, r.note() != null ? r.note() : com.platino.Tr.t("Sin daño"), x + 8, y + 7, DARK);
 			text(c, r.koText(), x + 8, y + 19, DARK);
 			return;
 		}
-		String dmg = r.min() + " - " + r.max() + " PS  (" + String.format("%.1f%% - %.1f%%", r.minPct(), r.maxPct()) + ")";
+		String dmg = r.min() + " - " + r.max() + com.platino.Tr.t(" PS  (") + String.format("%.1f%% - %.1f%%", r.minPct(), r.maxPct()) + ")";
 		c.getMatrices().push();
 		c.getMatrices().translate(x + 8, y + 5, 0);
 		c.getMatrices().scale(1.25f, 1.25f, 1f);
 		text(c, Draw.fit(dmg, (int) ((w - 16) / 1.25f)), 0, 0, DARK);
 		c.getMatrices().pop();
 		String eff = r.effectiveness() == 1f ? "" : "  ·  " + TypeChart.describe(r.effectiveness()) + " (" + TypeChart.multiplierText(r.effectiveness()) + ")";
-		String hpInfo = S.field.defHpPercent < 100 ? "  ·  PS del rival: " + r.currentHp() + "/" + r.defenderHp() : "";
+		String hpInfo = S.field.defHpPercent < 100 ? com.platino.Tr.t("  ·  PS del rival: ") + r.currentHp() + "/" + r.defenderHp() : "";
 		text(c, Draw.fit(r.koText() + eff + hpInfo, w - 16), x + 8, y + 19, DARK);
 		// Barra de PS del defensor: lo que le queda tras el golpe (oscuro = seguro, medio = posible)
 		int bx1 = x + 8, bx2 = x + w - 8, by = y + h - 11;
@@ -530,7 +530,7 @@ public class DamageCalcScreen extends Screen {
 		Draw.round(c, cb.x, cb.y, cb.x + cb.w, cb.y + 12, DARK);
 		c.fill(cb.x + 1, cb.y + 1, cb.x + cb.w - 1, cb.y + 11, hover ? PALE : LIGHT);
 		String cur = cb.current.get();
-		if (cur == null || cur.isEmpty()) text(c, "Buscar…", cb.x + 3, cb.y + 2, MID);
+		if (cur == null || cur.isEmpty()) text(c, com.platino.Tr.t("Buscar…"), cb.x + 3, cb.y + 2, MID);
 		else text(c, Draw.fit(cur, cb.w - 14), cb.x + 3, cb.y + 2, DARK);
 		text(c, "▾", cb.x + cb.w - 9, cb.y + 2, DARK);
 		hits.add(new Hit(cb.x, cb.y, cb.x + cb.w, cb.y + 12, () -> openCombo(cb)));
@@ -604,11 +604,11 @@ public class DamageCalcScreen extends Screen {
 		c.fill(listX + 1, listY + 1, listX + listW - 1, listY + listH - 1, LIGHT);
 		// Línea de búsqueda
 		c.fill(listX + 2, listY + 2, listX + listW - 2, listY + 13, PALE);
-		String q = query.isEmpty() ? (open.compact ? "" : "Escribe para buscar…") : query;
+		String q = query.isEmpty() ? (open.compact ? "" : com.platino.Tr.t("Escribe para buscar…")) : query;
 		boolean caret = (System.currentTimeMillis() / 500) % 2 == 0;
 		text(c, "⌕ " + q + (caret && !query.isEmpty() ? "_" : ""), listX + 4, listY + 4, query.isEmpty() ? MID : DARK);
 		if (filtered.isEmpty()) {
-			text(c, "Sin resultados", listX + 4, listY + 16, MID);
+			text(c, com.platino.Tr.t("Sin resultados"), listX + 4, listY + 16, MID);
 		}
 		for (int r = 0; r < rows && listScroll + r < filtered.size(); r++) {
 			int idx = listScroll + r;

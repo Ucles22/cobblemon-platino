@@ -102,7 +102,7 @@ public final class PartyHud {
 
 		int max = Math.max(1, p.getMaxHealth());
 		float ratio = p.getCurrentHealth() / (float) max;
-		String lv = "Nv" + p.getLevel();
+		String lv = com.platino.Tr.t("Nv") + p.getLevel();
 		if (compact) {
 			int barY = y + h - 5;
 			c.fill(tx, barY, x + w - 4, barY + 3, Draw.OUTLINE);

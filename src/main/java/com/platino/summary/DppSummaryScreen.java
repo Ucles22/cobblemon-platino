@@ -62,12 +62,12 @@ public class DppSummaryScreen extends Screen {
 	private static int lastPage = 0;
 
 	private enum Page {
-		INFO("INFO. POKéMON", 0xFF58B848, 0xFFE0F0C8),
-		MEMO("NOTAS ENTRENADOR", 0xFF48A8A0, 0xFFD8F4F0),
-		SKILLS("HABILIDADES", 0xFF6870C8, 0xFFC8C8F0),
-		MOVES("MOVIMIENTOS", 0xFFE05850, 0xFFF8B0A8),
+		INFO(com.platino.Tr.t("INFO. POKéMON"), 0xFF58B848, 0xFFE0F0C8),
+		MEMO(com.platino.Tr.t("NOTAS ENTRENADOR"), 0xFF48A8A0, 0xFFD8F4F0),
+		SKILLS(com.platino.Tr.t("HABILIDADES"), 0xFF6870C8, 0xFFC8C8F0),
+		MOVES(com.platino.Tr.t("MOVIMIENTOS"), 0xFFE05850, 0xFFF8B0A8),
 		STATS("IVs / EVs", 0xFFD8A028, 0xFFF8E8B0),
-		MARKS("MARCAS", 0xFFD060B8, 0xFFF8D8F0);
+		MARKS(com.platino.Tr.t("MARCAS"), 0xFFD060B8, 0xFFF8D8F0);
 
 		final String title;
 		final int color, light;
@@ -106,7 +106,7 @@ public class DppSummaryScreen extends Screen {
 	private long toastUntil;
 
 	public DppSummaryScreen(java.util.Collection<? extends Pokemon> original, boolean editable, int selection) {
-		super(Text.literal("Datos"));
+		super(Text.literal(com.platino.Tr.t("Datos")));
 		this.original = new ArrayList<>(original);
 		this.party = new ArrayList<>();
 		int idx = 0, i = 0;
@@ -262,7 +262,7 @@ public class DppSummaryScreen extends Screen {
 		else if (g == Gender.FEMALE) Draw.dsText(c, "♀", x + w - 12, y + 6, 0xFFFFC0D0, 0xFF782040);
 		// Nivel
 		Draw.round(c, x + 2, y + 19, x + w - 2, y + 32, 0xFFF8F8F0);
-		Draw.dsText(c, "Nv." + p.getLevel(), x + 8, y + 22, 0xFF303038, 0xFFC8C8C0);
+		Draw.dsText(c, com.platino.Tr.t("Nv.") + p.getLevel(), x + 8, y + 22, 0xFF303038, 0xFFC8C8C0);
 		// Retrato con fondo de rayas y modelo 3D
 		int px = x + 10, py = y + 36, ps = w - 20;
 		Draw.panel(c, px, py, px + ps, py + ps, 0xFFA8A8B0, 0xFFE8ECF4);
@@ -284,7 +284,7 @@ public class DppSummaryScreen extends Screen {
 		}
 		// Ordenar equipo
 		if (canEdit(p) && party.size() > 1) {
-			button(c, x + 10, py + ps + 15, x + w - 10, py + ps + 28, "⇅ Equipo", mx, my, 0xFFB8D8F8, () -> {
+			button(c, x + 10, py + ps + 15, x + w - 10, py + ps + 28, com.platino.Tr.t("⇅ Equipo"), mx, my, 0xFFB8D8F8, () -> {
 				ClientParty cp = clientParty();
 				int slot = cp == null ? 0 : Math.max(0, cp.getPosition(p.getUuid()));
 				MinecraftClient.getInstance().setScreen(new PartyScreen(this, slot));
@@ -293,7 +293,7 @@ public class DppSummaryScreen extends Screen {
 		// Objeto
 		int iy = y0 + H - 38;
 		Draw.panelGradient(c, x + 2, iy, x + w - 2, iy + 13, 0xFFB87820, 0xFFF8D080, 0xFFF0B048);
-		Draw.dsText(c, "Objeto", x + 6, iy + 3, 0xFF303038, 0xFFF8E8B0);
+		Draw.dsText(c, com.platino.Tr.t("Objeto"), x + 6, iy + 3, 0xFF303038, 0xFFF8E8B0);
 		Draw.round(c, x + 2, iy + 14, x + w - 2, iy + 32, 0xFFF8F8F0);
 		ItemStack held = ItemStack.EMPTY;
 		try {
@@ -301,7 +301,7 @@ public class DppSummaryScreen extends Screen {
 		} catch (Throwable ignored) {
 		}
 		if (held.isEmpty()) {
-			Draw.dsText(c, "Ninguno", x + 8, iy + 19, 0xFF303038, 0xFFC8C8C0);
+			Draw.dsText(c, com.platino.Tr.t("Ninguno"), x + 8, iy + 19, 0xFF303038, 0xFFC8C8C0);
 		} else {
 			c.drawItem(held, x + 5, iy + 15);
 			Draw.dsText(c, Draw.fit(held.getName().getString(), w - 30), x + 24, iy + 19, 0xFF303038, 0xFFC8C8C0);
@@ -351,13 +351,13 @@ public class DppSummaryScreen extends Screen {
 
 	private void drawInfo(DrawContext c, Pokemon p, int x, int y, int w) {
 		int cx = x + 6, cw = w - 12, yy = y + 6;
-		row(c, cx, yy, cw, "Nº Pokédex", String.format("%03d", p.getSpecies().getNationalPokedexNumber()), 0xFF303038);
+		row(c, cx, yy, cw, com.platino.Tr.t("Nº Pokédex"), String.format("%03d", p.getSpecies().getNationalPokedexNumber()), 0xFF303038);
 		yy += 17;
-		row(c, cx, yy, cw, "Especie", p.getSpecies().getTranslatedName().getString().toUpperCase(Locale.ROOT), 0xFF303038);
+		row(c, cx, yy, cw, com.platino.Tr.t("Especie"), p.getSpecies().getTranslatedName().getString().toUpperCase(Locale.ROOT), 0xFF303038);
 		yy += 17;
 		// Tipo con insignias
 		Draw.round(c, cx, yy, cx + 78, yy + 15, 0xFFC0E0A0);
-		Draw.dsText(c, "Tipo", cx + 4, yy + 4, 0xFF303038, 0xFFE8F8D8);
+		Draw.dsText(c, com.platino.Tr.t("Tipo"), cx + 4, yy + 4, 0xFF303038, 0xFFE8F8D8);
 		Draw.round(c, cx + 80, yy, cx + cw, yy + 15, 0xFFF8F8E8);
 		int bx = cx + cw - 6;
 		String t2 = p.getSecondaryType() == null ? null : p.getSecondaryType().getName();
@@ -365,19 +365,19 @@ public class DppSummaryScreen extends Screen {
 		TypeBadge.draw(c, p.getPrimaryType().getName(), bx - TypeBadge.WIDTH, yy + 2);
 		yy += 17;
 		String ot = p.getOriginalTrainerName();
-		row(c, cx, yy, cw, "ED", ot == null || ot.isBlank() ? "—" : ot, 0xFF3060C8);
+		row(c, cx, yy, cw, com.platino.Tr.t("ED"), ot == null || ot.isBlank() ? "—" : ot, 0xFF3060C8);
 		yy += 17;
 		String otId = p.getOriginalTrainer();
 		String id = otId == null ? "—" : String.format("%05d", Math.abs(otId.hashCode()) % 100000);
-		row(c, cx, yy, cw, "Nº ID", id, 0xFF303038);
+		row(c, cx, yy, cw, com.platino.Tr.t("Nº ID"), id, 0xFF303038);
 		yy += 19;
-		Draw.dsText(c, "Ptos. Exp.", cx + 4, yy, 0xFF303038, 0xFFE8F8D8);
+		Draw.dsText(c, com.platino.Tr.t("Ptos. Exp."), cx + 4, yy, 0xFF303038, 0xFFE8F8D8);
 		yy += 11;
 		Draw.round(c, cx + 80, yy, cx + cw, yy + 14, 0xFFF8F8E8);
 		String exp = String.valueOf(p.getExperience());
 		Draw.dsText(c, exp, cx + cw - 6 - Draw.width(exp), yy + 3, 0xFF303038, 0xFFD8D8C8);
 		yy += 17;
-		Draw.dsText(c, "Nv. siguiente", cx + 4, yy, 0xFF303038, 0xFFE8F8D8);
+		Draw.dsText(c, com.platino.Tr.t("Nv. siguiente"), cx + 4, yy, 0xFF303038, 0xFFE8F8D8);
 		yy += 11;
 		Draw.round(c, cx + 80, yy, cx + cw, yy + 14, 0xFFF8F8E8);
 		String next = p.getLevel() >= 100 ? "0" : String.valueOf(p.getExperienceToNextLevel());
@@ -388,12 +388,12 @@ public class DppSummaryScreen extends Screen {
 	}
 
 	private static final String[][] CHARACTERISTICS = {
-			{"Le encanta comer.", "A menudo se duerme.", "Duerme mucho.", "Suele desordenar.", "Le gusta relajarse."},
-			{"Orgulloso de su fuerza.", "Le gusta revolverse.", "A veces se enfada.", "Le gusta luchar.", "Tiene mal genio."},
-			{"Cuerpo resistente.", "Capaz de recibir golpes.", "Muy persistente.", "Muy resistente.", "Muy perseverante."},
-			{"Muy curioso.", "Muy travieso.", "Muy astuto.", "Suele estar en Babia.", "Muy melindroso."},
-			{"Voluntad firme.", "Algo vanidoso.", "Muy insolente.", "Odia perder.", "Algo cabezota."},
-			{"Le gusta correr.", "Atento a los sonidos.", "Impetuoso e insensato.", "Algo payaso.", "Huye rápido."}};
+			{com.platino.Tr.t("Le encanta comer."), com.platino.Tr.t("A menudo se duerme."), com.platino.Tr.t("Duerme mucho."), com.platino.Tr.t("Suele desordenar."), com.platino.Tr.t("Le gusta relajarse.")},
+			{com.platino.Tr.t("Orgulloso de su fuerza."), com.platino.Tr.t("Le gusta revolverse."), com.platino.Tr.t("A veces se enfada."), com.platino.Tr.t("Le gusta luchar."), com.platino.Tr.t("Tiene mal genio.")},
+			{com.platino.Tr.t("Cuerpo resistente."), com.platino.Tr.t("Capaz de recibir golpes."), com.platino.Tr.t("Muy persistente."), com.platino.Tr.t("Muy resistente."), com.platino.Tr.t("Muy perseverante.")},
+			{com.platino.Tr.t("Muy curioso."), com.platino.Tr.t("Muy travieso."), com.platino.Tr.t("Muy astuto."), com.platino.Tr.t("Suele estar en Babia."), com.platino.Tr.t("Muy melindroso.")},
+			{com.platino.Tr.t("Voluntad firme."), com.platino.Tr.t("Algo vanidoso."), com.platino.Tr.t("Muy insolente."), com.platino.Tr.t("Odia perder."), com.platino.Tr.t("Algo cabezota.")},
+			{com.platino.Tr.t("Le gusta correr."), com.platino.Tr.t("Atento a los sonidos."), com.platino.Tr.t("Impetuoso e insensato."), com.platino.Tr.t("Algo payaso."), com.platino.Tr.t("Huye rápido.")}};
 
 	private static String characteristic(Pokemon p) {
 		// Estadística con el IV más alto (orden de desempate de los juegos: PS, Atq, Def, Vel, AtEsp, DefEsp)
@@ -432,11 +432,11 @@ public class DppSummaryScreen extends Screen {
 			Object f = n.getFavouriteFlavour();
 			if (f == null) return null;
 			return switch (f.toString().toUpperCase(Locale.ROOT)) {
-				case "SPICY" -> "picante";
-				case "DRY" -> "seca";
-				case "SWEET" -> "dulce";
-				case "BITTER" -> "amarga";
-				case "SOUR" -> "ácida";
+				case "SPICY" -> com.platino.Tr.t("picante");
+				case "DRY" -> com.platino.Tr.t("seca");
+				case "SWEET" -> com.platino.Tr.t("dulce");
+				case "BITTER" -> com.platino.Tr.t("amarga");
+				case "SOUR" -> com.platino.Tr.t("ácida");
 				default -> f.toString().toLowerCase(Locale.ROOT);
 			};
 		} catch (Throwable t) {
@@ -450,15 +450,15 @@ public class DppSummaryScreen extends Screen {
 		int tx = x + 10, yy = y + 6;
 		Nature n = p.getEffectiveNature();
 		String nat = Text.translatable(n.getDisplayName()).getString();
-		Draw.dsText(c, "Naturaleza ", tx, yy, 0xFF303038, 0xFFC8E8E0);
-		Draw.dsText(c, nat + ".", tx + Draw.width("Naturaleza "), yy, 0xFFE03030, 0xFFF8C0B0);
+		Draw.dsText(c, com.platino.Tr.t("Naturaleza "), tx, yy, 0xFF303038, 0xFFC8E8E0);
+		Draw.dsText(c, nat + ".", tx + Draw.width(com.platino.Tr.t("Naturaleza ")), yy, 0xFFE03030, 0xFFF8C0B0);
 		yy += 14;
-		Draw.dsText(c, "Entrenador: " + (p.getOriginalTrainerName() == null ? "—" : p.getOriginalTrainerName()), tx, yy, 0xFF303038, 0xFFC8E8E0);
+		Draw.dsText(c, com.platino.Tr.t("Entrenador: ") + (p.getOriginalTrainerName() == null ? "—" : p.getOriginalTrainerName()), tx, yy, 0xFF303038, 0xFFC8E8E0);
 		yy += 14;
 		try {
 			Identifier ball = p.getCaughtBall().getName();
 			String bn = Text.translatable("item." + ball.getNamespace() + "." + ball.getPath()).getString();
-			Draw.dsText(c, "Capturado en " + bn + ".", tx, yy, 0xFF303038, 0xFFC8E8E0);
+			Draw.dsText(c, com.platino.Tr.t("Capturado en ") + bn + ".", tx, yy, 0xFF303038, 0xFFC8E8E0);
 		} catch (Throwable ignored) {
 		}
 		yy += 28; // línea en blanco
@@ -466,22 +466,24 @@ public class DppSummaryScreen extends Screen {
 		yy += 14;
 		String fl = flavour(n);
 		if (fl != null) {
-			Draw.dsText(c, "Le gusta la comida ", tx, yy, 0xFF303038, 0xFFC8E8E0);
-			Draw.dsText(c, fl + ".", tx + Draw.width("Le gusta la comida "), yy, 0xFFE03030, 0xFFF8C0B0);
+			String pre = com.platino.Tr.isEs() ? "Le gusta la comida " : "Likes ";
+			Draw.dsText(c, pre, tx, yy, 0xFF303038, 0xFFC8E8E0);
+			Draw.dsText(c, fl + (com.platino.Tr.isEs() ? "." : ""), tx + Draw.width(pre), yy, 0xFFE03030, 0xFFF8C0B0);
+			if (!com.platino.Tr.isEs()) Draw.dsText(c, " food.", tx + Draw.width(pre + fl), yy, 0xFF303038, 0xFFC8E8E0);
 		} else {
-			Draw.dsText(c, "No tiene preferencias de sabor.", tx, yy, 0xFF303038, 0xFFC8E8E0);
+			Draw.dsText(c, com.platino.Tr.t("No tiene preferencias de sabor."), tx, yy, 0xFF303038, 0xFFC8E8E0);
 		}
 		yy += 14;
-		Draw.dsText(c, "Amistad: " + p.getFriendship() + "/255", tx, yy, 0xFF303038, 0xFFC8E8E0);
+		Draw.dsText(c, com.platino.Tr.t("Amistad: ") + p.getFriendship() + "/255", tx, yy, 0xFF303038, 0xFFC8E8E0);
 		yy += 28; // línea en blanco
 		// Nota propia (de Cobblemon Platino)
 		String note = Notes.get(p.getUuid());
-		Draw.dsText(c, "✎ Nota:", tx, yy, 0xFF3060C8, 0xFFC8D8F0);
-		button(c, x + w - 62, yy - 2, x + w - 8, yy + 10, "Editar", mx, my, 0xFFF8F8F0,
+		Draw.dsText(c, com.platino.Tr.t("✎ Nota:"), tx, yy, 0xFF3060C8, 0xFFC8D8F0);
+		button(c, x + w - 62, yy - 2, x + w - 8, yy + 10, com.platino.Tr.t("Editar"), mx, my, 0xFFF8F8F0,
 				() -> MinecraftClient.getInstance().setScreen(new NotesScreen(this, p)));
 		yy += 14;
 		if (note.isBlank()) {
-			Draw.dsText(c, "(sin nota)", tx, yy, 0xFF808080, 0xFFD8E8E0);
+			Draw.dsText(c, com.platino.Tr.t("(sin nota)"), tx, yy, 0xFF808080, 0xFFD8E8E0);
 		} else {
 			List<OrderedText> lines = textRenderer.wrapLines(StringVisitable.plain(note), w - 20);
 			// Cada línea de la nota va sobre una raya del cuaderno
@@ -498,7 +500,7 @@ public class DppSummaryScreen extends Screen {
 		int down = n.getDecreasedStat() == null ? -1 : indexOf(n.getDecreasedStat());
 		// PS con barra
 		Draw.round(c, cx, yy, cx + cw, yy + 26, 0xFFE8E8F8);
-		Draw.dsText(c, "PS", cx + 6, yy + 4, 0xFF303038, 0xFFC8C8D8);
+		Draw.dsText(c, com.platino.Tr.t("PS"), cx + 6, yy + 4, 0xFF303038, 0xFFC8C8D8);
 		String hp = p.getCurrentHealth() + "/" + p.getMaxHealth();
 		Draw.dsText(c, hp, cx + cw - 6 - Draw.width(hp), yy + 4, 0xFF303038, 0xFFC8C8D8);
 		Draw.hpBar(c, cx + cw - 110, yy + 15, 104, p.getCurrentHealth() / (float) Math.max(1, p.getMaxHealth()), true);
@@ -516,7 +518,7 @@ public class DppSummaryScreen extends Screen {
 		yy += 4;
 		// Habilidad
 		Draw.panelGradient(c, cx, yy, cx + cw, yy + 14, 0xFF404888, 0xFF8890D8, 0xFF6870C0);
-		Draw.dsText(c, "Habilidad", cx + 6, yy + 3, 0xFFFFFFFF, 0xFF303870);
+		Draw.dsText(c, com.platino.Tr.t("Habilidad"), cx + 6, yy + 3, 0xFFFFFFFF, 0xFF303870);
 		String ab = "—", desc = "";
 		try {
 			ab = Text.translatable(p.getAbility().getDisplayName()).getString();
@@ -567,29 +569,29 @@ public class DppSummaryScreen extends Screen {
 				int bx = x + 8;
 				if (i > 0) button(c, bx, ry + 14, bx + 12, ry + 26, "▲", mx, my, 0xFFF8E0D8, () -> swapMoves(p, idx, idx - 1));
 				if (i < moves.size() - 1) button(c, bx + 14, ry + 14, bx + 26, ry + 26, "▼", mx, my, 0xFFF8E0D8, () -> swapMoves(p, idx, idx + 1));
-				button(c, bx + 30, ry + 14, bx + 84, ry + 26, "⇄ Cambiar", mx, my, 0xFFF8E0D8, () -> openSwap(p, idx));
+				button(c, bx + 30, ry + 14, bx + 84, ry + 26, com.platino.Tr.t("⇄ Cambiar"), mx, my, 0xFFF8E0D8, () -> openSwap(p, idx));
 			}
 		}
 		// Detalle del movimiento elegido
 		int dy = y + 124;
 		Draw.round(c, x + 4, dy, x + w - 4, y + h - 4, 0xFFF8F0F0);
 		if (selectedMove < 0 || selectedMove >= moves.size()) {
-			Draw.dsText(c, "Pulsa un movimiento para ver sus datos.", x + 10, dy + 6, 0xFF906060, 0xFFF0D8D8);
+			Draw.dsText(c, com.platino.Tr.t("Pulsa un movimiento para ver sus datos."), x + 10, dy + 6, 0xFF906060, 0xFFF0D8D8);
 			return;
 		}
 		MoveTemplate t = moves.get(selectedMove).getTemplate();
 		var cat = t.getDamageCategory();
-		String catName = cat == DamageCategories.INSTANCE.getPHYSICAL() ? "Físico" : cat == DamageCategories.INSTANCE.getSPECIAL() ? "Especial" : "Estado";
+		String catName = cat == DamageCategories.INSTANCE.getPHYSICAL() ? com.platino.Tr.t("Físico") : cat == DamageCategories.INSTANCE.getSPECIAL() ? com.platino.Tr.t("Especial") : com.platino.Tr.t("Estado");
 		String pow = t.getPower() > 0 ? String.valueOf((int) t.getPower()) : "—";
 		String acc = t.getAccuracy() > 0 ? (int) t.getAccuracy() + "%" : "—";
-		Draw.dsText(c, catName + "   Potencia " + pow + "   Precisión " + acc, x + 10, dy + 5, 0xFF303038, 0xFFE0D0D0);
+		Draw.dsText(c, catName + com.platino.Tr.t("   Potencia ") + pow + com.platino.Tr.t("   Precisión ") + acc, x + 10, dy + 5, 0xFF303038, 0xFFE0D0D0);
 		List<OrderedText> lines = textRenderer.wrapLines(StringVisitable.plain(t.getDescription().getString()), w - 22);
 		for (int i = 0; i < Math.min(5, lines.size()); i++) c.drawText(textRenderer, lines.get(i), x + 10, dy + 18 + i * 10, 0xFF303038, false);
 	}
 
 	private void drawStatsPage(DrawContext c, Pokemon p, int x, int y, int w) {
 		int cx = x + 6, cw = w - 12, yy = y + 6;
-		Draw.dsText(c, "Estadística", cx + 4, yy, 0xFF705010, 0xFFF8E8B0);
+		Draw.dsText(c, com.platino.Tr.t("Estadística"), cx + 4, yy, 0xFF705010, 0xFFF8E8B0);
 		Draw.dsText(c, "IV", cx + cw - 104, yy, 0xFF705010, 0xFFF8E8B0);
 		Draw.dsText(c, "EV", cx + cw - 52, yy, 0xFF705010, 0xFFF8E8B0);
 		yy += 13;
@@ -616,7 +618,7 @@ public class DppSummaryScreen extends Screen {
 		yy += 12;
 		int perfect = 0;
 		for (int i = 0; i < 6; i++) if (iv(p, i) == 31) perfect++;
-		Draw.dsText(c, perfect + " IV perfectos", cx + 6, yy, 0xFF705010, 0xFFF8E8B0);
+		Draw.dsText(c, perfect + com.platino.Tr.t(" IV perfectos"), cx + 6, yy, 0xFF705010, 0xFFF8E8B0);
 	}
 
 	private static void bar(DrawContext c, int x, int y, int w, float ratio, int color) {
@@ -633,7 +635,7 @@ public class DppSummaryScreen extends Screen {
 		} catch (Throwable ignored) {
 		}
 		if (marks.isEmpty()) {
-			Draw.dsText(c, "No tiene ninguna marca.", x + 10, y + 10, 0xFF804070, 0xFFF8E0F0);
+			Draw.dsText(c, com.platino.Tr.t("No tiene ninguna marca."), x + 10, y + 10, 0xFF804070, 0xFFF8E0F0);
 			return;
 		}
 		int cols = 4, cell = (w - 16) / cols;
@@ -649,7 +651,7 @@ public class DppSummaryScreen extends Screen {
 			String name = Draw.fit(markName(mark), cell - 6);
 			c.drawText(textRenderer, name, cx + cell / 2 - textRenderer.getWidth(name) / 2, cy + 30, 0xFF604050, false);
 		}
-		if (marks.size() > 12) Draw.dsText(c, "+" + (marks.size() - 12) + " más", x + w - 60, y + h - 14, 0xFF804070, 0xFFF8E0F0);
+		if (marks.size() > 12) Draw.dsText(c, "+" + (marks.size() - 12) + com.platino.Tr.t(" más"), x + w - 60, y + h - 14, 0xFF804070, 0xFFF8E0F0);
 		if (hovered != null) {
 			List<Text> tip = new ArrayList<>();
 			tip.add(Text.literal(markName(hovered)));
@@ -739,7 +741,7 @@ public class DppSummaryScreen extends Screen {
 
 	private void openSwap(Pokemon p, int slot) {
 		if (inBattle()) {
-			toast("No se puede durante un combate.");
+			toast(com.platino.Tr.t("No se puede durante un combate."));
 			return;
 		}
 		List<MoveTemplate> known = new ArrayList<>();
@@ -751,7 +753,7 @@ public class DppSummaryScreen extends Screen {
 		}
 		opts.sort(Comparator.comparing((MoveTemplate t) -> t.getDisplayName().getString(), String.CASE_INSENSITIVE_ORDER));
 		if (opts.isEmpty()) {
-			toast("No conoce otros movimientos.");
+			toast(com.platino.Tr.t("No conoce otros movimientos."));
 			return;
 		}
 		swapOptions = opts;
@@ -781,8 +783,8 @@ public class DppSummaryScreen extends Screen {
 		hits.add(new Hit(x, y, x + w, y + h, () -> {})); // bloquea los clics a lo que hay debajo
 		Draw.panel(c, x, y, x + w, y + h, 0xFFE05850, 0xFFF8E8E4);
 		String old = moves.get(swapSlot).getTemplate().getDisplayName().getString();
-		Draw.dsText(c, Draw.fit("Olvidar " + old + " y aprender:", w - 80), x + 8, y + 7, 0xFF303038, 0xFFE8D0C8);
-		button(c, x + w - 66, y + 4, x + w - 6, y + 17, "Cancelar", mx, my, 0xFFF8F8F0, () -> swapSlot = -1);
+		Draw.dsText(c, Draw.fit(com.platino.Tr.t("Olvidar ") + old + com.platino.Tr.t(" y aprender:"), w - 80), x + 8, y + 7, 0xFF303038, 0xFFE8D0C8);
+		button(c, x + w - 66, y + 4, x + w - 6, y + 17, com.platino.Tr.t("Cancelar"), mx, my, 0xFFF8F8F0, () -> swapSlot = -1);
 		int vis = swapVisible(h);
 		swapScroll = Math.max(0, Math.min(swapScroll, Math.max(0, swapOptions.size() - vis)));
 		int ly = y + 22;
@@ -794,14 +796,14 @@ public class DppSummaryScreen extends Screen {
 			TypeBadge.draw(c, t.getElementalType().getName(), x + 7, ry + 2);
 			Draw.dsText(c, Draw.fit(t.getDisplayName().getString(), w - 130), x + 10 + TypeBadge.WIDTH, ry + 3, 0xFF303038, 0xFFE8C8C0);
 			var cat = t.getDamageCategory();
-			String info = (cat == DamageCategories.INSTANCE.getPHYSICAL() ? "Fís " : cat == DamageCategories.INSTANCE.getSPECIAL() ? "Esp " : "Est ")
+			String info = (cat == DamageCategories.INSTANCE.getPHYSICAL() ? com.platino.Tr.t("Fís ") : cat == DamageCategories.INSTANCE.getSPECIAL() ? com.platino.Tr.t("Esp ") : com.platino.Tr.t("Est "))
 					+ (t.getPower() > 0 ? String.valueOf((int) t.getPower()) : "—");
 			Draw.dsText(c, info, x + w - 16 - Draw.width(info), ry + 3, 0xFF805050, 0xFFE8C8C0);
 			MoveTemplate pick = t;
 			hits.add(new Hit(x + 4, ry, x + w - 10, ry + SWAP_ROW - 1, () -> {
 				new BenchMovePacket(true, p.getUuid(), moves.get(swapSlot).getTemplate(), pick).sendToServer();
 				beep(1.9f);
-				toast(p.getDisplayName(false).getString() + " aprendió " + pick.getDisplayName().getString() + ".");
+				toast(p.getDisplayName(false).getString() + com.platino.Tr.t(" aprendió ") + pick.getDisplayName().getString() + ".");
 				swapSlot = -1;
 			}));
 		}
@@ -961,7 +963,7 @@ public class DppSummaryScreen extends Screen {
 		nickBuffer = null;
 		new SetNicknamePacket(p.getUuid(), true, nick).sendToServer();
 		beep(1.9f);
-		toast(nick.isEmpty() ? "Mote eliminado." : "Mote cambiado a " + nick + ".");
+		toast(nick.isEmpty() ? com.platino.Tr.t("Mote eliminado.") : com.platino.Tr.t("Mote cambiado a ") + nick + ".");
 	}
 
 	@Override

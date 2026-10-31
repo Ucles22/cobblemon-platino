@@ -75,7 +75,7 @@ public final class DsTextBox {
 		String prompt = null;
 		if (DsBattleMenu.isActive() && done && now - lastNewMsg > 1200) {
 			String name = activeName();
-			if (name != null) prompt = "¿Qué debería hacer " + name + "?";
+			if (name != null) prompt = com.platino.Tr.isEs() ? "¿Qué debería hacer " + name + "?" : "What will " + name + " do?";
 		}
 		if (prompt != null && !prompt.equals(promptShown)) {
 			promptShown = prompt;

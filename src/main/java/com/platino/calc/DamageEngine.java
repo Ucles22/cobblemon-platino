@@ -10,13 +10,13 @@ public final class DamageEngine {
 	public enum Category { PHYSICAL, SPECIAL, STATUS }
 
 	public enum Weather {
-		NONE("Sin clima"), SUN("Sol"), RAIN("Lluvia"), SAND("Tormenta de arena"), SNOW("Nieve");
+		NONE(com.platino.Tr.t("Sin clima")), SUN(com.platino.Tr.t("Sol")), RAIN(com.platino.Tr.t("Lluvia")), SAND(com.platino.Tr.t("Tormenta de arena")), SNOW(com.platino.Tr.t("Nieve"));
 		public final String label;
 		Weather(String label) { this.label = label; }
 	}
 
 	public enum Terrain {
-		NONE("Sin campo"), ELECTRIC("Campo Eléctrico"), PSYCHIC("Campo Psíquico"), GRASSY("Campo de Hierba"), MISTY("Campo de Niebla");
+		NONE(com.platino.Tr.t("Sin campo")), ELECTRIC(com.platino.Tr.t("Campo Eléctrico")), PSYCHIC(com.platino.Tr.t("Campo Psíquico")), GRASSY(com.platino.Tr.t("Campo de Hierba")), MISTY(com.platino.Tr.t("Campo de Niebla"));
 		public final String label;
 		Terrain(String label) { this.label = label; }
 	}
@@ -34,33 +34,33 @@ public final class DamageEngine {
 
 	/** Objetos con efecto en el daño (el servidor no tiene objetos custom). */
 	public enum Item {
-		NONE("Ninguno", null),
-		CHOICE_BAND("Cinta Elección", "choice_band"),
-		CHOICE_SPECS("Gafas Elección", "choice_specs"),
-		LIFE_ORB("Vidasfera", "life_orb"),
-		EXPERT_BELT("Cinta Experto", "expert_belt"),
-		MUSCLE_BAND("Cinta Fuerte", "muscle_band"),
-		WISE_GLASSES("Gafas Especiales", "wise_glasses"),
-		ASSAULT_VEST("Chaleco Asalto", "assault_vest"),
-		EVIOLITE("Mineral Evolutivo", "eviolite"),
-		CHARCOAL("Carbón", "charcoal", "fire"),
-		MYSTIC_WATER("Agua Mística", "mystic_water", "water"),
-		MIRACLE_SEED("Semilla Milagro", "miracle_seed", "grass"),
-		MAGNET("Imán", "magnet", "electric"),
-		NEVER_MELT_ICE("Antiderretir", "never_melt_ice", "ice"),
-		BLACK_BELT("Cinturón Negro", "black_belt", "fighting"),
-		POISON_BARB("Flecha Venenosa", "poison_barb", "poison"),
-		SOFT_SAND("Arena Fina", "soft_sand", "ground"),
-		SHARP_BEAK("Pico Afilado", "sharp_beak", "flying"),
-		TWISTED_SPOON("Cuchara Torcida", "twisted_spoon", "psychic"),
-		SILVER_POWDER("Polvo Plata", "silver_powder", "bug"),
-		HARD_STONE("Piedra Dura", "hard_stone", "rock"),
-		SPELL_TAG("Hechizo", "spell_tag", "ghost"),
-		DRAGON_FANG("Colmillo Dragón", "dragon_fang", "dragon"),
-		BLACK_GLASSES("Gafas de Sol", "black_glasses", "dark"),
-		METAL_COAT("Revestimiento Metálico", "metal_coat", "steel"),
-		SILK_SCARF("Pañuelo Seda", "silk_scarf", "normal"),
-		FAIRY_FEATHER("Pluma Hada", "fairy_feather", "fairy");
+		NONE(com.platino.Tr.t("Ninguno"), null),
+		CHOICE_BAND(com.platino.Tr.t("Cinta Elección"), "choice_band"),
+		CHOICE_SPECS(com.platino.Tr.t("Gafas Elección"), "choice_specs"),
+		LIFE_ORB(com.platino.Tr.t("Vidasfera"), "life_orb"),
+		EXPERT_BELT(com.platino.Tr.t("Cinta Experto"), "expert_belt"),
+		MUSCLE_BAND(com.platino.Tr.t("Cinta Fuerte"), "muscle_band"),
+		WISE_GLASSES(com.platino.Tr.t("Gafas Especiales"), "wise_glasses"),
+		ASSAULT_VEST(com.platino.Tr.t("Chaleco Asalto"), "assault_vest"),
+		EVIOLITE(com.platino.Tr.t("Mineral Evolutivo"), "eviolite"),
+		CHARCOAL(com.platino.Tr.t("Carbón"), "charcoal", "fire"),
+		MYSTIC_WATER(com.platino.Tr.t("Agua Mística"), "mystic_water", "water"),
+		MIRACLE_SEED(com.platino.Tr.t("Semilla Milagro"), "miracle_seed", "grass"),
+		MAGNET(com.platino.Tr.t("Imán"), "magnet", "electric"),
+		NEVER_MELT_ICE(com.platino.Tr.t("Antiderretir"), "never_melt_ice", "ice"),
+		BLACK_BELT(com.platino.Tr.t("Cinturón Negro"), "black_belt", "fighting"),
+		POISON_BARB(com.platino.Tr.t("Flecha Venenosa"), "poison_barb", "poison"),
+		SOFT_SAND(com.platino.Tr.t("Arena Fina"), "soft_sand", "ground"),
+		SHARP_BEAK(com.platino.Tr.t("Pico Afilado"), "sharp_beak", "flying"),
+		TWISTED_SPOON(com.platino.Tr.t("Cuchara Torcida"), "twisted_spoon", "psychic"),
+		SILVER_POWDER(com.platino.Tr.t("Polvo Plata"), "silver_powder", "bug"),
+		HARD_STONE(com.platino.Tr.t("Piedra Dura"), "hard_stone", "rock"),
+		SPELL_TAG(com.platino.Tr.t("Hechizo"), "spell_tag", "ghost"),
+		DRAGON_FANG(com.platino.Tr.t("Colmillo Dragón"), "dragon_fang", "dragon"),
+		BLACK_GLASSES(com.platino.Tr.t("Gafas de Sol"), "black_glasses", "dark"),
+		METAL_COAT(com.platino.Tr.t("Revestimiento Metálico"), "metal_coat", "steel"),
+		SILK_SCARF(com.platino.Tr.t("Pañuelo Seda"), "silk_scarf", "normal"),
+		FAIRY_FEATHER(com.platino.Tr.t("Pluma Hada"), "fairy_feather", "fairy");
 
 		public final String label, id, boostType;
 
@@ -92,7 +92,7 @@ public final class DamageEngine {
 		public int[] evs = {0, 0, 0, 0, 0, 0};
 		/** Estadística que sube / baja la naturaleza (índice 1-5) o -1. */
 		public int natureUp = -1, natureDown = -1;
-		public String natureName = "Seria";
+		public String natureName = com.platino.Tr.t("Seria");
 		public String ability = "";
 		public Item item = Item.NONE;
 		/** Cambios de estadísticas (-6..+6) por estadística, mismo orden que las stats (el 0, PS, no se usa). */
@@ -115,11 +115,11 @@ public final class DamageEngine {
 
 		/** "KO en 2 golpes", "Posible KO en 1"… (sobre los PS actuales). */
 		public String koText() {
-			if (max <= 0) return effectiveness == 0 ? "No le afecta" : "Sin daño";
+			if (max <= 0) return effectiveness == 0 ? com.platino.Tr.t("No le afecta") : com.platino.Tr.t("Sin daño");
 			int hitsMax = (int) Math.ceil(currentHp / (double) max);
 			int hitsMin = min <= 0 ? 99 : (int) Math.ceil(currentHp / (double) min);
-			if (hitsMax == hitsMin) return hitsMax == 1 ? "¡KO de un golpe!" : "KO en " + hitsMax + " golpes";
-			return "Posible KO en " + hitsMax + " (seguro en " + Math.min(hitsMin, 99) + ")";
+			if (hitsMax == hitsMin) return hitsMax == 1 ? com.platino.Tr.t("¡KO de un golpe!") : com.platino.Tr.t("KO en ") + hitsMax + com.platino.Tr.t(" golpes");
+			return com.platino.Tr.t("Posible KO en ") + hitsMax + com.platino.Tr.t(" (seguro en ") + Math.min(hitsMin, 99) + ")";
 		}
 	}
 
@@ -139,7 +139,7 @@ public final class DamageEngine {
 		int hp = def.stat(0);
 		int cur = Math.max(1, (int) Math.floor(hp * Math.max(1, Math.min(100, f.defHpPercent)) / 100.0));
 		if (move == null || move.category() == Category.STATUS || move.power() <= 0) {
-			return new Result(0, 0, hp, cur, 1f, "Movimiento de estado");
+			return new Result(0, 0, hp, cur, 1f, com.platino.Tr.t("Movimiento de estado"));
 		}
 		boolean physical = move.category() == Category.PHYSICAL;
 		String mt = move.type();
@@ -150,7 +150,7 @@ public final class DamageEngine {
 		if (immune != null) return new Result(0, 0, hp, cur, 0f, immune);
 
 		float eff = TypeEff.multiplier(mt, def.type1, def.type2);
-		if (eff == 0f) return new Result(0, 0, hp, cur, 0f, "Inmune por tipo");
+		if (eff == 0f) return new Result(0, 0, hp, cur, 0f, com.platino.Tr.t("Inmune por tipo"));
 
 		// Potencia
 		double power = move.power();

@@ -23,7 +23,7 @@ public class TrainerCardScreen extends Screen {
 	private long caughtUpdated;
 
 	public TrainerCardScreen() {
-		super(Text.literal("Ficha de Entrenador"));
+		super(Text.literal(com.platino.Tr.t("Ficha de Entrenador")));
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class TrainerCardScreen extends Screen {
 	public void render(DrawContext c, int mouseX, int mouseY, float delta) {
 		super.render(c, mouseX, mouseY, delta);
 		if (error != null) {
-			c.drawCenteredTextWithShadow(textRenderer, "Error en la Ficha: " + error, width / 2, height / 2, 0xFFFF6060);
+			c.drawCenteredTextWithShadow(textRenderer, com.platino.Tr.t("Error en la Ficha: ") + error, width / 2, height / 2, 0xFFFF6060);
 			return;
 		}
 		try {
@@ -72,8 +72,8 @@ public class TrainerCardScreen extends Screen {
 		Draw.batch(c, () -> pokeballWatermark(c, x + 70, y + 84));
 
 		Draw.tinyBall(c, x + 9, y + 8);
-		Draw.dsText(c, "FICHA DE ENTRENADOR", x + 20, y + 8, TEXT, SHADOW);
-		Draw.tinyBall(c, x + 20 + Draw.width("FICHA DE ENTRENADOR") + 4, y + 8);
+		Draw.dsText(c, com.platino.Tr.t("FICHA DE ENTRENADOR"), x + 20, y + 8, TEXT, SHADOW);
+		Draw.tinyBall(c, x + 20 + Draw.width(com.platino.Tr.t("FICHA DE ENTRENADOR")) + 4, y + 8);
 
 		String uuid = mc.player.getUuid().toString();
 		String name = mc.player.getGameProfile().getName();
@@ -82,17 +82,17 @@ public class TrainerCardScreen extends Screen {
 		String points = ServerStats.points != null ? ServerStats.points : "—";
 
 		int rx1 = x + 8, rx2 = x + 168;
-		row(c, rx1, rx2, y + 22, "Nº ID", uuid);
-		row(c, rx1, rx2, y + 40, "NOMBRE", name);
-		row(c, rx1, rx2, y + 62, "DINERO", money);
+		row(c, rx1, rx2, y + 22, com.platino.Tr.t("Nº ID"), uuid);
+		row(c, rx1, rx2, y + 40, com.platino.Tr.t("NOMBRE"), name);
+		row(c, rx1, rx2, y + 62, com.platino.Tr.t("DINERO"), money);
 		row(c, rx1, rx2, y + 84, "POKéDEX", dex);
-		row(c, rx1, rx2, y + 106, "PUNTOS BATALLA", points);
+		row(c, rx1, rx2, y + 106, com.platino.Tr.t("PUNTOS BATALLA"), points);
 
 		// Medallas (de DiosesMon)
 		List<DiosesmonBridge.Medal> medals = DiosesmonBridge.medals();
 		int my = y + 130;
 		Draw.round(c, x + 8, my, x + CW - 8, my + 32, 0x60FFE0E0);
-		Draw.dsText(c, "MEDALLAS", x + 12, my + 3, TEXT, SHADOW);
+		Draw.dsText(c, com.platino.Tr.t("MEDALLAS"), x + 12, my + 3, TEXT, SHADOW);
 		if (medals.isEmpty()) {
 			Draw.dsText(c, "—", x + 12, my + 17, TEXT, SHADOW);
 		} else {

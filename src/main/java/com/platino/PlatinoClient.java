@@ -126,7 +126,7 @@ public class PlatinoClient implements ClientModInitializer {
 				boolean hover = mx >= bx && mx < bx + bw && my >= by && my < by + bh;
 				Draw.panelGradient(ctx, bx, by, bx + bw, by + bh, Draw.OUTLINE,
 						hover ? 0xFFF8E070 : 0xFFE8ECF0, hover ? Draw.GOLD : 0xFFB0B8C4);
-				String label = "✎ Notas (N)";
+				String label = com.platino.Tr.t("✎ Notas (N)");
 				Draw.dsText(ctx, label, bx + (bw - Draw.width(label)) / 2, by + 3, Draw.TEXT_DARK, 0x80FFFFFF);
 				ctx.getMatrices().pop();
 
@@ -145,7 +145,7 @@ public class PlatinoClient implements ClientModInitializer {
 					PlatinoConfig.get().palette = name;
 					PlatinoConfig.get().screensTheme = !name.equals("original");
 					PlatinoConfig.save();
-					ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino] Paleta: " + name + " (recargando texturas…)"));
+					ctx.getSource().sendFeedback(Text.literal(com.platino.Tr.t("[Cobblemon Platino] Paleta: ") + name + com.platino.Tr.t(" (recargando texturas…)")));
 					ScreenRecolor.reapply();
 					return 1;
 				}));
@@ -163,8 +163,8 @@ public class PlatinoClient implements ClientModInitializer {
 						else PlatinoConfig.get().lowHpBeep = on;
 						PlatinoConfig.save();
 						ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino] "
-								+ (part.equals("menu") ? "Menú de combate DS" : part.equals("texto") ? "Cuadro de texto DS" : part.equals("bolsa") ? "Bolsa en combate" : part.equals("registro") ? "Tema Platino del registro (Battle Extras)" : "Pitido de vida baja")
-								+ (on ? " ACTIVADO" : " DESACTIVADO")));
+								+ (part.equals("menu") ? com.platino.Tr.t("Menú de combate DS") : part.equals("texto") ? com.platino.Tr.t("Cuadro de texto DS") : part.equals("bolsa") ? com.platino.Tr.t("Bolsa en combate") : part.equals("registro") ? com.platino.Tr.t("Tema Platino del registro (Battle Extras)") : com.platino.Tr.t("Pitido de vida baja"))
+								+ (on ? com.platino.Tr.t(" ACTIVADO") : com.platino.Tr.t(" DESACTIVADO"))));
 						return 1;
 					}));
 				}
@@ -174,7 +174,7 @@ public class PlatinoClient implements ClientModInitializer {
 				combate.then(ClientCommandManager.literal("posicion").then(ClientCommandManager.literal(side).executes(ctx -> {
 					PlatinoConfig.get().battleMenuSide = side;
 					PlatinoConfig.save();
-					ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino] Menú de combate a la " + side));
+					ctx.getSource().sendFeedback(Text.literal(com.platino.Tr.t("[Cobblemon Platino] Menú de combate a la ") + com.platino.Tr.t(side)));
 					return 1;
 				})));
 			}
@@ -182,7 +182,7 @@ public class PlatinoClient implements ClientModInitializer {
 					.argument("escala", FloatArgumentType.floatArg(0.5f, 1.5f)).executes(ctx -> {
 						PlatinoConfig.get().battleMenuScale = FloatArgumentType.getFloat(ctx, "escala");
 						PlatinoConfig.save();
-						ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino] Tamaño del menú: "
+						ctx.getSource().sendFeedback(Text.literal(com.platino.Tr.t("[Cobblemon Platino] Tamaño del menú: ")
 								+ PlatinoConfig.get().battleMenuScale));
 						return 1;
 					})));
@@ -194,14 +194,14 @@ public class PlatinoClient implements ClientModInitializer {
 			}));
 			root.then(ClientCommandManager.literal("debug").then(ClientCommandManager.literal("marcador").executes(ctx -> {
 				var lines = ServerStats.debugLines();
-				ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino] Marcador DiosesMon: " + lines.size() + " líneas"));
+				ctx.getSource().sendFeedback(Text.literal(com.platino.Tr.t("[Cobblemon Platino] Marcador DiosesMon: ") + lines.size() + com.platino.Tr.t(" líneas")));
 				for (String l : lines) {
 					ctx.getSource().sendFeedback(Text.literal(" · " + l));
 					LOGGER.info("[Cobblemon Platino] marcador: {}", l);
 				}
 				ServerStats.update();
-				ctx.getSource().sendFeedback(Text.literal("→ dinero=" + ServerStats.money + " coins=" + ServerStats.coins
-						+ " puntos=" + ServerStats.points + " clan=" + ServerStats.clan));
+				ctx.getSource().sendFeedback(Text.literal(com.platino.Tr.t("→ dinero=") + ServerStats.money + " coins=" + ServerStats.coins
+						+ com.platino.Tr.t(" puntos=") + ServerStats.points + " clan=" + ServerStats.clan));
 				return 1;
 			})));
 			var resumen = ClientCommandManager.literal("resumen");
@@ -209,8 +209,8 @@ public class PlatinoClient implements ClientModInitializer {
 				resumen.then(ClientCommandManager.literal(state).executes(ctx -> {
 					PlatinoConfig.get().dppSummary = state.equals("on");
 					PlatinoConfig.save();
-					ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino] Ficha de Pokémon estilo DP "
-							+ (state.equals("on") ? "ACTIVADA" : "DESACTIVADA (se usa la de Cobblemon)")));
+					ctx.getSource().sendFeedback(Text.literal(com.platino.Tr.t("[Cobblemon Platino] Ficha de Pokémon estilo DP ")
+							+ (state.equals("on") ? com.platino.Tr.t("ACTIVADA") : com.platino.Tr.t("DESACTIVADA (se usa la de Cobblemon)"))));
 					return 1;
 				}));
 			}
@@ -220,8 +220,8 @@ public class PlatinoClient implements ClientModInitializer {
 				pcNode.then(ClientCommandManager.literal(state).executes(ctx -> {
 					PlatinoConfig.get().dppPc = state.equals("on");
 					PlatinoConfig.save();
-					ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino] PC estilo DP "
-							+ (state.equals("on") ? "ACTIVADO" : "DESACTIVADO (se usa el de Cobblemon)")));
+					ctx.getSource().sendFeedback(Text.literal(com.platino.Tr.t("[Cobblemon Platino] PC estilo DP ")
+							+ (state.equals("on") ? com.platino.Tr.t("ACTIVADO") : com.platino.Tr.t("DESACTIVADO (se usa el de Cobblemon)"))));
 					return 1;
 				}));
 			}
@@ -239,11 +239,11 @@ public class PlatinoClient implements ClientModInitializer {
 				return 1;
 			}));
 			root.executes(ctx -> {
-				ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino " + version() + "] /platino ficha · pokereloj · bolsa · equipo · resumen · pc · combate · paleta · recargar"));
+				ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino " + version() + com.platino.Tr.t("] /platino ficha · pokereloj · bolsa · equipo · resumen · pc · combate · paleta · recargar")));
 				return 1;
 			});
 			dispatcher.register(root.then(pal).then(ClientCommandManager.literal("recargar").executes(ctx -> {
-				PlatinoConfig.reload(() -> ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino] Configuración recargada.")));
+				PlatinoConfig.reload(() -> ctx.getSource().sendFeedback(Text.literal(com.platino.Tr.t("[Cobblemon Platino] Configuración recargada."))));
 				return 1;
 			})));
 		});
@@ -251,8 +251,8 @@ public class PlatinoClient implements ClientModInitializer {
 		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> client.execute(() -> {
 			ServerStats.reset();
 			if (client.player != null) {
-				client.player.sendMessage(Text.literal("§6[Cobblemon Platino " + version() + "]§f I = Bolsa · K = Ficha · P = Pokéreloj · N = Notas"
-						+ (DiosesmonBridge.isPresent() ? " · marcador DiosesMon OK" : "")), false);
+				client.player.sendMessage(Text.literal("§6[Cobblemon Platino " + version() + com.platino.Tr.t("]§f I = Bolsa · K = Ficha · P = Pokéreloj · N = Notas")
+						+ (DiosesmonBridge.isPresent() ? com.platino.Tr.t(" · marcador DiosesMon OK") : "")), false);
 			}
 		}));
 		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> client.execute(ServerStats::reset));
@@ -314,7 +314,7 @@ public class PlatinoClient implements ClientModInitializer {
 			mc.setScreen(new TrainerCardScreen());
 		} catch (Throwable t) {
 			LOGGER.error("[Cobblemon Platino] No se pudo abrir la Ficha", t);
-			if (mc.player != null) mc.player.sendMessage(Text.literal("§c[Cobblemon Platino] Error al abrir la Ficha: " + t), false);
+			if (mc.player != null) mc.player.sendMessage(Text.literal(com.platino.Tr.t("§c[Cobblemon Platino] Error al abrir la Ficha: ") + t), false);
 		}
 	}
 

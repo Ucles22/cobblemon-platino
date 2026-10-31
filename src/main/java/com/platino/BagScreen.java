@@ -26,14 +26,14 @@ public class BagScreen extends Screen {
 	private static int lastPocket = 0;
 
 	enum Pocket {
-		ITEMS("OBJETOS", 0xFFE87040),
-		MEDICINE("MEDICINAS", 0xFF58B858),
+		ITEMS(com.platino.Tr.t("OBJETOS"), 0xFFE87040),
+		MEDICINE(com.platino.Tr.t("MEDICINAS"), 0xFF58B858),
 		BALLS("POKé BALLS", 0xFFE84848),
-		TMS("MT/MO", 0xFF4878D8),
-		BERRIES("BAYAS", 0xFF88C040),
-		BATTLE("COMBATE", 0xFFF0A030),
-		KEY("OBJ. CLAVE", 0xFF9060C8),
-		OTHER("VARIOS", 0xFF8890A0);
+		TMS(com.platino.Tr.t("MT/MO"), 0xFF4878D8),
+		BERRIES(com.platino.Tr.t("BAYAS"), 0xFF88C040),
+		BATTLE(com.platino.Tr.t("COMBATE"), 0xFFF0A030),
+		KEY(com.platino.Tr.t("OBJ. CLAVE"), 0xFF9060C8),
+		OTHER(com.platino.Tr.t("VARIOS"), 0xFF8890A0);
 
 		final String label;
 		final int color;
@@ -61,7 +61,7 @@ public class BagScreen extends Screen {
 
 	/** Bolsa abierta desde el botón BOLSA del combate. */
 	public BagScreen(Screen battleParent) {
-		super(Text.literal("Bolsa"));
+		super(Text.literal(com.platino.Tr.t("Bolsa")));
 		this.battleParent = battleParent;
 		pocket = battleParent != null ? Pocket.MEDICINE.ordinal() : lastPocket;
 	}
@@ -189,7 +189,7 @@ public class BagScreen extends Screen {
 		for (int yy = y + 4; yy < y + H - 4; yy += 4) c.fill(x + 2, yy, x + W - 2, yy + 1, 0x18FFFFFF);
 
 		drawBag(c, x + 14, y + 12, pk);
-		if (inBattle()) Draw.dsText(c, "COMBATE", x + 14 + 45 - Draw.width("COMBATE") / 2, y + 4, 0xFFFFFFFF, 0xFF303030);
+		if (inBattle()) Draw.dsText(c, com.platino.Tr.t("COMBATE"), x + 14 + 45 - Draw.width(com.platino.Tr.t("COMBATE")) / 2, y + 4, 0xFFFFFFFF, 0xFF303030);
 		// Nombre del bolsillo
 		int nx1 = x + 8, nx2 = x + LIST_X - 6, ny = y + 102;
 		Draw.panel(c, nx1, ny, nx2, ny + 16, 0xFF303840, 0xFFF8F8F8);
@@ -211,7 +211,7 @@ public class BagScreen extends Screen {
 		int ly2 = ly1 + rows * ROW + 6;
 		Draw.panel(c, lx1, ly1, lx2, ly2, 0xFF303840, 0xFFF8F8F8);
 		if (items.isEmpty()) {
-			String empty = inBattle() ? "Nada que usar aquí" : "Bolsillo vacío";
+			String empty = inBattle() ? com.platino.Tr.t("Nada que usar aquí") : com.platino.Tr.t("Bolsillo vacío");
 			Draw.dsText(c, empty, (lx1 + lx2) / 2 - Draw.width(empty) / 2, (ly1 + ly2) / 2 - 4, 0xFF909090, 0xFFE0E0E0);
 		}
 		scroll = Math.max(0, Math.min(scroll, Math.max(0, items.size() - rows)));
@@ -262,8 +262,8 @@ public class BagScreen extends Screen {
 		}
 		// Botones
 		boolean canUse = !items.isEmpty();
-		button(c, x + W - 78, y + H - 46, x + W - 8, y + H - 28, inBattle() ? "USAR" : "A LA MANO", canUse, mouseX, mouseY, 0xFF58B858);
-		button(c, x + W - 78, y + H - 26, x + W - 8, y + H - 8, "CERRAR", true, mouseX, mouseY, 0xFF6890D0);
+		button(c, x + W - 78, y + H - 46, x + W - 8, y + H - 28, inBattle() ? com.platino.Tr.t("USAR") : com.platino.Tr.t("A LA MANO"), canUse, mouseX, mouseY, 0xFF58B858);
+		button(c, x + W - 78, y + H - 26, x + W - 8, y + H - 8, com.platino.Tr.t("CERRAR"), true, mouseX, mouseY, 0xFF6890D0);
 		c.getMatrices().pop();
 	}
 
@@ -345,7 +345,7 @@ public class BagScreen extends Screen {
 		MinecraftClient mc = MinecraftClient.getInstance();
 		ItemStack st = g.stack();
 		if (!usableInBattle(st)) {
-			flash = "¡No puedes usar " + st.getName().getString() + " en combate!";
+			flash = com.platino.Tr.t("¡No puedes usar ") + st.getName().getString() + com.platino.Tr.t(" en combate!");
 			flashUntil = System.currentTimeMillis() + 2000;
 			mc.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.BLOCK_NOTE_BLOCK_BASS.value(), 0.6f, 0.6f));
 			return;
@@ -357,7 +357,7 @@ public class BagScreen extends Screen {
 		mc.setScreen(null);
 		if (isBall(st)) {
 			if (mc.player != null) {
-				mc.player.sendMessage(Text.literal("§e¡Apunta al Pokémon y lanza la " + st.getName().getString() + " con clic derecho!"), true);
+				mc.player.sendMessage(Text.literal(com.platino.Tr.t("§e¡Apunta al Pokémon y lanza la ") + st.getName().getString() + com.platino.Tr.t(" con clic derecho!")), true);
 			}
 		} else {
 			PlatinoClient.useHeldItemSoon();

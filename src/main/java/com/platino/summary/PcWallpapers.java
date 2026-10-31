@@ -13,9 +13,9 @@ import java.util.UUID;
  */
 public final class PcWallpapers {
 	public enum Theme {
-		BOSQUE("Bosque"), CIUDAD("Ciudad"), DESIERTO("Desierto"), SABANA("Sabana"), PENASCO("Peñasco"),
-		VOLCAN("Volcán"), NIEVE("Nieve"), CUEVA("Cueva"), PLAYA("Playa"), MARINO("Fondo marino"),
-		RIO("Río"), CIELO("Cielo"), CENTRO("Centro Pokémon"), MAQUINA("Máquina"), CUADROS("Cuadros"),
+		BOSQUE(com.platino.Tr.t("Bosque")), CIUDAD(com.platino.Tr.t("Ciudad")), DESIERTO(com.platino.Tr.t("Desierto")), SABANA(com.platino.Tr.t("Sabana")), PENASCO(com.platino.Tr.t("Peñasco")),
+		VOLCAN(com.platino.Tr.t("Volcán")), NIEVE(com.platino.Tr.t("Nieve")), CUEVA(com.platino.Tr.t("Cueva")), PLAYA(com.platino.Tr.t("Playa")), MARINO(com.platino.Tr.t("Fondo marino")),
+		RIO(com.platino.Tr.t("Río")), CIELO(com.platino.Tr.t("Cielo")), CENTRO(com.platino.Tr.t("Centro Pokémon")), MAQUINA(com.platino.Tr.t("Máquina")), CUADROS(com.platino.Tr.t("Cuadros")),
 		SIMPLE("Simple");
 
 		public final String label;

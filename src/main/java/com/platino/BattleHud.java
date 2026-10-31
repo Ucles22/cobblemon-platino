@@ -79,8 +79,8 @@ public final class BattleHud {
 		String lvNum = String.valueOf(bp.getLevel());
 		int lvx = right - Draw.width(lvNum);
 		Draw.dsText(c, lvNum, lvx, y + 5, WHITE, DARK);
-		int nvx = lvx - Draw.width("Nv") - 1;
-		Draw.dsText(c, "Nv", nvx, y + 5, WHITE, DARK);
+		int nvx = lvx - Draw.width(com.platino.Tr.t("Nv")) - 1;
+		Draw.dsText(c, com.platino.Tr.t("Nv"), nvx, y + 5, WHITE, DARK);
 		Gender g = bp.getGender();
 		if (g == Gender.MALE) Draw.dsText(c, "♂", nvx - 8, y + 5, 0xFF4890E8, DARK);
 		else if (g == Gender.FEMALE) Draw.dsText(c, "♀", nvx - 8, y + 5, 0xFFF06080, DARK);
@@ -89,7 +89,7 @@ public final class BattleHud {
 		int railY = ally ? y + 17 : y + 19;
 		int barX2 = right - 1, barX1 = barX2 - (ally ? 82 : 70);
 		drawRail(c, x, railY, W, inwardRight, barX1 - 14, barX2, cur);
-		Draw.dsText(c, "PS", barX1 - 12, railY - 1, 0xFFF8F0B0, DARK);
+		Draw.dsText(c, com.platino.Tr.t("PS"), barX1 - 12, railY - 1, 0xFFF8F0B0, DARK);
 
 		int lx = ix;
 		if (!ally && dexState != null && dexState.equalsIgnoreCase("CAUGHT")) {

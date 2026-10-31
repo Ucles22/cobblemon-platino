@@ -2,8 +2,8 @@ package com.platino;
 
 /** Tabla de tipos (generación 6 en adelante, con Hada) para el indicador de movimientos del Pokéreloj. */
 public final class TypeChart {
-	public static final String[] NAMES = {"NORMAL", "FUEGO", "AGUA", "PLANTA", "ELÉCTRICO", "HIELO", "LUCHA", "VENENO",
-			"TIERRA", "VOLADOR", "PSÍQUICO", "BICHO", "ROCA", "FANTASMA", "DRAGÓN", "SINIESTRO", "ACERO", "HADA"};
+	public static final String[] NAMES = {"NORMAL", com.platino.Tr.t("FUEGO"), com.platino.Tr.t("AGUA"), com.platino.Tr.t("PLANTA"), com.platino.Tr.t("ELÉCTRICO"), com.platino.Tr.t("HIELO"), com.platino.Tr.t("LUCHA"), com.platino.Tr.t("VENENO"),
+			com.platino.Tr.t("TIERRA"), com.platino.Tr.t("VOLADOR"), com.platino.Tr.t("PSÍQUICO"), com.platino.Tr.t("BICHO"), com.platino.Tr.t("ROCA"), com.platino.Tr.t("FANTASMA"), com.platino.Tr.t("DRAGÓN"), com.platino.Tr.t("SINIESTRO"), com.platino.Tr.t("ACERO"), com.platino.Tr.t("HADA")};
 
 	private static final int NOR = 0, FUE = 1, AGU = 2, PLA = 3, ELE = 4, HIE = 5, LUC = 6, VEN = 7, TIE = 8,
 			VOL = 9, PSI = 10, BIC = 11, ROC = 12, FAN = 13, DRA = 14, SIN = 15, ACE = 16, HAD = 17;
@@ -45,11 +45,11 @@ public final class TypeChart {
 	}
 
 	public static String describe(float m) {
-		if (m == 0f) return "No afecta";
-		if (m >= 4f) return "¡Súper eficaz!";
-		if (m >= 2f) return "Muy eficaz";
-		if (m <= 0.25f) return "Muy poco eficaz";
-		if (m < 1f) return "Poco eficaz";
+		if (m == 0f) return com.platino.Tr.t("No afecta");
+		if (m >= 4f) return com.platino.Tr.t("¡Súper eficaz!");
+		if (m >= 2f) return com.platino.Tr.t("Muy eficaz");
+		if (m <= 0.25f) return com.platino.Tr.t("Muy poco eficaz");
+		if (m < 1f) return com.platino.Tr.t("Poco eficaz");
 		return "Normal";
 	}
 

@@ -27,7 +27,7 @@ import java.util.Map;
  */
 public final class CalcData {
 	public static final Stats[] STAT_ORDER = {Stats.HP, Stats.ATTACK, Stats.DEFENCE, Stats.SPECIAL_ATTACK, Stats.SPECIAL_DEFENCE, Stats.SPEED};
-	public static final String[] STAT_LABEL = {"PS", "Ataque", "Defensa", "At. Esp.", "Def. Esp.", "Velocidad"};
+	public static final String[] STAT_LABEL = {com.platino.Tr.t("PS"), com.platino.Tr.t("Ataque"), com.platino.Tr.t("Defensa"), com.platino.Tr.t("At. Esp."), com.platino.Tr.t("Def. Esp."), com.platino.Tr.t("Velocidad")};
 
 	public record SpeciesEntry(String display, String search, int[] base, String type1, String type2, List<AbilityEntry> abilities) {}
 
