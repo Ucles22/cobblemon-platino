@@ -159,12 +159,13 @@ public final class BattleHud {
 		int barX1 = railFrom + 14;
 		Draw.batch(c, () -> {
 			int x1, x2;
+			// cruza toda la caja y sale 10 px por el lado que mira al centro
 			if (inwardRight) {
-				x1 = railFrom;
+				x1 = x + 2;
 				x2 = x + w + 10;
 			} else {
 				x1 = x - 10;
-				x2 = barX2 + 2;
+				x2 = x + w - 2;
 			}
 			c.fill(x1, ry, x2, ry + 2, RAIL);
 			c.fill(x1, ry + 2, x2, ry + 4, FRAME);
