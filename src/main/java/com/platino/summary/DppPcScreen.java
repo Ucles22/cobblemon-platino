@@ -19,6 +19,9 @@ import com.cobblemon.mod.common.net.messages.server.storage.pc.MovePartyPokemonT
 import com.cobblemon.mod.common.net.messages.server.storage.pc.ReleasePCPokemonPacket;
 import com.cobblemon.mod.common.net.messages.server.storage.pc.SwapPCPokemonPacket;
 import com.cobblemon.mod.common.net.messages.server.storage.pc.UnlinkPlayerFromPCPacket;
+import com.cobblemon.mod.common.net.messages.server.storage.pc.RequestRenamePCBoxPacket;
+import com.cobblemon.mod.common.net.messages.server.storage.pc.RequestChangePCBoxWallpaperPacket;
+import com.cobblemon.mod.common.client.render.gui.PCBoxWallpaperRepository;
 import com.cobblemon.mod.common.pokemon.Gender;
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.platino.Draw;
@@ -73,6 +76,13 @@ public class DppPcScreen extends Screen {
 	private Spot releaseConfirm;
 	/** Opción marcada en el menú de liberar: 0 = SÍ, 1 = NO. */
 	private int confirmCursor = 1;
+	/** Menú de la caja (FONDO / NOMBRE / CANCELAR), nombre en edición y selector de fondos. */
+	private boolean boxMenu;
+	private int boxMenuCursor;
+	private String boxName;
+	private boolean wallPicker;
+	private int wallScroll;
+	private static final int BOX_NAME_MAX = 16;
 	private String message;
 	private long messageUntil;
 	private int x0, y0;
@@ -180,7 +190,7 @@ public class DppPcScreen extends Screen {
 		Draw.panel(c, x0, y0, x0 + W, y0 + H, 0xFF283048, 0xFF384868);
 		c.fillGradient(x0 + 1, y0 + 1, x0 + W - 1, y0 + 19, 0xFF68A0D8, 0xFF3060A8);
 		for (int yy = y0 + 4; yy < y0 + 18; yy += 4) c.fill(x0 + 1, yy, x0 + W - 1, yy + 1, 0x18FFFFFF);
-		Draw.dsText(c, "MOVER POKéMON", x0 + 8, y0 + 6, 0xFFFFFFFF, 0xFF203060);
+		Draw.dsText(c, "MOVER POKEMON", x0 + 8, y0 + 6, 0xFFFFFFFF, 0xFF203060);
 		button(c, x0 + W - 92, y0 + 4, x0 + W - 22, y0 + 16, "Cobblemon ⇄", mx, my, 0xFFE8E8F0, this::openOriginal);
 		button(c, x0 + W - 18, y0 + 4, x0 + W - 5, y0 + 16, "×", mx, my, 0xFFE8E8F0, this::close);
 
@@ -188,17 +198,35 @@ public class DppPcScreen extends Screen {
 		int bx = x0 + LW + 8, by = y0 + 24, bw = COLS * CELL + 8;
 		ClientBox cb = pc.getBoxes().get(box);
 		Draw.panelGradient(c, bx, by, bx + bw, by + 18, 0xFF284868, 0xFFB8D8F8, 0xFF78A8E0);
-		String name = cb.getName() == null || cb.getName().getString().isBlank() ? "CAJA " + (box + 1) : cb.getName().getString();
-		name = Draw.fit(name.toUpperCase(Locale.ROOT), bw - 40);
-		Draw.dsText(c, name, bx + bw / 2 - Draw.width(name) / 2, by + 5, 0xFF303038, 0xFFE8F0F8);
+		if (boxName != null) {
+			Draw.round(c, bx + 18, by + 3, bx + bw - 18, by + 15, 0xFFF8F8F0);
+			String shown = Draw.fit(boxName, bw - 44);
+			int tx = bx + bw / 2 - Draw.width(shown) / 2;
+			Draw.dsText(c, shown, tx, by + 5, 0xFF303038, 0xFFD8D8D0);
+			if ((System.currentTimeMillis() / 400) % 2 == 0) c.fill(tx + Draw.width(shown), by + 4, tx + Draw.width(shown) + 1, by + 14, 0xFF303038);
+		} else {
+			String name = boxLabel(cb, box);
+			name = Draw.fit(name.toUpperCase(Locale.ROOT), bw - 40);
+			Draw.dsText(c, name, bx + bw / 2 - Draw.width(name) / 2, by + 5, 0xFF303038, 0xFFE8F0F8);
+		}
 		button(c, bx + 3, by + 3, bx + 15, by + 15, "◀", mx, my, 0xFFF0F0F8, () -> changeBox(-1));
 		button(c, bx + bw - 15, by + 3, bx + bw - 3, by + 15, "▶", mx, my, 0xFFF0F0F8, () -> changeBox(1));
-		hits.add(new Hit(bx + 16, by, bx + bw - 16, by + 18, () -> {}));
+		hits.add(new Hit(bx + 16, by, bx + bw - 16, by + 18, () -> {
+			if (boxName != null) return;
+			boxMenu = !boxMenu;
+			boxMenuCursor = 0;
+			held = null;
+			heldPokemon = null;
+			click();
+		}));
 
 		int gx = bx, gy = by + 20, gh = ROWS * CELL + 8;
 		Draw.panel(c, gx, gy, gx + bw, gy + gh, 0xFF284868, 0xFF88B8E0);
 		Identifier wall = cb.getWallpaper();
-		if (wall != null) {
+		PcWallpapers.Theme theme = PcWallpapers.get(pc.getUuid(), box);
+		if (theme != null) {
+			PcWallpapers.draw(c, theme, gx + 2, gy + 2, bw - 4, gh - 4);
+		} else if (wall != null) {
 			try {
 				c.drawTexture(wall, gx + 2, gy + 2, bw - 4, gh - 4, 0f, 0f, 1, 1, 1, 1);
 				c.fill(gx + 2, gy + 2, gx + bw - 2, gy + gh - 2, 0x30FFFFFF);
@@ -252,10 +280,12 @@ public class DppPcScreen extends Screen {
 		if (message != null && System.currentTimeMillis() < messageUntil) text = message;
 		else if (releaseConfirm != null) text = "¿Seguro que quieres liberar a " + heldPokemon.getDisplayName(false).getString() + "?";
 		else if (held != null) text = "¿Dónde quieres dejar a " + heldPokemon.getDisplayName(false).getString() + "?";
-		else text = "Clic: coger · Clic derecho: datos · Rueda: caja";
+		else text = "Clic: coger · Clic dcho.: datos · Clic en el nombre: menú";
 		Draw.dsText(c, Draw.fit(text, W - LW - 24), x0 + LW + 14, ty + 9, 0xFF303038, 0xFFD0D0D8);
 
 		if (releaseConfirm != null) drawReleaseMenu(c, px, ry + 18, pw, mx, my);
+		if (boxMenu) drawBoxMenu(c, bx + bw / 2 - 40, by + 17, 80, mx, my);
+		if (wallPicker) drawWallPicker(c, gx, gy, bw, gh, mx, my);
 
 		// Pokémon cogido siguiendo al ratón
 		if (held != null && heldPokemon != null && releaseConfirm == null) {
@@ -298,16 +328,16 @@ public class DppPcScreen extends Screen {
 		int x = x0 + 4, y = y0 + 22, w = LW;
 		c.fill(x, y, x + w, y0 + H - 4, 0xFFD0D0C0);
 		for (int yy = y; yy < y0 + H - 4; yy += 3) c.fill(x, yy, x + w, yy + 1, 0x18FFFFFF);
-		Draw.panelGradient(c, x + 2, y + 2, x + w - 2, y + 18, 0xFFB87820, 0xFFF8D080, 0xFFF0B048);
+		Draw.panelGradient(c, x + 2, y + 2, x + w - 2, y + 18, 0xFF7A3A08, 0xFFE8902C, 0xFFC0600E); // placa del nombre, naranja oscuro para leer bien el blanco
 		if (p == null) {
-			Draw.dsText(c, "—", x + 8, y + 6, 0xFFFFFFFF, 0xFF905018);
+			Draw.dsText(c, "—", x + 8, y + 6, 0xFFFFFFFF, 0xFF4A1E00);
 			return;
 		}
 		Draw.tinyBall(c, x + 6, y + 6);
-		Draw.dsText(c, Draw.fit(p.getDisplayName(false).getString().toUpperCase(Locale.ROOT), w - 34), x + 16, y + 6, 0xFFFFFFFF, 0xFF905018);
+		Draw.dsText(c, Draw.fit(p.getDisplayName(false).getString().toUpperCase(Locale.ROOT), w - 34), x + 16, y + 6, 0xFFFFFFFF, 0xFF4A1E00);
 		Gender g = p.getGender();
-		if (g == Gender.MALE) Draw.dsText(c, "♂", x + w - 12, y + 6, 0xFF3070F0, 0xFFA8C8F8);
-		else if (g == Gender.FEMALE) Draw.dsText(c, "♀", x + w - 12, y + 6, 0xFFF04870, 0xFFF8B8C8);
+		if (g == Gender.MALE) Draw.dsText(c, "♂", x + w - 12, y + 6, 0xFFA8D0FF, 0xFF203878);
+		else if (g == Gender.FEMALE) Draw.dsText(c, "♀", x + w - 12, y + 6, 0xFFFFC0D0, 0xFF782040);
 
 		int ps = 84, px = x + (w - ps) / 2, py = y + 21;
 		Draw.panel(c, px, py, px + ps, py + ps, 0xFFA8A8B0, 0xFFE8ECF4);
@@ -364,9 +394,148 @@ public class DppPcScreen extends Screen {
 
 	// ---------------------------------------------------------------- Acciones
 
+	private static String boxLabel(ClientBox cb, int box) {
+		return cb.getName() == null || cb.getName().getString().isBlank() ? "Caja " + (box + 1) : cb.getName().getString();
+	}
+
+	// ---------------------------------------------------------------- Menú de la caja, nombre y fondos
+
+	private void drawBoxMenu(DrawContext c, int x, int y, int w, int mx, int my) {
+		c.getMatrices().push();
+		c.getMatrices().translate(0, 0, 250);
+		hits.add(new Hit(0, 0, width, height, () -> boxMenu = false));
+		String[] opts = {"FONDO", "NOMBRE", "CANCELAR"};
+		int ih = 16, mh = opts.length * ih + 8;
+		Draw.panel(c, x, y, x + w, y + mh, 0xFF484858, 0xFFF8F8F8);
+		for (int i = 0; i < opts.length; i++) {
+			int iy = y + 4 + i * ih;
+			if (mx >= x && mx < x + w && my >= iy && my < iy + ih) boxMenuCursor = i;
+			if (i == boxMenuCursor) {
+				Draw.round(c, x + 3, iy, x + w - 3, iy + ih - 1, 0xFFF8E0A0);
+				Draw.dsText(c, "▶", x + 6, iy + 4, 0xFFE05030, 0xFFF8C0A0);
+			}
+			Draw.dsText(c, opts[i], x + 18, iy + 4, 0xFF303038, 0xFFD0D0D8);
+			int opt = i;
+			hits.add(new Hit(x, iy, x + w, iy + ih, () -> chooseBoxMenu(opt)));
+		}
+		c.getMatrices().pop();
+	}
+
+	private void chooseBoxMenu(int opt) {
+		boxMenu = false;
+		click();
+		if (opt == 0) {
+			wallPicker = true;
+			wallScroll = 0;
+		} else if (opt == 1) {
+			boxName = boxLabel(pc.getBoxes().get(box), box);
+		}
+	}
+
+	private void commitBoxName() {
+		if (boxName == null) return;
+		String n = boxName.trim();
+		boxName = null;
+		new RequestRenamePCBoxPacket(pc.getUuid(), box, n).sendToServer();
+		click();
+		say(n.isEmpty() ? "Nombre de la caja restablecido." : "Caja renombrada: " + n);
+	}
+
+	private record WallOpt(PcWallpapers.Theme theme, Identifier texture, String label) {}
+
+	private List<WallOpt> wallOptions() {
+		List<WallOpt> out = new ArrayList<>();
+		for (PcWallpapers.Theme t : PcWallpapers.Theme.values()) out.add(new WallOpt(t, null, t.label));
+		try {
+			for (Identifier id : PCBoxWallpaperRepository.INSTANCE.getAvailableWallpapers()) {
+				String path = id.getPath();
+				String label = path.substring(path.lastIndexOf('/') + 1).replace(".png", "").replace('_', ' ');
+				out.add(new WallOpt(null, id, label));
+			}
+		} catch (Throwable ignored) {
+		}
+		return out;
+	}
+
+	private static final int WCOLS = 3, WTH = 30, WROW = 42;
+
+	private void drawWallPicker(DrawContext c, int x, int y, int w, int h, int mx, int my) {
+		c.getMatrices().push();
+		c.getMatrices().translate(0, 0, 250);
+		hits.add(new Hit(0, 0, width, height, () -> wallPicker = false));
+		Draw.panel(c, x - 2, y - 2, x + w + 2, y + h + 2, 0xFF284868, 0xFFE8F0F8);
+		Draw.dsText(c, "Elige un fondo", x + 4, y + 2, 0xFF303038, 0xFFC8D8E8);
+		List<WallOpt> opts = wallOptions();
+		int cw = (w - 8) / WCOLS;
+		int visRows = (h - 14) / WROW, rows = (opts.size() + WCOLS - 1) / WCOLS;
+		wallScroll = Math.max(0, Math.min(wallScroll, Math.max(0, rows - visRows)));
+		c.enableScissor(x, y + 12, x + w, y + h);
+		WallOpt hoverOpt = null;
+		for (int i = wallScroll * WCOLS; i < opts.size() && i < (wallScroll + visRows + 1) * WCOLS; i++) {
+			WallOpt o = opts.get(i);
+			int r = i / WCOLS - wallScroll, col = i % WCOLS;
+			int tx = x + 4 + col * cw, ty = y + 14 + r * WROW;
+			boolean over = mx >= tx && mx < tx + cw - 4 && my >= ty && my < ty + WROW - 2 && my >= y + 12 && my < y + h;
+			if (over) hoverOpt = o;
+			Draw.round(c, tx - 1, ty - 1, tx + cw - 3, ty + WTH + 1, over ? 0xFFF8C830 : 0xFF484858);
+			if (o.theme() != null) PcWallpapers.draw(c, o.theme(), tx, ty, cw - 4, WTH);
+			else {
+				try {
+					c.drawTexture(o.texture(), tx, ty, cw - 4, WTH, 0f, 0f, 1, 1, 1, 1);
+				} catch (Throwable ignored) {
+				}
+			}
+			String lbl = Draw.fit(o.label(), cw - 4);
+			c.getMatrices().push();
+			c.getMatrices().translate(tx, ty + WTH + 3, 0);
+			c.getMatrices().scale(0.75f, 0.75f, 1f);
+			c.drawText(textRenderer, lbl, 0, 0, 0xFF303038, false);
+			c.getMatrices().pop();
+			hits.add(new Hit(tx, Math.max(ty, y + 12), tx + cw - 4, Math.min(ty + WROW - 2, y + h), () -> pickWallpaper(o)));
+		}
+		c.disableScissor();
+		if (rows > visRows) {
+			int th = h - 16, kh = Math.max(8, th * visRows / rows);
+			int ky = y + 14 + (th - kh) * wallScroll / Math.max(1, rows - visRows);
+			c.fill(x + w - 3, y + 14, x + w - 1, y + 14 + th, 0xFFB0C0D0);
+			c.fill(x + w - 3, ky, x + w - 1, ky + kh, 0xFF284868);
+		}
+		c.getMatrices().pop();
+	}
+
+	private void pickWallpaper(WallOpt o) {
+		wallPicker = false;
+		click();
+		if (o.theme() != null) {
+			PcWallpapers.set(pc.getUuid(), box, o.theme());
+			return;
+		}
+		PcWallpapers.set(pc.getUuid(), box, null);
+		Identifier alt = null;
+		try {
+			for (Object t : PCBoxWallpaperRepository.INSTANCE.getAllWallpapers()) {
+				if (t instanceof kotlin.Triple<?, ?, ?> tr && o.texture().equals(tr.getFirst()) && tr.getSecond() instanceof Identifier a) alt = a;
+			}
+		} catch (Throwable ignored) {
+		}
+		new RequestChangePCBoxWallpaperPacket(pc.getUuid(), box, o.texture(), alt).sendToServer();
+	}
+
+	@Override
+	public boolean charTyped(char chr, int modifiers) {
+		if (boxName != null) {
+			if (!Character.isISOControl(chr) && chr != '§' && boxName.length() < BOX_NAME_MAX) boxName += chr;
+			return true;
+		}
+		return super.charTyped(chr, modifiers);
+	}
+
 	private void changeBox(int dir) {
 		box = Math.floorMod(box + dir, Math.max(1, pc.getBoxes().size()));
 		releaseConfirm = null;
+		boxName = null;
+		boxMenu = false;
+		wallPicker = false;
 		click();
 	}
 
@@ -512,6 +681,12 @@ public class DppPcScreen extends Screen {
 	@Override
 	public boolean mouseClicked(double mx, double my, int button) {
 		List<Hit> list = new ArrayList<>(hits);
+		if (button == 1 && (boxMenu || wallPicker || boxName != null)) {
+			boxMenu = false;
+			wallPicker = false;
+			boxName = null;
+			return true;
+		}
 		if (button == 1) {
 			if (releaseConfirm != null) {
 				cancelRelease();
@@ -554,6 +729,11 @@ public class DppPcScreen extends Screen {
 
 	@Override
 	public boolean mouseScrolled(double mx, double my, double horizontal, double vertical) {
+		if (wallPicker) {
+			wallScroll += vertical > 0 ? -1 : 1;
+			return true;
+		}
+		if (boxMenu || boxName != null) return true;
 		if (releaseConfirm != null) return true;
 		if (vertical != 0) changeBox(vertical > 0 ? -1 : 1);
 		return true;
@@ -561,6 +741,27 @@ public class DppPcScreen extends Screen {
 
 	@Override
 	public boolean keyPressed(int key, int scan, int mods) {
+		if (boxName != null) {
+			if (key == GLFW.GLFW_KEY_ESCAPE) boxName = null;
+			else if (key == GLFW.GLFW_KEY_ENTER || key == GLFW.GLFW_KEY_KP_ENTER) commitBoxName();
+			else if (key == GLFW.GLFW_KEY_BACKSPACE && !boxName.isEmpty()) boxName = boxName.substring(0, boxName.length() - 1);
+			return true;
+		}
+		if (wallPicker) {
+			if (key == GLFW.GLFW_KEY_ESCAPE) wallPicker = false;
+			return true;
+		}
+		if (boxMenu) {
+			switch (key) {
+				case GLFW.GLFW_KEY_UP, GLFW.GLFW_KEY_W -> boxMenuCursor = Math.floorMod(boxMenuCursor - 1, 3);
+				case GLFW.GLFW_KEY_DOWN, GLFW.GLFW_KEY_S -> boxMenuCursor = Math.floorMod(boxMenuCursor + 1, 3);
+				case GLFW.GLFW_KEY_ENTER, GLFW.GLFW_KEY_KP_ENTER, GLFW.GLFW_KEY_SPACE -> chooseBoxMenu(boxMenuCursor);
+				case GLFW.GLFW_KEY_ESCAPE -> boxMenu = false;
+				default -> {
+				}
+			}
+			return true;
+		}
 		if (releaseConfirm != null) {
 			switch (key) {
 				case GLFW.GLFW_KEY_UP, GLFW.GLFW_KEY_DOWN, GLFW.GLFW_KEY_W, GLFW.GLFW_KEY_S -> confirmCursor = 1 - confirmCursor;

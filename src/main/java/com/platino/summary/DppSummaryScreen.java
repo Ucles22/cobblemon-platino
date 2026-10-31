@@ -237,7 +237,7 @@ public class DppSummaryScreen extends Screen {
 		c.fill(x, y, x + w, y0 + H - 4, 0xFFD0D0C0);
 		for (int yy = y; yy < y0 + H - 4; yy += 3) c.fill(x, yy, x + w, yy + 1, 0x18FFFFFF);
 		// Placa de nombre naranja
-		Draw.panelGradient(c, x + 2, y + 2, x + w - 2, y + 18, 0xFFB87820, 0xFFF8D080, 0xFFF0B048);
+		Draw.panelGradient(c, x + 2, y + 2, x + w - 2, y + 18, 0xFF7A3A08, 0xFFE8902C, 0xFFC0600E); // placa del nombre, naranja oscuro para leer bien el blanco
 		Draw.tinyBall(c, x + 6, y + 6);
 		boolean nickEditable = canEdit(p);
 		if (nickBuffer != null) {
@@ -249,7 +249,7 @@ public class DppSummaryScreen extends Screen {
 			button(c, x + w - 28, y + 4, x + w - 16, y + 16, "✔", mx, my, 0xFFC8F0C0, () -> commitNick(p));
 		} else {
 			String name = Draw.fit(p.getDisplayName(false).getString().toUpperCase(Locale.ROOT), w - (nickEditable ? 46 : 34));
-			Draw.dsText(c, name, x + 16, y + 6, 0xFFFFFFFF, 0xFF905018);
+			Draw.dsText(c, name, x + 16, y + 6, 0xFFFFFFFF, 0xFF4A1E00);
 			if (nickEditable) {
 				button(c, x + w - 28, y + 4, x + w - 16, y + 16, "✎", mx, my, 0xFFF8E8C0, () -> {
 					var nick = p.getNickname();
@@ -258,8 +258,8 @@ public class DppSummaryScreen extends Screen {
 			}
 		}
 		Gender g = p.getGender();
-		if (g == Gender.MALE) Draw.dsText(c, "♂", x + w - 12, y + 6, 0xFF3070F0, 0xFFA8C8F8);
-		else if (g == Gender.FEMALE) Draw.dsText(c, "♀", x + w - 12, y + 6, 0xFFF04870, 0xFFF8B8C8);
+		if (g == Gender.MALE) Draw.dsText(c, "♂", x + w - 12, y + 6, 0xFFA8D0FF, 0xFF203878);
+		else if (g == Gender.FEMALE) Draw.dsText(c, "♀", x + w - 12, y + 6, 0xFFFFC0D0, 0xFF782040);
 		// Nivel
 		Draw.round(c, x + 2, y + 19, x + w - 2, y + 32, 0xFFF8F8F0);
 		Draw.dsText(c, "Nv." + p.getLevel(), x + 8, y + 22, 0xFF303038, 0xFFC8C8C0);
