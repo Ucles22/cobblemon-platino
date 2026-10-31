@@ -63,87 +63,99 @@ public final class BattleHud {
 		boolean low = ally && cur > 0f && cur <= 0.2f;
 		if (low) LowHpAlarm.mark();
 		boolean blinkOn = (System.currentTimeMillis() / 350) % 2 == 0;
-		int border = hovered ? Draw.GOLD : (low && blinkOn) ? 0xFFE83030 : 0xFF181C20;
+		int border = hovered ? Draw.GOLD : (low && blinkOn) ? 0xFFE83030 : 0xFF333A38;
 
-		// Caja de una sola pieza estilo DPPt: placa gris pizarra con filo claro, y la barra de PS
-		// (y la de EXP) metidas dentro de la propia placa, sin cápsulas sueltas.
-		Draw.round(c, x + 2, y + 2, x + W + 2, y + h + 2, 0x60000000);
-		Draw.panelGradient(c, x, y, x + W, y + h, border, 0xFF6C7482, 0xFF3E4550);
-		c.fill(x + 2, y + 1, x + W - 2, y + 2, 0x70FFFFFF);
-		c.fill(x + 1, y + 2, x + 2, y + h - 2, 0x40FFFFFF);
-		// Pestaña lateral (lado de la pantalla)
-		if (ally) c.fill(x + 1, y + 3, x + 3, y + h - 3, 0xFF9AA2AE);
-		else c.fill(x + W - 3, y + 3, x + W - 1, y + h - 3, 0xFF9AA2AE);
+		// Caja blanca de una pieza como en DPPt: borde oscuro, filo gris claro, pestaña gris al lado de la
+		// pantalla y punta hacia el centro. La barra de PS (con "PS" en rojo) va dentro de la caja.
+		Draw.round(c, x + 2, y + 2, x + W + 2, y + h + 2, 0x50000000);
+		Draw.panelGradient(c, x, y, x + W, y + h, border, 0xFFFAFAF8, 0xFFE8EAE4);
+		c.fill(x + 1, y + 1, x + W - 1, y + 2, 0xFFC8CDC2);
+		c.fill(x + 1, y + h - 2, x + W - 1, y + h - 1, 0xFFC8CDC2);
+		int tabX = ally ? x + 1 : x + W - 5;
+		c.fill(tabX, y + 2, tabX + 4, y + h - 2, 0xFFA1A793);
+		// Punta (triángulo) hacia el centro de la pantalla
+		int tipX = ally ? x + W : x - 1;
+		for (int i = 0; i < 4; i++) {
+			int ty = y + h / 2 - 4 + i, tb = y + h / 2 + 4 - i;
+			int xx = ally ? tipX + i : tipX - i;
+			c.fill(xx, ty, xx + 1, tb, i == 3 ? 0xFF333A38 : 0xFFE8EAE4);
+			c.fill(xx, ty - 1, xx + 1, ty, 0xFF333A38);
+			c.fill(xx, tb, xx + 1, tb + 1, 0xFF333A38);
+		}
 
-		int ix = x + (ally ? 6 : 5);
-		int right = x + W - (ally ? 6 : 7);
-		// Nombre + sexo (blanco con sombra oscura)
-		String name = Draw.fit(bp.getDisplayName().getString().toUpperCase(java.util.Locale.ROOT), W - 56);
-		Draw.dsText(c, name, ix, y + 4, 0xFFFFFFFF, 0xFF202428);
-		int gx = ix + Draw.width(name) + 2;
+		int ix = x + (ally ? 8 : 5);
+		int right = x + W - (ally ? 6 : 9);
+		// Nombre + sexo (texto oscuro con sombra gris, como en DS)
+		String name = Draw.fit(bp.getDisplayName().getString().toUpperCase(java.util.Locale.ROOT), W - 58);
+		Draw.dsText(c, name, ix, y + 4, 0xFF383430, 0xFFB0ACA4);
 		Gender g = bp.getGender();
-		if (g == Gender.MALE) Draw.dsText(c, "♂", gx, y + 4, 0xFF68B0FF, 0xFF202428);
-		else if (g == Gender.FEMALE) Draw.dsText(c, "♀", gx, y + 4, 0xFFFF88A8, 0xFF202428);
 
-		// Nivel (derecha): "Nv" pequeño + número
+		// Sexo + "Nv" pequeño + número, a la derecha
 		String lvNum = String.valueOf(bp.getLevel());
 		int lvx = right - Draw.width(lvNum);
-		Draw.dsText(c, lvNum, lvx, y + 4, 0xFFFFFFFF, 0xFF202428);
+		Draw.dsText(c, lvNum, lvx, y + 4, 0xFF383430, 0xFFB0ACA4);
 		c.getMatrices().push();
 		c.getMatrices().translate(lvx - 11, y + 6, 0);
 		c.getMatrices().scale(0.75f, 0.75f, 1f);
-		c.drawText(Draw.font(), "Nv", 0, 0, 0xFFF8D048, false);
+		c.drawText(Draw.font(), "Nv", 0, 0, 0xFF383430, false);
 		c.getMatrices().pop();
+		if (g == Gender.MALE) Draw.dsText(c, "♂", lvx - 19, y + 4, 0xFF3088F8, 0xFFA8C8F8);
+		else if (g == Gender.FEMALE) Draw.dsText(c, "♀", lvx - 19, y + 4, 0xFFF05070, 0xFFF8B8C8);
 
-		// Capturado (rival salvaje)
+		// Capturado (rival salvaje): ball pequeña bajo el nombre
 		if (!ally && dexState != null && dexState.equalsIgnoreCase("CAUGHT")) {
-			Draw.tinyBall(c, lvx - 22, y + 4);
+			Draw.tinyBall(c, ix, y + 16);
 		}
 
-		// Franja de PS integrada: fondo oscuro de toda la fila con "PS" dorado y la barra dentro
-		int stripY = y + 15;
+		// Barra de PS: cápsula oscura con "PS" en rojo y la vida dentro
+		int stripY = y + 16;
 		PersistentStatus st = bp.getStatus();
-		int used = st != null ? Draw.statusBadge(c, st.getShowdownName(), ix, stripY) : 0;
-		int sx = ix + (used > 0 ? used + 2 : 0);
-		int finalSx = sx;
+		int used = st != null ? Draw.statusBadge(c, st.getShowdownName(), ix + (ally ? 0 : 10), stripY - 1) : 0;
+		int barW = Math.min(W - 40, 86);
+		int sx = right - barW;
 		Draw.batch(c, () -> {
-			c.fill(finalSx, stripY, right, stripY + 9, 0xFF22262C);
-			c.fill(finalSx + 1, stripY + 1, right - 1, stripY + 2, 0xFF14171B);
-			int lx = finalSx + 2;
-			c.drawText(Draw.font(), "PS", lx, stripY + 1, 0xFFF8B830, false);
-			int bx = lx + 14, bw = right - 2 - bx;
-			c.fill(bx, stripY + 2, bx + bw, stripY + 7, 0xFF505862);
+			Draw.round(c, sx, stripY, right, stripY + 8, 0xFF3A3633);
+			// "PS" sobre fondo granate
+			c.fill(sx + 1, stripY + 1, sx + 15, stripY + 7, 0xFF5A2C30);
+			c.getMatrices().push();
+			c.getMatrices().translate(sx + 3, stripY + 1.5f, 0);
+			c.getMatrices().scale(0.75f, 0.75f, 1f);
+			c.drawText(Draw.font(), "PS", 0, 0, 0xFFF89880, false);
+			c.getMatrices().pop();
+			int bx = sx + 16, bw = right - 1 - bx;
+			c.fill(bx, stripY + 1, bx + bw, stripY + 7, 0xFF505858);
 			int fw = Math.round(bw * cur);
 			if (cur > 0 && fw < 1) fw = 1;
 			int col, hi;
-			if (cur > 0.5f) { col = Draw.HP_GREEN; hi = Draw.HP_GREEN_HI; }
-			else if (cur > 0.2f) { col = Draw.HP_YELLOW; hi = Draw.HP_YELLOW_HI; }
-			else { col = Draw.HP_RED; hi = Draw.HP_RED_HI; }
+			if (cur > 0.5f) { col = 0xFF40A840; hi = 0xFF68F068; }
+			else if (cur > 0.2f) { col = 0xFFC8A008; hi = 0xFFF8E038; }
+			else { col = 0xFFA82818; hi = 0xFFF85838; }
 			if (fw > 0) {
-				c.fill(bx, stripY + 2, bx + fw, stripY + 7, col);
-				c.fill(bx, stripY + 3, bx + fw, stripY + 4, hi);
+				c.fill(bx, stripY + 1, bx + fw, stripY + 7, col);
+				c.fill(bx, stripY + 2, bx + fw, stripY + 4, hi);
 			}
 		});
 
 		if (ally) {
-			// PS numéricos y franja de EXP en el borde inferior de la misma placa
+			// PS numéricos y barra de EXP azul en la parte baja de la misma caja
 			if (bp.isHpFlat()) {
 				String hp = Math.round(bp.getHpValue()) + "/" + Math.round(max);
-				Draw.dsText(c, hp, right - Draw.width(hp), y + 26, 0xFFFFFFFF, 0xFF202428);
+				Draw.dsText(c, hp, right - Draw.width(hp), y + 26, 0xFF383430, 0xFFB0ACA4);
 			}
 			Pokemon own = findOwn(bp.getUuid());
 			if (own != null) {
 				float er = Math.max(0, Math.min(1, expRatio(own)));
-				int ey = y + h - 5;
+				int ey = y + h - 6;
 				Draw.batch(c, () -> {
-					c.fill(x + 3, ey, x + W - 3, ey + 3, 0xFF22262C);
-					int ew = Math.round((W - 8) * er);
-					if (ew > 0) c.fill(x + 4, ey + 1, x + 4 + ew, ey + 2, Draw.EXP_BLUE);
+					c.fill(x + 6, ey, x + W - 4, ey + 3, 0xFF3A3633);
+					c.fill(x + 7, ey + 1, x + W - 5, ey + 2, 0xFF505858);
+					int ew = Math.round((W - 12) * er);
+					if (ew > 0) c.fill(x + 7, ey + 1, x + 7 + ew, ey + 2, Draw.EXP_BLUE);
 				});
 				c.getMatrices().push();
 				c.getMatrices().translate(ix, y + 28, 0);
 				c.getMatrices().scale(0.75f, 0.75f, 1f);
-				c.drawText(Draw.font(), "EXP", 0, 0, 0xFF88D0F8, false);
+				c.drawText(Draw.font(), "EXP", 0, 0, 0xFF3070C0, false);
 				c.getMatrices().pop();
 			}
 		}

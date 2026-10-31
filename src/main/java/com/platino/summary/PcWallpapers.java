@@ -85,6 +85,8 @@ public final class PcWallpapers {
 		c.enableScissor(x, y, x + w, y + h);
 		try {
 			drawInner(c, t, x, y, w, h);
+		} catch (RuntimeException e) {
+			c.fill(x, y, x + w, y + h, 0xFFE0E8F0); // nunca tumbar el juego por un fondo
 		} finally {
 			c.disableScissor();
 		}
@@ -146,7 +148,7 @@ public final class PcWallpapers {
 				peak(c, x + w / 2, y + h, w / 2 - 6, h - 30, 0xFF402828);
 				c.fill(x + w / 2 - 8, y + 30, x + w / 2 + 8, y + 34, 0xFFF88828);
 				for (int i = 0; i < 4; i++) c.fill(x + w / 2 - 6 + i * 4, y + 34, x + w / 2 - 4 + i * 4, y + 50 + i * 9, 0xFFF86818);
-				for (int i = 0; i < 8; i++) disc(c, x + 14 + (i * 37) % (w - 20), y + 10 + (i * 23) % 30, 2, 0xFFF8C848);
+				for (int i = 0; i < 8; i++) disc(c, x + 14 + (i * 37) % Math.max(1, w - 20), y + 10 + (i * 23) % 30, 2, 0xFFF8C848);
 			}
 			case NIEVE -> {
 				grad(c, x, y, w, h, 0xFFD0E8F8, 0xFFF8FCFF);
@@ -188,7 +190,7 @@ public final class PcWallpapers {
 			case CIELO -> {
 				grad(c, x, y, w, h, 0xFF4890E8, 0xFFB8E0F8);
 				for (int i = 0; i < 5; i++) {
-					int cx = x + 20 + (i * 47) % (w - 30), cy = y + 18 + (i * 31) % (h - 30);
+					int cx = x + 20 + (i * 47) % Math.max(1, w - 30), cy = y + 18 + (i * 31) % Math.max(1, h - 30);
 					disc(c, cx, cy, 7, 0xE0FFFFFF);
 					disc(c, cx + 9, cy + 2, 6, 0xE0FFFFFF);
 					disc(c, cx - 9, cy + 2, 5, 0xE0FFFFFF);

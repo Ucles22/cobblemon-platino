@@ -212,11 +212,8 @@ public class DppPcScreen extends Screen {
 		button(c, bx + 3, by + 3, bx + 15, by + 15, "◀", mx, my, 0xFFF0F0F8, () -> changeBox(-1));
 		button(c, bx + bw - 15, by + 3, bx + bw - 3, by + 15, "▶", mx, my, 0xFFF0F0F8, () -> changeBox(1));
 		hits.add(new Hit(bx + 16, by, bx + bw - 16, by + 18, () -> {
-			if (boxName != null) return;
-			boxMenu = !boxMenu;
-			boxMenuCursor = 0;
-			held = null;
-			heldPokemon = null;
+			if (boxName != null || wallPicker) return;
+			boxName = boxLabel(pc.getBoxes().get(box), box);
 			click();
 		}));
 
@@ -241,10 +238,17 @@ public class DppPcScreen extends Screen {
 			Pokemon p = i < slots.size() ? slots.get(i) : null;
 			Spot spot = new Spot(box, i);
 			boolean over = mx >= sx && mx < sx + CELL && my >= sy && my < sy + CELL;
+			if (wallPicker) continue; // el selector de fondos tapa la caja
 			if (over && p != null) hover = p;
 			drawCell(c, p, spot, sx, sy, CELL, over);
 			hits.add(new Hit(sx, sy, sx + CELL, sy + CELL, () -> clickSpot(spot)));
 		}
+		button(c, gx, gy + gh + 4, gx + bw, gy + gh + 18, wallPicker ? "Cerrar fondos" : "Cambiar fondo", mx, my, 0xFFD8E8F8, () -> {
+			wallPicker = !wallPicker;
+			wallScroll = 0;
+			boxName = null;
+			click();
+		});
 
 		// ---- Equipo
 		int px = bx + bw + 6, py = by, pw = x0 + W - 4 - px;
@@ -280,11 +284,10 @@ public class DppPcScreen extends Screen {
 		if (message != null && System.currentTimeMillis() < messageUntil) text = message;
 		else if (releaseConfirm != null) text = "¿Seguro que quieres liberar a " + heldPokemon.getDisplayName(false).getString() + "?";
 		else if (held != null) text = "¿Dónde quieres dejar a " + heldPokemon.getDisplayName(false).getString() + "?";
-		else text = "Clic: coger · Clic dcho.: datos · Clic en el nombre: menú";
+		else text = "Clic: coger · Clic dcho.: datos · Clic en el nombre: renombrar";
 		Draw.dsText(c, Draw.fit(text, W - LW - 24), x0 + LW + 14, ty + 9, 0xFF303038, 0xFFD0D0D8);
 
 		if (releaseConfirm != null) drawReleaseMenu(c, px, ry + 18, pw, mx, my);
-		if (boxMenu) drawBoxMenu(c, bx + bw / 2 - 40, by + 17, 80, mx, my);
 		if (wallPicker) drawWallPicker(c, gx, gy, bw, gh, mx, my);
 
 		// Pokémon cogido siguiendo al ratón
@@ -460,9 +463,10 @@ public class DppPcScreen extends Screen {
 	private static final int WCOLS = 3, WTH = 30, WROW = 42;
 
 	private void drawWallPicker(DrawContext c, int x, int y, int w, int h, int mx, int my) {
+		c.draw();
 		c.getMatrices().push();
-		c.getMatrices().translate(0, 0, 250);
-		hits.add(new Hit(0, 0, width, height, () -> wallPicker = false));
+		c.getMatrices().translate(0, 0, 600);
+		hits.add(new Hit(x - 2, y - 2, x + w + 2, y + h + 2, () -> {})); // dentro del selector, nada debajo
 		Draw.panel(c, x - 2, y - 2, x + w + 2, y + h + 2, 0xFF284868, 0xFFE8F0F8);
 		Draw.dsText(c, "Elige un fondo", x + 4, y + 2, 0xFF303038, 0xFFC8D8E8);
 		List<WallOpt> opts = wallOptions();
@@ -494,13 +498,48 @@ public class DppPcScreen extends Screen {
 			hits.add(new Hit(tx, Math.max(ty, y + 12), tx + cw - 4, Math.min(ty + WROW - 2, y + h), () -> pickWallpaper(o)));
 		}
 		c.disableScissor();
-		if (rows > visRows) {
-			int th = h - 16, kh = Math.max(8, th * visRows / rows);
-			int ky = y + 14 + (th - kh) * wallScroll / Math.max(1, rows - visRows);
-			c.fill(x + w - 3, y + 14, x + w - 1, y + 14 + th, 0xFFB0C0D0);
-			c.fill(x + w - 3, ky, x + w - 1, ky + kh, 0xFF284868);
+		wallBarVisible = rows > visRows;
+		if (wallBarVisible) {
+			int th = h - 16, kh = Math.max(10, th * visRows / rows);
+			wallBarMax = rows - visRows;
+			wallBarY1 = y + 14;
+			wallBarY2 = y + 14 + th;
+			wallBarKnob = kh;
+			wallBarX1 = x + w - 6;
+			wallBarX2 = x + w;
+			int ky = y + 14 + (th - kh) * wallScroll / Math.max(1, wallBarMax);
+			boolean hot = wallDragging || (mx >= wallBarX1 && mx < wallBarX2 && my >= ky && my < ky + kh);
+			c.fill(x + w - 5, y + 14, x + w - 1, y + 14 + th, 0xFFB0C0D0);
+			c.fill(x + w - 5, ky, x + w - 1, ky + kh, hot ? 0xFF4878B8 : 0xFF284868);
 		}
 		c.getMatrices().pop();
+	}
+
+	private boolean wallBarVisible, wallDragging;
+	private int wallBarX1, wallBarX2, wallBarY1, wallBarY2, wallBarKnob, wallBarMax;
+
+	private void dragWallBar(double my) {
+		double track = Math.max(1, (wallBarY2 - wallBarY1) - wallBarKnob);
+		double t = (my - wallBarY1 - wallBarKnob / 2.0) / track;
+		wallScroll = (int) Math.round(Math.max(0, Math.min(1, t)) * wallBarMax);
+	}
+
+	@Override
+	public boolean mouseDragged(double mx, double my, int button, double dx, double dy) {
+		if (wallDragging && button == 0) {
+			dragWallBar(my);
+			return true;
+		}
+		return super.mouseDragged(mx, my, button, dx, dy);
+	}
+
+	@Override
+	public boolean mouseReleased(double mx, double my, int button) {
+		if (button == 0 && wallDragging) {
+			wallDragging = false;
+			return true;
+		}
+		return super.mouseReleased(mx, my, button);
 	}
 
 	private void pickWallpaper(WallOpt o) {
@@ -518,7 +557,12 @@ public class DppPcScreen extends Screen {
 			}
 		} catch (Throwable ignored) {
 		}
-		new RequestChangePCBoxWallpaperPacket(pc.getUuid(), box, o.texture(), alt).sendToServer();
+		try {
+			new RequestChangePCBoxWallpaperPacket(pc.getUuid(), box, o.texture(), alt).sendToServer();
+		} catch (Throwable t) {
+			com.platino.PlatinoClient.LOGGER.warn("[Cobblemon Platino] No se pudo cambiar el fondo", t);
+			say("No se pudo cambiar el fondo.");
+		}
 	}
 
 	@Override
@@ -595,8 +639,9 @@ public class DppPcScreen extends Screen {
 
 	/** Menú «¿Seguro que quieres liberarlo?» con SÍ / NO, como el menú del equipo. */
 	private void drawReleaseMenu(DrawContext c, int x, int y, int w, int mx, int my) {
+		c.draw();
 		c.getMatrices().push();
-		c.getMatrices().translate(0, 0, 250);
+		c.getMatrices().translate(0, 0, 600);
 		hits.add(new Hit(0, 0, width, height, this::cancelRelease)); // clic fuera = NO
 		List<net.minecraft.text.OrderedText> q = textRenderer.wrapLines(
 				net.minecraft.text.StringVisitable.plain("¿Seguro que quieres liberarlo?"), w - 12);
@@ -680,6 +725,11 @@ public class DppPcScreen extends Screen {
 
 	@Override
 	public boolean mouseClicked(double mx, double my, int button) {
+		if (button == 0 && wallPicker && wallBarVisible && mx >= wallBarX1 && mx < wallBarX2 && my >= wallBarY1 && my < wallBarY2) {
+			wallDragging = true;
+			dragWallBar(my);
+			return true;
+		}
 		List<Hit> list = new ArrayList<>(hits);
 		if (button == 1 && (boxMenu || wallPicker || boxName != null)) {
 			boxMenu = false;
