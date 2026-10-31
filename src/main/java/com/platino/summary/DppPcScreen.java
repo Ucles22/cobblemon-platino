@@ -71,6 +71,8 @@ public class DppPcScreen extends Screen {
 	private Pokemon heldPokemon;
 	private Pokemon preview;
 	private Spot releaseConfirm;
+	/** Opción marcada en el menú de liberar: 0 = SÍ, 1 = NO. */
+	private int confirmCursor = 1;
 	private String message;
 	private long messageUntil;
 	private int x0, y0;
@@ -248,13 +250,15 @@ public class DppPcScreen extends Screen {
 		Draw.panel(c, x0 + LW + 8, ty, x0 + W - 4, ty + 26, 0xFF484858, 0xFFF8F8F8);
 		String text;
 		if (message != null && System.currentTimeMillis() < messageUntil) text = message;
-		else if (releaseConfirm != null) text = "¿Seguro que quieres liberarlo? Pulsa Liberar otra vez.";
+		else if (releaseConfirm != null) text = "¿Seguro que quieres liberar a " + heldPokemon.getDisplayName(false).getString() + "?";
 		else if (held != null) text = "¿Dónde quieres dejar a " + heldPokemon.getDisplayName(false).getString() + "?";
 		else text = "Clic: coger · Clic derecho: datos · Rueda: caja";
 		Draw.dsText(c, Draw.fit(text, W - LW - 24), x0 + LW + 14, ty + 9, 0xFF303038, 0xFFD0D0D8);
 
+		if (releaseConfirm != null) drawReleaseMenu(c, px, ry + 18, pw, mx, my);
+
 		// Pokémon cogido siguiendo al ratón
-		if (held != null && heldPokemon != null) {
+		if (held != null && heldPokemon != null && releaseConfirm == null) {
 			c.getMatrices().push();
 			c.getMatrices().translate(0, 0, 300);
 			c.draw();
@@ -420,14 +424,53 @@ public class DppPcScreen extends Screen {
 		}
 	}
 
+	/** Menú «¿Seguro que quieres liberarlo?» con SÍ / NO, como el menú del equipo. */
+	private void drawReleaseMenu(DrawContext c, int x, int y, int w, int mx, int my) {
+		c.getMatrices().push();
+		c.getMatrices().translate(0, 0, 250);
+		hits.add(new Hit(0, 0, width, height, this::cancelRelease)); // clic fuera = NO
+		List<net.minecraft.text.OrderedText> q = textRenderer.wrapLines(
+				net.minecraft.text.StringVisitable.plain("¿Seguro que quieres liberarlo?"), w - 12);
+		int ih = 16, mh = 6 + q.size() * 10 + 4 + 2 * ih + 4;
+		Draw.panel(c, x, y, x + w, y + mh, 0xFF484858, 0xFFF8F8F8);
+		for (int i = 0; i < q.size(); i++) c.drawText(textRenderer, q.get(i), x + 6, y + 6 + i * 10, 0xFF303038, false);
+		int oy = y + 6 + q.size() * 10 + 4;
+		String[] opts = {"SÍ", "NO"};
+		for (int i = 0; i < 2; i++) {
+			int iy = oy + i * ih;
+			if (mx >= x && mx < x + w && my >= iy && my < iy + ih) confirmCursor = i;
+			if (i == confirmCursor) {
+				Draw.round(c, x + 3, iy, x + w - 3, iy + ih - 1, 0xFFF8E0A0);
+				Draw.dsText(c, "▶", x + 6, iy + 4, 0xFFE05030, 0xFFF8C0A0);
+			}
+			Draw.dsText(c, opts[i], x + 18, iy + 4, 0xFF303038, 0xFFD0D0D8);
+			int opt = i;
+			hits.add(new Hit(x, iy, x + w, iy + ih, () -> {
+				if (opt == 0) doRelease();
+				else cancelRelease();
+			}));
+		}
+		c.getMatrices().pop();
+	}
+
+	private void cancelRelease() {
+		releaseConfirm = null;
+		click();
+	}
+
 	private void release() {
 		if (held == null) {
 			say("Primero coge al Pokémon que quieres liberar.");
 			return;
 		}
-		if (!held.equals(releaseConfirm)) {
-			releaseConfirm = held;
-			sound(SoundEvents.BLOCK_NOTE_BLOCK_BASS.value(), 0.8f);
+		releaseConfirm = held;
+		confirmCursor = 1;
+		sound(SoundEvents.BLOCK_NOTE_BLOCK_BASS.value(), 0.8f);
+	}
+
+	private void doRelease() {
+		if (held == null || heldPokemon == null) {
+			releaseConfirm = null;
 			return;
 		}
 		Pokemon p = heldPokemon;
@@ -470,6 +513,10 @@ public class DppPcScreen extends Screen {
 	public boolean mouseClicked(double mx, double my, int button) {
 		List<Hit> list = new ArrayList<>(hits);
 		if (button == 1) {
+			if (releaseConfirm != null) {
+				cancelRelease();
+				return true;
+			}
 			if (held != null) {
 				held = null;
 				heldPokemon = null;
@@ -507,12 +554,26 @@ public class DppPcScreen extends Screen {
 
 	@Override
 	public boolean mouseScrolled(double mx, double my, double horizontal, double vertical) {
+		if (releaseConfirm != null) return true;
 		if (vertical != 0) changeBox(vertical > 0 ? -1 : 1);
 		return true;
 	}
 
 	@Override
 	public boolean keyPressed(int key, int scan, int mods) {
+		if (releaseConfirm != null) {
+			switch (key) {
+				case GLFW.GLFW_KEY_UP, GLFW.GLFW_KEY_DOWN, GLFW.GLFW_KEY_W, GLFW.GLFW_KEY_S -> confirmCursor = 1 - confirmCursor;
+				case GLFW.GLFW_KEY_ENTER, GLFW.GLFW_KEY_KP_ENTER, GLFW.GLFW_KEY_SPACE -> {
+					if (confirmCursor == 0) doRelease();
+					else cancelRelease();
+				}
+				case GLFW.GLFW_KEY_ESCAPE, GLFW.GLFW_KEY_BACKSPACE -> cancelRelease();
+				default -> {
+				}
+			}
+			return true;
+		}
 		if (key == GLFW.GLFW_KEY_ESCAPE && held != null) {
 			held = null;
 			heldPokemon = null;

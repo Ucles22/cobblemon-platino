@@ -461,7 +461,7 @@ public class DppSummaryScreen extends Screen {
 			Draw.dsText(c, "Capturado en " + bn + ".", tx, yy, 0xFF303038, 0xFFC8E8E0);
 		} catch (Throwable ignored) {
 		}
-		yy += 21;
+		yy += 28; // línea en blanco
 		Draw.dsText(c, characteristic(p), tx, yy, 0xFF303038, 0xFFC8E8E0);
 		yy += 14;
 		String fl = flavour(n);
@@ -473,19 +473,20 @@ public class DppSummaryScreen extends Screen {
 		}
 		yy += 14;
 		Draw.dsText(c, "Amistad: " + p.getFriendship() + "/255", tx, yy, 0xFF303038, 0xFFC8E8E0);
-		yy += 21;
+		yy += 28; // línea en blanco
 		// Nota propia (de Cobblemon Platino)
 		String note = Notes.get(p.getUuid());
 		Draw.dsText(c, "✎ Nota:", tx, yy, 0xFF3060C8, 0xFFC8D8F0);
 		button(c, x + w - 62, yy - 2, x + w - 8, yy + 10, "Editar", mx, my, 0xFFF8F8F0,
 				() -> MinecraftClient.getInstance().setScreen(new NotesScreen(this, p)));
-		yy += 13;
+		yy += 14;
 		if (note.isBlank()) {
 			Draw.dsText(c, "(sin nota)", tx, yy, 0xFF808080, 0xFFD8E8E0);
 		} else {
 			List<OrderedText> lines = textRenderer.wrapLines(StringVisitable.plain(note), w - 20);
-			for (int i = 0; i < Math.min(3, lines.size()); i++) {
-				c.drawText(textRenderer, lines.get(i), tx, yy + i * 11, 0xFF303038, false);
+			// Cada línea de la nota va sobre una raya del cuaderno
+			for (int i = 0; i < lines.size() && yy + i * 14 + 9 < y + h - 4; i++) {
+				c.drawText(textRenderer, lines.get(i), tx, yy + i * 14, 0xFF303038, false);
 			}
 		}
 	}

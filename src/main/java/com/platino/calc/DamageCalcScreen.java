@@ -103,6 +103,7 @@ public class DamageCalcScreen extends Screen {
 
 	@Override
 	protected void init() {
+		S.field.auroraVeil = false; // ya no hay casilla: Reflejo + Pant. Luz cubren el Velo Aurora
 		W = Math.min(480, width - 12);
 		H = Math.min(296, height - 12);
 		x0 = (width - W) / 2;
@@ -414,8 +415,7 @@ public class DamageCalcScreen extends Screen {
 		comboBox(c, combo("terrain").at(x0 + 12 + third, y, third), mx, my);
 		int sx = x0 + 16 + 2 * third;
 		toggle(c, sx, y + 2, "Reflejo", S.field.reflect, mx, my, () -> S.field.reflect = !S.field.reflect);
-		toggle(c, sx + 50, y + 2, "Pant. Luz", S.field.lightScreen, mx, my, () -> S.field.lightScreen = !S.field.lightScreen);
-		toggle(c, sx + 106, y + 2, "Velo Aurora", S.field.auroraVeil, mx, my, () -> S.field.auroraVeil = !S.field.auroraVeil);
+		toggle(c, sx + 56, y + 2, "Pant. Luz", S.field.lightScreen, mx, my, () -> S.field.lightScreen = !S.field.lightScreen);
 		y += ROW + 4;
 
 		drawResult(c, x0 + 6, y, W - 12, y0 + H - 4 - y);
