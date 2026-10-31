@@ -12,7 +12,8 @@
 		"BattleGUIMixin",
 		"BattleMessagePaneMixin",
 		"SummaryOpenMixin",
-		"PcScreenMixin"
+		"PcScreenMixin",
+		"BattleExtrasThemeMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

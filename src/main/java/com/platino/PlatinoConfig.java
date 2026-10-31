@@ -42,6 +42,8 @@ public class PlatinoConfig {
 	public boolean dppSummary = true;
 	/** PC estilo Diamante/Perla en vez del de Cobblemon (/platino pc). */
 	public boolean dppPc = true;
+	/** Tema Platino para el registro de combate de Cobblemon Battle Extras. */
+	public boolean battleLogTheme = true;
 	/** Fondos de caja estilo DPPt elegidos en este cliente ("uuidPC:caja" -> tema). */
 	public java.util.Map<String, String> pcWallpapers = new java.util.HashMap<>();
 	/** Paleta de las pantallas de Cobblemon: diamante, perla, platino u original. Cambiar con /platino paleta. */

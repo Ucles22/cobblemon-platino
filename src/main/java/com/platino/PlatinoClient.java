@@ -151,7 +151,7 @@ public class PlatinoClient implements ClientModInitializer {
 				}));
 			}
 			var combate = ClientCommandManager.literal("combate");
-			for (String part : new String[]{"menu", "texto", "pitido", "bolsa"}) {
+			for (String part : new String[]{"menu", "texto", "pitido", "bolsa", "registro"}) {
 				var node = ClientCommandManager.literal(part);
 				for (String state : new String[]{"on", "off"}) {
 					node.then(ClientCommandManager.literal(state).executes(ctx -> {
@@ -159,10 +159,11 @@ public class PlatinoClient implements ClientModInitializer {
 						if (part.equals("menu")) PlatinoConfig.get().battleMenu = on;
 						else if (part.equals("texto")) PlatinoConfig.get().battleText = on;
 						else if (part.equals("bolsa")) PlatinoConfig.get().battleBag = on;
+						else if (part.equals("registro")) PlatinoConfig.get().battleLogTheme = on;
 						else PlatinoConfig.get().lowHpBeep = on;
 						PlatinoConfig.save();
 						ctx.getSource().sendFeedback(Text.literal("[Cobblemon Platino] "
-								+ (part.equals("menu") ? "Menú de combate DS" : part.equals("texto") ? "Cuadro de texto DS" : part.equals("bolsa") ? "Bolsa en combate" : "Pitido de vida baja")
+								+ (part.equals("menu") ? "Menú de combate DS" : part.equals("texto") ? "Cuadro de texto DS" : part.equals("bolsa") ? "Bolsa en combate" : part.equals("registro") ? "Tema Platino del registro (Battle Extras)" : "Pitido de vida baja")
 								+ (on ? " ACTIVADO" : " DESACTIVADO")));
 						return 1;
 					}));
