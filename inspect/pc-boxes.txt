@@ -1,0 +1,386 @@
+==== com.cobblemon.mod.common.net.messages.server.storage.pc.RequestRenamePCBoxPacket
+Compiled from "RequestRenamePCBoxPacket.java"
+public final class com.cobblemon.mod.common.net.messages.server.storage.pc.RequestRenamePCBoxPacket implements com.cobblemon.mod.common.api.net.NetworkPacket<com.cobblemon.mod.common.net.messages.server.storage.pc.RequestRenamePCBoxPacket>, com.cobblemon.mod.common.api.net.UnsplittablePacket {
+  public static final com.cobblemon.mod.common.net.messages.server.storage.pc.RequestRenamePCBoxPacket$Companion Companion;
+  private final java.util.UUID storeID;
+  private final int boxNumber;
+  private final java.lang.String name;
+  private final net.minecraft.util.Identifier id;
+  private static final net.minecraft.util.Identifier ID;
+  public com.cobblemon.mod.common.net.messages.server.storage.pc.RequestRenamePCBoxPacket(java.util.UUID, int, java.lang.String);
+  public final java.util.UUID getStoreID();
+  public final int getBoxNumber();
+  public final java.lang.String getName();
+  public net.minecraft.util.Identifier getId();
+  public void sendToServer();
+  public net.minecraft.network.packet.CustomPayload$Id<com.cobblemon.mod.common.net.messages.server.storage.pc.RequestRenamePCBoxPacket> getId();
+  static {};
+}
+==== com.cobblemon.mod.common.net.messages.server.storage.pc.RequestChangePCBoxWallpaperPacket
+Compiled from "RequestChangePCBoxWallpaperPacket.java"
+public final class com.cobblemon.mod.common.net.messages.server.storage.pc.RequestChangePCBoxWallpaperPacket implements com.cobblemon.mod.common.api.net.NetworkPacket<com.cobblemon.mod.common.net.messages.server.storage.pc.RequestChangePCBoxWallpaperPacket>, com.cobblemon.mod.common.api.net.UnsplittablePacket {
+  public static final com.cobblemon.mod.common.net.messages.server.storage.pc.RequestChangePCBoxWallpaperPacket$Companion Companion;
+  private final java.util.UUID storeID;
+  private final int boxNumber;
+  private final net.minecraft.util.Identifier wallpaper;
+  private final net.minecraft.util.Identifier altWallpaper;
+  private final net.minecraft.util.Identifier id;
+  private static final net.minecraft.util.Identifier ID;
+  public com.cobblemon.mod.common.net.messages.server.storage.pc.RequestChangePCBoxWallpaperPacket(java.util.UUID, int, net.minecraft.util.Identifier, net.minecraft.util.Identifier);
+  public final java.util.UUID getStoreID();
+  public final int getBoxNumber();
+  public final net.minecraft.util.Identifier getWallpaper();
+  public final net.minecraft.util.Identifier getAltWallpaper();
+  public net.minecraft.util.Identifier getId();
+  public void sendToServer();
+  public net.minecraft.network.packet.CustomPayload$Id<com.cobblemon.mod.common.net.messages.server.storage.pc.RequestChangePCBoxWallpaperPacket> getId();
+  static {};
+}
+==== com.cobblemon.mod.common.client.gui.pc.WallpapersScrollingWidget
+Compiled from "WallpapersScrollingWidget.java"
+public final class com.cobblemon.mod.common.client.gui.pc.WallpapersScrollingWidget extends com.cobblemon.mod.common.client.gui.ScrollingWidget<com.cobblemon.mod.common.client.gui.pc.WallpapersScrollingWidget$WallpaperEntry> {
+  public static final com.cobblemon.mod.common.client.gui.pc.WallpapersScrollingWidget$Companion Companion;
+  private final int pY;
+  private final com.cobblemon.mod.common.client.gui.pc.PCGUI pcGui;
+  private final com.cobblemon.mod.common.client.gui.pc.StorageWidget storageWidget;
+  public static final int WIDTH;
+  public static final int HEIGHT;
+  public static final int SLOT_WIDTH;
+  public static final int SLOT_HEIGHT;
+  public static final int SLOT_PADDING;
+  private static final net.minecraft.util.Identifier previewOverlayResource;
+  private static final net.minecraft.util.Identifier previewOverlayNewResource;
+  private static final net.minecraft.util.Identifier backgroundResource;
+  public com.cobblemon.mod.common.client.gui.pc.WallpapersScrollingWidget(int, int, com.cobblemon.mod.common.client.gui.pc.PCGUI, com.cobblemon.mod.common.client.gui.pc.StorageWidget);
+  public final int getPY();
+  public final com.cobblemon.mod.common.client.gui.pc.PCGUI getPcGui();
+  public final com.cobblemon.mod.common.client.gui.pc.StorageWidget getStorageWidget();
+  protected int getScrollbarX();
+  public void renderWidget(net.minecraft.client.gui.DrawContext, int, int, float);
+  private final void createEntries();
+  public int getRowLeft();
+  public int getRowWidth();
+  public int getRowRight();
+  static {};
+}
+==== com.cobblemon.mod.common.client.gui.pc.WallpapersScrollingWidget$WallpaperEntry
+Compiled from "WallpapersScrollingWidget.java"
+public final class com.cobblemon.mod.common.client.gui.pc.WallpapersScrollingWidget$WallpaperEntry extends com.cobblemon.mod.common.client.gui.ScrollingWidget$Slot<com.cobblemon.mod.common.client.gui.pc.WallpapersScrollingWidget$WallpaperEntry> {
+  private final net.minecraft.util.Identifier wallpaper;
+  private net.minecraft.util.Identifier altWallpaper;
+  private boolean isNew;
+  final com.cobblemon.mod.common.client.gui.pc.WallpapersScrollingWidget this$0;
+  public com.cobblemon.mod.common.client.gui.pc.WallpapersScrollingWidget$WallpaperEntry(net.minecraft.util.Identifier, net.minecraft.util.Identifier, boolean);
+  public final net.minecraft.util.Identifier getWallpaper();
+  public final net.minecraft.util.Identifier getAltWallpaper();
+  public final void setAltWallpaper(net.minecraft.util.Identifier);
+  public final boolean isNew();
+  public final void setNew(boolean);
+  public void render(net.minecraft.client.gui.DrawContext, int, int, int, int, int, int, int, boolean, float);
+  public boolean mouseClicked(double, double, int);
+  public net.minecraft.text.Text getNarration();
+}
+==== com.cobblemon.mod.common.client.gui.pc.BoxNameWidget
+Compiled from "BoxNameWidget.java"
+public final class com.cobblemon.mod.common.client.gui.pc.BoxNameWidget extends com.cobblemon.mod.common.client.gui.pc.TextWidget {
+  private final com.cobblemon.mod.common.client.gui.pc.PCGUI pcGui;
+  private final com.cobblemon.mod.common.client.gui.pc.StorageWidget storageWidget;
+  public com.cobblemon.mod.common.client.gui.pc.BoxNameWidget(int, int, net.minecraft.text.Text, com.cobblemon.mod.common.client.gui.pc.PCGUI, com.cobblemon.mod.common.client.gui.pc.StorageWidget);
+  public com.cobblemon.mod.common.client.gui.pc.BoxNameWidget(int, int, net.minecraft.text.Text, com.cobblemon.mod.common.client.gui.pc.PCGUI, com.cobblemon.mod.common.client.gui.pc.StorageWidget, int, kotlin.jvm.internal.DefaultConstructorMarker);
+  public void renderWidget(net.minecraft.client.gui.DrawContext, int, int, float);
+  public void setFocused(boolean);
+  public boolean keyPressed(int, int, int);
+  public void unfocused();
+  public final com.cobblemon.mod.common.client.storage.ClientBox getBox();
+  public final net.minecraft.text.MutableText defaultBoxLabel();
+}
+==== com.cobblemon.mod.common.net.messages.client.storage.pc.wallpaper.SetPCBoxWallpapersPacket
+Compiled from "SetPCBoxWallpapersPacket.java"
+public final class com.cobblemon.mod.common.net.messages.client.storage.pc.wallpaper.SetPCBoxWallpapersPacket implements com.cobblemon.mod.common.api.net.NetworkPacket<com.cobblemon.mod.common.net.messages.client.storage.pc.wallpaper.SetPCBoxWallpapersPacket>, com.cobblemon.mod.common.api.net.UnsplittablePacket {
+  public static final com.cobblemon.mod.common.net.messages.client.storage.pc.wallpaper.SetPCBoxWallpapersPacket$Companion Companion;
+  private final java.util.Set<net.minecraft.util.Identifier> wallpapers;
+  private final net.minecraft.util.Identifier id;
+  private static final net.minecraft.util.Identifier ID;
+  public com.cobblemon.mod.common.net.messages.client.storage.pc.wallpaper.SetPCBoxWallpapersPacket(java.util.Set<net.minecraft.util.Identifier>);
+  public final java.util.Set<net.minecraft.util.Identifier> getWallpapers();
+  public net.minecraft.util.Identifier getId();
+  public void sendToServer();
+  public net.minecraft.network.packet.CustomPayload$Id<com.cobblemon.mod.common.net.messages.client.storage.pc.wallpaper.SetPCBoxWallpapersPacket> getId();
+  static {};
+}
+==== com.cobblemon.mod.common.net.messages.client.storage.pc.wallpaper.UnlockPCBoxWallpaperPacket
+Compiled from "UnlockPCBoxWallpaperPacket.java"
+public final class com.cobblemon.mod.common.net.messages.client.storage.pc.wallpaper.UnlockPCBoxWallpaperPacket implements com.cobblemon.mod.common.api.net.NetworkPacket<com.cobblemon.mod.common.net.messages.client.storage.pc.wallpaper.UnlockPCBoxWallpaperPacket> {
+  public static final com.cobblemon.mod.common.net.messages.client.storage.pc.wallpaper.UnlockPCBoxWallpaperPacket$Companion Companion;
+  private final net.minecraft.util.Identifier texture;
+  private final net.minecraft.util.Identifier id;
+  private static final net.minecraft.util.Identifier ID;
+  public com.cobblemon.mod.common.net.messages.client.storage.pc.wallpaper.UnlockPCBoxWallpaperPacket(net.minecraft.util.Identifier);
+  public final net.minecraft.util.Identifier getTexture();
+  public net.minecraft.util.Identifier getId();
+  public void sendToServer();
+  public net.minecraft.network.packet.CustomPayload$Id<com.cobblemon.mod.common.net.messages.client.storage.pc.wallpaper.UnlockPCBoxWallpaperPacket> getId();
+  static {};
+}
+==== WallpapersScrollingWidget bytecode
+  public static final com.cobblemon.mod.common.client.gui.pc.WallpapersScrollingWidget$Companion Companion;
+  private final int pY;
+  private final com.cobblemon.mod.common.client.gui.pc.PCGUI pcGui;
+  private final com.cobblemon.mod.common.client.gui.pc.StorageWidget storageWidget;
+  public static final int WIDTH;
+  public static final int HEIGHT;
+  public static final int SLOT_WIDTH;
+  public static final int SLOT_HEIGHT;
+  public static final int SLOT_PADDING;
+  private static final net.minecraft.util.Identifier previewOverlayResource;
+  private static final net.minecraft.util.Identifier previewOverlayNewResource;
+  private static final net.minecraft.util.Identifier backgroundResource;
+  public com.cobblemon.mod.common.client.gui.pc.WallpapersScrollingWidget(int, int, com.cobblemon.mod.common.client.gui.pc.PCGUI, com.cobblemon.mod.common.client.gui.pc.StorageWidget);
+       3: invokestatic  #82                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+      10: invokestatic  #82                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+      27: invokespecial #86                 // Method com/cobblemon/mod/common/client/gui/ScrollingWidget."<init>":(IIIIIIILkotlin/jvm/internal/DefaultConstructorMarker;)V
+      57: invokevirtual #100                // Method setY:(I)V
+      61: invokespecial #102                // Method createEntries:()V
+  public final int getPY();
+  public final com.cobblemon.mod.common.client.gui.pc.PCGUI getPcGui();
+  public final com.cobblemon.mod.common.client.gui.pc.StorageWidget getStorageWidget();
+  protected int getScrollbarX();
+       1: invokevirtual #107                // Method getX:()I
+  public void renderWidget(net.minecraft.client.gui.DrawContext, int, int, float);
+       3: invokestatic  #82                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+       7: invokevirtual #118                // Method net/minecraft/client/gui/DrawContext.getMatrices:()Lnet/minecraft/client/util/math/MatrixStack;
+      13: invokestatic  #123                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      18: getstatic     #125                // Field backgroundResource:Lnet/minecraft/util/Identifier;
+      24: invokevirtual #107                // Method getX:()I
+      30: invokevirtual #128                // Method getY:()I
+      57: invokestatic  #137                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+      65: invokestatic  #137                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+      73: invokestatic  #137                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+      81: invokestatic  #137                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+     101: invokestatic  #146                // Method com/cobblemon/mod/common/api/gui/GuiUtilsKt.blitk$default:(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/Identifier;Ljava/lang/Number;Ljava/lang/Number;Ljava/lang/Number;Ljava/lang/Number;Ljava/lang/Number;Ljava/lang/Number;Ljava/lang/Number;Ljava/lang/Number;Ljava/lang/Number;Ljava/lang/Number;Ljava/lang/Number;Ljava/lang/Number;Ljava/lang/Number;ZFILjava/lang/Object;)V
+     105: getstatic     #152                // Field com/cobblemon/mod/common/client/CobblemonResources.INSTANCE:Lcom/cobblemon/mod/common/client/CobblemonResources;
+     108: invokevirtual #156                // Method com/cobblemon/mod/common/client/CobblemonResources.getDEFAULT_LARGE:()Lnet/minecraft/util/Identifier;
+     117: invokestatic  #166                // Method com/cobblemon/mod/common/util/LocalizationUtilsKt.lang:(Ljava/lang/String;[Ljava/lang/Object;)Lnet/minecraft/text/MutableText;
+     123: invokestatic  #123                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+     126: invokestatic  #174                // Method com/cobblemon/mod/common/api/text/TextKt.bold:(Lnet/minecraft/text/MutableText;)Lnet/minecraft/text/MutableText;
+     130: invokevirtual #107                // Method getX:()I
+     136: invokestatic  #137                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+     143: invokevirtual #128                // Method getY:()I
+     149: invokestatic  #137                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+     167: invokestatic  #180                // Method com/cobblemon/mod/common/client/render/RenderHelperKt.drawScaledText$default:(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/util/Identifier;Lnet/minecraft/text/MutableText;Ljava/lang/Number;Ljava/lang/Number;FLjava/lang/Number;IIZZLjava/lang/Integer;Ljava/lang/Integer;ILjava/lang/Object;)V
+     172: invokevirtual #107                // Method getX:()I
+     176: invokevirtual #128                // Method getY:()I
+     180: invokevirtual #107                // Method getX:()I
+     189: invokevirtual #128                // Method getY:()I
+     197: invokevirtual #184                // Method net/minecraft/client/gui/DrawContext.enableScissor:(IIII)V
+     206: invokespecial #186                // Method com/cobblemon/mod/common/client/gui/ScrollingWidget.renderWidget:(Lnet/minecraft/client/gui/DrawContext;IIF)V
+     210: invokevirtual #189                // Method net/minecraft/client/gui/DrawContext.disableScissor:()V
+  private final void createEntries();
+       1: invokevirtual #194                // Method clearEntries:()V
+       4: getstatic     #199                // Field com/cobblemon/mod/common/client/render/gui/PCBoxWallpaperRepository.INSTANCE:Lcom/cobblemon/mod/common/client/render/gui/PCBoxWallpaperRepository;
+       7: invokevirtual #203                // Method com/cobblemon/mod/common/client/render/gui/PCBoxWallpaperRepository.getAvailableWallpapers:()Ljava/util/Set;
+      10: invokeinterface #209,  1          // InterfaceMethod java/util/Set.iterator:()Ljava/util/Iterator;
+      17: invokeinterface #215,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      26: invokeinterface #219,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      35: getstatic     #199                // Field com/cobblemon/mod/common/client/render/gui/PCBoxWallpaperRepository.INSTANCE:Lcom/cobblemon/mod/common/client/render/gui/PCBoxWallpaperRepository;
+      38: invokevirtual #224                // Method com/cobblemon/mod/common/client/render/gui/PCBoxWallpaperRepository.getAllWallpapers:()Ljava/util/Set;
+      48: invokeinterface #227,  1          // InterfaceMethod java/lang/Iterable.iterator:()Ljava/util/Iterator;
+      57: invokeinterface #215,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      67: invokeinterface #219,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      86: invokevirtual #232                // Method kotlin/Triple.getFirst:()Ljava/lang/Object;
+      90: invokestatic  #236                // Method kotlin/jvm/internal/Intrinsics.areEqual:(Ljava/lang/Object;Ljava/lang/Object;)Z
+     109: invokevirtual #239                // Method kotlin/Triple.getSecond:()Ljava/lang/Object;
+     122: new           #59                 // class com/cobblemon/mod/common/client/gui/pc/WallpapersScrollingWidget$WallpaperEntry
+     133: invokevirtual #244                // Method com/cobblemon/mod/common/client/gui/pc/PCGUI.getUnseenWallpapers:()Ljava/util/Set;
+     137: invokeinterface #248,  2          // InterfaceMethod java/util/Set.contains:(Ljava/lang/Object;)Z
+     142: invokespecial #251                // Method com/cobblemon/mod/common/client/gui/pc/WallpapersScrollingWidget$WallpaperEntry."<init>":(Lcom/cobblemon/mod/common/client/gui/pc/WallpapersScrollingWidget;Lnet/minecraft/util/Identifier;Lnet/minecraft/util/Identifier;Z)V
+     148: invokevirtual #257                // Method addEntry:(Lnet/minecraft/client/gui/widget/EntryListWidget$Entry;)I
+  public int getRowLeft();
+       1: invokevirtual #265                // Method getLeft:()I
+  public int getRowWidth();
+  public int getRowRight();
+       1: invokevirtual #267                // Method getRowLeft:()I
+  public static final net.minecraft.util.Identifier access$getPreviewOverlayResource$cp();
+       0: getstatic     #270                // Field previewOverlayResource:Lnet/minecraft/util/Identifier;
+  public static final net.minecraft.util.Identifier access$getPreviewOverlayNewResource$cp();
+       0: getstatic     #273                // Field previewOverlayNewResource:Lnet/minecraft/util/Identifier;
+  public static final net.minecraft.util.Identifier access$getBackgroundResource$cp();
+       0: getstatic     #125                // Field backgroundResource:Lnet/minecraft/util/Identifier;
+  public static final net.minecraft.client.MinecraftClient access$getMinecraft$p$s-1032132216(com.cobblemon.mod.common.client.gui.pc.WallpapersScrollingWidget);
+  static {};
+       0: new           #57                 // class com/cobblemon/mod/common/client/gui/pc/WallpapersScrollingWidget$Companion
+       5: invokespecial #285                // Method com/cobblemon/mod/common/client/gui/pc/WallpapersScrollingWidget$Companion."<init>":(Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+      14: invokestatic  #295                // Method com/cobblemon/mod/common/util/MiscUtilsKt.cobblemonResource:(Ljava/lang/String;)Lnet/minecraft/util/Identifier;
+      23: invokestatic  #295                // Method com/cobblemon/mod/common/util/MiscUtilsKt.cobblemonResource:(Ljava/lang/String;)Lnet/minecraft/util/Identifier;
+      32: invokestatic  #295                // Method com/cobblemon/mod/common/util/MiscUtilsKt.cobblemonResource:(Ljava/lang/String;)Lnet/minecraft/util/Identifier;
+==== BoxNameWidget bytecode
+  private final com.cobblemon.mod.common.client.gui.pc.PCGUI pcGui;
+  private final com.cobblemon.mod.common.client.gui.pc.StorageWidget storageWidget;
+  public com.cobblemon.mod.common.client.gui.pc.BoxNameWidget(int, int, net.minecraft.text.Text, com.cobblemon.mod.common.client.gui.pc.PCGUI, com.cobblemon.mod.common.client.gui.pc.StorageWidget);
+       3: invokestatic  #62                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+      10: invokestatic  #62                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+      17: invokestatic  #62                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+      27: invokedynamic #83,  0             // InvokeDynamic #0:invoke:()Lkotlin/jvm/functions/Function0;
+      35: invokespecial #86                 // Method com/cobblemon/mod/common/client/gui/pc/TextWidget."<init>":(IIIIILnet/minecraft/text/Text;Lkotlin/jvm/functions/Function0;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+  public com.cobblemon.mod.common.client.gui.pc.BoxNameWidget(int, int, net.minecraft.text.Text, com.cobblemon.mod.common.client.gui.pc.PCGUI, com.cobblemon.mod.common.client.gui.pc.StorageWidget, int, kotlin.jvm.internal.DefaultConstructorMarker);
+       9: invokestatic  #101                // Method com/cobblemon/mod/common/api/text/TextKt.text:(Ljava/lang/String;)Lnet/minecraft/text/MutableText;
+      24: invokespecial #105                // Method "<init>":(IILnet/minecraft/text/Text;Lcom/cobblemon/mod/common/client/gui/pc/PCGUI;Lcom/cobblemon/mod/common/client/gui/pc/StorageWidget;)V
+  public void renderWidget(net.minecraft.client.gui.DrawContext, int, int, float);
+       3: invokestatic  #62                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+       7: invokevirtual #109                // Method getBox:()Lcom/cobblemon/mod/common/client/storage/ClientBox;
+      10: invokevirtual #115                // Method com/cobblemon/mod/common/client/storage/ClientBox.getName:()Lnet/minecraft/text/MutableText;
+      19: invokevirtual #117                // Method defaultBoxLabel:()Lnet/minecraft/text/MutableText;
+      26: invokevirtual #123                // Method getText:()Ljava/lang/String;
+      32: invokestatic  #128                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      37: invokevirtual #132                // Method applyTextCursor:(Ljava/lang/String;Lnet/minecraft/text/MutableText;)Lnet/minecraft/text/MutableText;
+      40: invokestatic  #136                // Method com/cobblemon/mod/common/api/text/TextKt.bold:(Lnet/minecraft/text/MutableText;)Lnet/minecraft/text/MutableText;
+      45: invokestatic  #142                // Method net/minecraft/client/MinecraftClient.getInstance:()Lnet/minecraft/client/MinecraftClient;
+      52: invokevirtual #150                // Method isFocused:()Z
+      59: invokevirtual #123                // Method getText:()Ljava/lang/String;
+      65: invokestatic  #128                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      68: invokestatic  #101                // Method com/cobblemon/mod/common/api/text/TextKt.text:(Ljava/lang/String;)Lnet/minecraft/text/MutableText;
+      76: invokestatic  #136                // Method com/cobblemon/mod/common/api/text/TextKt.bold:(Lnet/minecraft/text/MutableText;)Lnet/minecraft/text/MutableText;
+      79: getstatic     #160                // Field com/cobblemon/mod/common/client/CobblemonResources.INSTANCE:Lcom/cobblemon/mod/common/client/CobblemonResources;
+      82: invokevirtual #164                // Method com/cobblemon/mod/common/client/CobblemonResources.getDEFAULT_LARGE:()Lnet/minecraft/util/Identifier;
+      88: invokestatic  #128                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      91: invokestatic  #170                // Method com/cobblemon/mod/common/api/text/TextKt.font:(Lnet/minecraft/text/MutableText;Lnet/minecraft/util/Identifier;)Lnet/minecraft/text/MutableText;
+      97: invokevirtual #176                // Method net/minecraft/client/font/TextRenderer.getWidth:(Lnet/minecraft/text/StringVisitable;)I
+     103: invokevirtual #180                // Method getX:()I
+     121: invokevirtual #186                // Method getStartPosX:()I
+     132: invokevirtual #190                // Method setStartPosX:(I)V
+     135: getstatic     #160                // Field com/cobblemon/mod/common/client/CobblemonResources.INSTANCE:Lcom/cobblemon/mod/common/client/CobblemonResources;
+     138: invokevirtual #164                // Method com/cobblemon/mod/common/client/CobblemonResources.getDEFAULT_LARGE:()Lnet/minecraft/util/Identifier;
+     144: invokevirtual #186                // Method getStartPosX:()I
+     150: invokevirtual #193                // Method getY:()I
+     164: invokestatic  #199                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+     172: invokestatic  #199                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+     190: invokestatic  #207                // Method com/cobblemon/mod/common/client/render/RenderHelperKt.drawScaledText$default:(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/util/Identifier;Lnet/minecraft/text/MutableText;Ljava/lang/Number;Ljava/lang/Number;FLjava/lang/Number;IIZZLjava/lang/Integer;Ljava/lang/Integer;ILjava/lang/Object;)V
+     197: invokevirtual #211                // Method renderCursor:(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/text/MutableText;)V
+  public void setFocused(boolean);
+       2: invokespecial #220                // Method com/cobblemon/mod/common/client/gui/pc/TextWidget.setFocused:(Z)V
+      10: invokevirtual #123                // Method getText:()Ljava/lang/String;
+      16: invokestatic  #128                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      22: invokeinterface #225,  1          // InterfaceMethod java/lang/CharSequence.length:()I
+      39: invokevirtual #109                // Method getBox:()Lcom/cobblemon/mod/common/client/storage/ClientBox;
+      42: invokevirtual #115                // Method com/cobblemon/mod/common/client/storage/ClientBox.getName:()Lnet/minecraft/text/MutableText;
+      50: invokevirtual #109                // Method getBox:()Lcom/cobblemon/mod/common/client/storage/ClientBox;
+      53: invokevirtual #115                // Method com/cobblemon/mod/common/client/storage/ClientBox.getName:()Lnet/minecraft/text/MutableText;
+      60: invokevirtual #228                // Method net/minecraft/text/MutableText.getString:()Ljava/lang/String;
+      70: invokevirtual #237                // Method setText:(Ljava/lang/String;)V
+  public boolean keyPressed(int, int, int);
+       1: invokevirtual #150                // Method isFocused:()Z
+      16: invokevirtual #109                // Method getBox:()Lcom/cobblemon/mod/common/client/storage/ClientBox;
+      19: invokevirtual #115                // Method com/cobblemon/mod/common/client/storage/ClientBox.getName:()Lnet/minecraft/text/MutableText;
+      26: invokevirtual #228                // Method net/minecraft/text/MutableText.getString:()Ljava/lang/String;
+      36: invokevirtual #237                // Method setText:(Ljava/lang/String;)V
+      43: invokespecial #240                // Method com/cobblemon/mod/common/client/gui/pc/TextWidget.keyPressed:(III)Z
+  public void unfocused();
+       1: invokespecial #242                // Method com/cobblemon/mod/common/client/gui/pc/TextWidget.unfocused:()V
+       4: new           #244                // class com/cobblemon/mod/common/net/messages/server/storage/pc/RequestRenamePCBoxPacket
+      12: invokevirtual #250                // Method com/cobblemon/mod/common/client/gui/pc/PCGUI.getPc:()Lcom/cobblemon/mod/common/client/storage/ClientPC;
+      15: invokevirtual #256                // Method com/cobblemon/mod/common/client/storage/ClientPC.getUuid:()Ljava/util/UUID;
+      22: invokevirtual #260                // Method com/cobblemon/mod/common/client/gui/pc/StorageWidget.getBox:()I
+      26: invokevirtual #123                // Method getText:()Ljava/lang/String;
+      29: invokespecial #263                // Method com/cobblemon/mod/common/net/messages/server/storage/pc/RequestRenamePCBoxPacket."<init>":(Ljava/util/UUID;ILjava/lang/String;)V
+      32: invokevirtual #266                // Method com/cobblemon/mod/common/net/messages/server/storage/pc/RequestRenamePCBoxPacket.sendToServer:()V
+      36: invokevirtual #109                // Method getBox:()Lcom/cobblemon/mod/common/client/storage/ClientBox;
+      40: invokevirtual #123                // Method getText:()Ljava/lang/String;
+      46: invokestatic  #128                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      52: invokestatic  #272                // Method kotlin/text/StringsKt.isBlank:(Ljava/lang/CharSequence;)Z
+      63: invokevirtual #123                // Method getText:()Ljava/lang/String;
+      66: invokestatic  #275                // InterfaceMethod net/minecraft/text/Text.literal:(Ljava/lang/String;)Lnet/minecraft/text/MutableText;
+      73: invokestatic  #128                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      76: invokestatic  #136                // Method com/cobblemon/mod/common/api/text/TextKt.bold:(Lnet/minecraft/text/MutableText;)Lnet/minecraft/text/MutableText;
+      79: invokevirtual #281                // Method com/cobblemon/mod/common/client/storage/ClientBox.setName:(Lnet/minecraft/text/MutableText;)V
+      85: invokevirtual #237                // Method setText:(Ljava/lang/String;)V
+  public final com.cobblemon.mod.common.client.storage.ClientBox getBox();
+data/cobblemon/unlockable_pc_box_wallpapers/
+data/cobblemon/unlockable_pc_box_wallpapers/biome_the_end.json
+data/cobblemon/unlockable_pc_box_wallpapers/biome_ocean.json
+data/cobblemon/unlockable_pc_box_wallpapers/biome_nether.json
+data/cobblemon/unlockable_pc_box_wallpapers/biome_forest.json
+data/cobblemon/unlockable_pc_box_wallpapers/biome_cave.json
+data/cobblemon/callbacks/player_tick_pre/wallpaper_unlocks.molang
+assets/cobblemon/textures/gui/pc/wallpaper_scroll_background.png
+assets/cobblemon/textures/gui/pc/wallpaper/
+assets/cobblemon/textures/gui/pc/wallpaper/biome/
+assets/cobblemon/textures/gui/pc/wallpaper/biome/wallpaper_biome_the_end.png
+assets/cobblemon/textures/gui/pc/wallpaper/biome/wallpaper_biome_ocean.png
+assets/cobblemon/textures/gui/pc/wallpaper/biome/wallpaper_biome_nether.png
+assets/cobblemon/textures/gui/pc/wallpaper/biome/wallpaper_biome_forest.png
+assets/cobblemon/textures/gui/pc/wallpaper/biome/wallpaper_biome_cave.png
+assets/cobblemon/textures/gui/pc/wallpaper/biome/glow/
+assets/cobblemon/textures/gui/pc/wallpaper/biome/glow/wallpaper_biome_the_end.png
+assets/cobblemon/textures/gui/pc/wallpaper/biome/glow/wallpaper_biome_ocean.png
+assets/cobblemon/textures/gui/pc/wallpaper/biome/glow/wallpaper_biome_nether.png
+assets/cobblemon/textures/gui/pc/wallpaper/biome/glow/wallpaper_biome_forest.png
+assets/cobblemon/textures/gui/pc/wallpaper/biome/glow/wallpaper_biome_cave.png
+assets/cobblemon/textures/gui/pc/wallpaper/biome/alt/
+assets/cobblemon/textures/gui/pc/wallpaper/biome/alt/wallpaper_biome_the_end.png
+assets/cobblemon/textures/gui/pc/wallpaper/biome/alt/wallpaper_biome_ocean.png
+assets/cobblemon/textures/gui/pc/wallpaper/biome/alt/wallpaper_biome_nether.png
+assets/cobblemon/textures/gui/pc/wallpaper/biome/alt/wallpaper_biome_forest.png
+assets/cobblemon/textures/gui/pc/wallpaper/biome/alt/wallpaper_biome_cave.png
+assets/cobblemon/textures/gui/pc/wallpaper/basic/
+assets/cobblemon/textures/gui/pc/wallpaper/basic/wallpaper_basic_11.png
+assets/cobblemon/textures/gui/pc/wallpaper/basic/wallpaper_basic_10.png
+assets/cobblemon/textures/gui/pc/wallpaper/basic/wallpaper_basic_09.png
+assets/cobblemon/textures/gui/pc/wallpaper/basic/wallpaper_basic_08.png
+assets/cobblemon/textures/gui/pc/wallpaper/basic/wallpaper_basic_07.png
+assets/cobblemon/textures/gui/pc/wallpaper/basic/wallpaper_basic_06.png
+assets/cobblemon/textures/gui/pc/wallpaper/basic/wallpaper_basic_05.png
+assets/cobblemon/textures/gui/pc/wallpaper/basic/wallpaper_basic_04.png
+assets/cobblemon/textures/gui/pc/wallpaper/basic/wallpaper_basic_03.png
+assets/cobblemon/textures/gui/pc/wallpaper/basic/wallpaper_basic_02.png
+assets/cobblemon/textures/gui/pc/wallpaper/basic/wallpaper_basic_01.png
+assets/cobblemon/textures/gui/pc/wallpaper/basic/glow/
+assets/cobblemon/textures/gui/pc/wallpaper/basic/glow/wallpaper_basic_11.png
+assets/cobblemon/textures/gui/pc/wallpaper/basic/glow/wallpaper_basic_10.png
+assets/cobblemon/textures/gui/pc/wallpaper/basic/glow/wallpaper_basic_09.png
+assets/cobblemon/textures/gui/pc/wallpaper/basic/glow/wallpaper_basic_08.png
+assets/cobblemon/textures/gui/pc/wallpaper/basic/glow/wallpaper_basic_07.png
+assets/cobblemon/textures/gui/pc/wallpaper/basic/glow/wallpaper_basic_06.png
+assets/cobblemon/textures/gui/pc/wallpaper/basic/glow/wallpaper_basic_05.png
+assets/cobblemon/textures/gui/pc/wallpaper/basic/glow/wallpaper_basic_04.png
+assets/cobblemon/textures/gui/pc/wallpaper/basic/glow/wallpaper_basic_03.png
+assets/cobblemon/textures/gui/pc/wallpaper/basic/glow/wallpaper_basic_02.png
+assets/cobblemon/textures/gui/pc/wallpaper/basic/glow/wallpaper_basic_01.png
+assets/cobblemon/textures/gui/pc/pc_button_set_wallpaper.png
+assets/cobblemon/sounds/pc/pc_wallpaper_unlock.ogg
+com/cobblemon/mod/common/net/messages/client/storage/pc/wallpaper/
+com/cobblemon/mod/common/client/gui/pc/WallpapersScrollingWidget$Companion.class
+com/cobblemon/mod/common/command/UnlockPCBoxWallpaperCommand.class
+com/cobblemon/mod/common/net/serverhandling/storage/pc/MarkPCBoxWallpapersSeenHandler.class
+com/cobblemon/mod/common/CobblemonUnlockableWallpapers.class
+com/cobblemon/mod/common/net/messages/client/storage/pc/wallpaper/ChangePCBoxWallpaperPacket$Companion.class
+com/cobblemon/mod/common/api/events/storage/ChangePCBoxWallpaperEvent$Pre.class
+com/cobblemon/mod/common/client/net/storage/pc/UnlockPCBoxWallpaperHandler.class
+com/cobblemon/mod/common/net/messages/server/storage/pc/PCBoxWallpapersPacket$Companion.class
+com/cobblemon/mod/common/api/storage/pc/UnlockablePCWallpaper.class
+com/cobblemon/mod/common/net/messages/server/storage/pc/RequestChangePCBoxWallpaperPacket.class
+com/cobblemon/mod/common/command/ChangeBoxWallpaperCommand.class
+com/cobblemon/mod/common/net/messages/client/storage/pc/wallpaper/RequestPCBoxWallpapersPacket.class
+com/cobblemon/mod/common/client/gui/pc/WallpapersScrollingWidget$WallpaperEntry.class
+com/cobblemon/mod/common/api/events/storage/ChangePCBoxWallpaperEvent.class
+com/cobblemon/mod/common/net/messages/client/storage/pc/wallpaper/UnlockPCBoxWallpaperPacket$Companion.class
+com/cobblemon/mod/common/net/messages/client/storage/pc/wallpaper/UnlockPCBoxWallpaperPacket.class
+com/cobblemon/mod/common/command/argument/UnlockablePCBoxWallpaperArgumentType.class
+com/cobblemon/mod/common/net/messages/server/storage/pc/MarkPCBoxWallpapersSeenPacket$Companion.class
+com/cobblemon/mod/common/command/argument/UnlockablePCBoxWallpaperArgumentType$Companion.class
+com/cobblemon/mod/common/client/net/storage/pc/ChangePCBoxWallpaperHandler.class
+com/cobblemon/mod/common/api/events/storage/ChangePCBoxWallpaperEvent$Post.class
+com/cobblemon/mod/common/net/messages/server/storage/pc/PCBoxWallpapersPacket.class
+com/cobblemon/mod/common/net/serverhandling/storage/pc/RequestChangePCBoxWallpaperHandler.class
+com/cobblemon/mod/common/net/serverhandling/storage/pc/PCBoxWallpapersHandler.class
+com/cobblemon/mod/common/net/messages/client/storage/pc/wallpaper/RequestPCBoxWallpapersPacket$Companion.class
+com/cobblemon/mod/common/net/messages/client/storage/pc/wallpaper/ChangePCBoxWallpaperPacket.class
+com/cobblemon/mod/common/api/events/storage/WallpaperCollectionEvent.class
+com/cobblemon/mod/common/client/net/storage/pc/SetPCBoxWallpapersHandler.class
+com/cobblemon/mod/common/client/net/storage/pc/RequestPCBoxWallpapersHandler.class
+com/cobblemon/mod/common/api/events/storage/WallpaperUnlockedEvent.class
+com/cobblemon/mod/common/net/messages/server/storage/pc/RequestChangePCBoxWallpaperPacket$Companion.class
+com/cobblemon/mod/common/net/messages/client/storage/pc/wallpaper/SetPCBoxWallpapersPacket.class
+com/cobblemon/mod/common/client/render/gui/PCBoxWallpaperRepository.class
+com/cobblemon/mod/common/net/messages/client/storage/pc/wallpaper/SetPCBoxWallpapersPacket$Companion.class
+com/cobblemon/mod/common/client/gui/pc/WallpapersScrollingWidget.class
+com/cobblemon/mod/common/net/messages/server/storage/pc/MarkPCBoxWallpapersSeenPacket.class

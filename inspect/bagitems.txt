@@ -1,0 +1,99 @@
+com/cobblemon/mod/common/item/interactive/PotionType.class
+com/cobblemon/mod/common/item/interactive/PotionType$FULL_RESTORE.class
+com/cobblemon/mod/common/item/interactive/PotionType$POTION.class
+com/cobblemon/mod/common/item/interactive/PotionItem.class
+com/cobblemon/mod/common/item/interactive/PotionType$HYPER_POTION.class
+com/cobblemon/mod/common/item/interactive/PotionType$MAX_POTION.class
+com/cobblemon/mod/common/item/interactive/PotionType$SUPER_POTION.class
+==== com.cobblemon.mod.common.battles.BagItems
+Compiled from "BagItems.java"
+public final class com.cobblemon.mod.common.battles.BagItems implements com.cobblemon.mod.common.api.data.DataRegistry {
+  public static final com.cobblemon.mod.common.battles.BagItems INSTANCE;
+  private static final net.minecraft.util.Identifier id;
+  private static final net.minecraft.resource.ResourceType type;
+  private static final com.cobblemon.mod.common.api.reactive.SimpleObservable<com.cobblemon.mod.common.battles.BagItems> observable;
+  private static final com.cobblemon.mod.common.api.PrioritizedList<com.cobblemon.mod.common.item.battle.BagItemLike> bagItems;
+  private static final java.util.Map<java.lang.String, java.lang.String> bagItemsScripts;
+  private com.cobblemon.mod.common.battles.BagItems();
+  public net.minecraft.util.Identifier getId();
+  public net.minecraft.resource.ResourceType getType();
+  public com.cobblemon.mod.common.api.reactive.SimpleObservable<com.cobblemon.mod.common.battles.BagItems> getObservable();
+  public void sync(net.minecraft.server.network.ServerPlayerEntity);
+  public final com.cobblemon.mod.common.api.PrioritizedList<com.cobblemon.mod.common.item.battle.BagItemLike> getBagItems();
+  public final java.util.Map<java.lang.String, java.lang.String> getBagItemsScripts$common();
+  public static final com.cobblemon.mod.common.item.battle.BagItemLike getConvertibleForStack(net.minecraft.item.ItemStack);
+  public void reload(net.minecraft.resource.ResourceManager);
+  private static final boolean reload$lambda$0(net.minecraft.util.Identifier);
+  static {};
+}
+==== com.cobblemon.mod.common.item.battle.BagItemLike
+Compiled from "BagItemLike.java"
+public interface com.cobblemon.mod.common.item.battle.BagItemLike {
+  public abstract com.cobblemon.mod.common.item.battle.BagItem getBagItem(net.minecraft.item.ItemStack);
+  public default boolean handleInteraction(net.minecraft.server.network.ServerPlayerEntity, com.cobblemon.mod.common.battles.pokemon.BattlePokemon, net.minecraft.item.ItemStack);
+  public static boolean access$handleInteraction$jd(com.cobblemon.mod.common.item.battle.BagItemLike, net.minecraft.server.network.ServerPlayerEntity, com.cobblemon.mod.common.battles.pokemon.BattlePokemon, net.minecraft.item.ItemStack);
+}
+==== com.cobblemon.mod.common.item.battle.SimpleBagItemLike
+Compiled from "SimpleBagItemLike.java"
+public interface com.cobblemon.mod.common.item.battle.SimpleBagItemLike extends com.cobblemon.mod.common.item.battle.BagItemLike {
+  public abstract com.cobblemon.mod.common.item.battle.BagItem getBagItem();
+  public default com.cobblemon.mod.common.item.battle.BagItem getBagItem(net.minecraft.item.ItemStack);
+  public static com.cobblemon.mod.common.item.battle.BagItem access$getBagItem$jd(com.cobblemon.mod.common.item.battle.SimpleBagItemLike, net.minecraft.item.ItemStack);
+  public static boolean access$handleInteraction$jd(com.cobblemon.mod.common.item.battle.SimpleBagItemLike, net.minecraft.server.network.ServerPlayerEntity, com.cobblemon.mod.common.battles.pokemon.BattlePokemon, net.minecraft.item.ItemStack);
+}
+==== com.cobblemon.mod.common.item.interactive.PotionItem
+Compiled from "PotionItem.java"
+public final class com.cobblemon.mod.common.item.interactive.PotionItem extends net.minecraft.item.AliasedBlockItem implements com.cobblemon.mod.common.api.item.PokemonSelectingItem,com.cobblemon.mod.common.api.item.HealingSource {
+  private final com.cobblemon.mod.common.item.interactive.PotionType type;
+  private final com.cobblemon.mod.common.item.interactive.PotionType bagItem;
+  public com.cobblemon.mod.common.item.interactive.PotionItem(com.cobblemon.mod.common.item.interactive.PotionType, net.minecraft.block.Block);
+  public final com.cobblemon.mod.common.item.interactive.PotionType getType();
+  public com.cobblemon.mod.common.item.interactive.PotionType getBagItem();
+  public boolean canUseOnPokemon(net.minecraft.item.ItemStack, com.cobblemon.mod.common.pokemon.Pokemon);
+  public net.minecraft.util.TypedActionResult<net.minecraft.item.ItemStack> use(net.minecraft.world.World, net.minecraft.entity.player.PlayerEntity, net.minecraft.util.Hand);
+  public net.minecraft.util.TypedActionResult<net.minecraft.item.ItemStack> applyToPokemon(net.minecraft.server.network.ServerPlayerEntity, net.minecraft.item.ItemStack, com.cobblemon.mod.common.pokemon.Pokemon);
+  public void applyToBattlePokemon(net.minecraft.server.network.ServerPlayerEntity, net.minecraft.item.ItemStack, com.cobblemon.mod.common.battles.pokemon.BattlePokemon);
+  public net.minecraft.util.TypedActionResult<net.minecraft.item.ItemStack> use(net.minecraft.server.network.ServerPlayerEntity, net.minecraft.item.ItemStack);
+  public boolean canUseOnBattlePokemon(net.minecraft.item.ItemStack, com.cobblemon.mod.common.battles.pokemon.BattlePokemon);
+  public net.minecraft.util.TypedActionResult<net.minecraft.item.ItemStack> interactWithSpecificBattle(net.minecraft.server.network.ServerPlayerEntity, net.minecraft.item.ItemStack, com.cobblemon.mod.common.battles.pokemon.BattlePokemon);
+  public net.minecraft.util.TypedActionResult<net.minecraft.item.ItemStack> interactGeneral(net.minecraft.server.network.ServerPlayerEntity, net.minecraft.item.ItemStack);
+       1: invokespecial #79                 // Method java/lang/Object."<init>":()V
+       0: getstatic     #83                 // Field id:Lnet/minecraft/util/Identifier;
+       0: getstatic     #86                 // Field type:Lnet/minecraft/resource/ResourceType;
+       0: getstatic     #89                 // Field observable:Lcom/cobblemon/mod/common/api/reactive/SimpleObservable;
+       3: invokestatic  #97                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+       0: getstatic     #101                // Field bagItems:Lcom/cobblemon/mod/common/api/PrioritizedList;
+       0: getstatic     #104                // Field bagItemsScripts:Ljava/util/Map;
+       3: invokestatic  #97                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+       6: getstatic     #110                // Field INSTANCE:Lcom/cobblemon/mod/common/battles/BagItems;
+      10: getstatic     #101                // Field bagItems:Lcom/cobblemon/mod/common/api/PrioritizedList;
+      20: invokeinterface #116,  1          // InterfaceMethod java/lang/Iterable.iterator:()Ljava/util/Iterator;
+      27: invokeinterface #122,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      36: invokeinterface #126,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      56: invokeinterface #132,  2          // InterfaceMethod com/cobblemon/mod/common/item/battle/BagItemLike.getBagItem:(Lnet/minecraft/item/ItemStack;)Lcom/cobblemon/mod/common/item/battle/BagItem;
+       3: invokestatic  #97                 // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+       6: getstatic     #104                // Field bagItemsScripts:Ljava/util/Map;
+       9: invokeinterface #148,  1          // InterfaceMethod java/util/Map.clear:()V
+      14: getstatic     #151                // Field com/cobblemon/mod/common/battles/runner/ShowdownService.Companion:Lcom/cobblemon/mod/common/battles/runner/ShowdownService$Companion;
+      17: invokevirtual #155                // Method com/cobblemon/mod/common/battles/runner/ShowdownService$Companion.getService:()Lcom/cobblemon/mod/common/battles/runner/ShowdownService;
+      22: invokeinterface #161,  2          // InterfaceMethod com/cobblemon/mod/common/battles/runner/ShowdownService.resetRegistryData:(Ljava/lang/String;)V
+      30: invokedynamic #182,  0            // InvokeDynamic #0:test:()Ljava/util/function/Predicate;
+      35: invokeinterface #188,  3          // InterfaceMethod net/minecraft/resource/ResourceManager.findResources:(Ljava/lang/String;Ljava/util/function/Predicate;)Ljava/util/Map;
+      43: invokestatic  #193                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      50: invokeinterface #197,  1          // InterfaceMethod java/util/Map.entrySet:()Ljava/util/Set;
+      55: invokeinterface #200,  1          // InterfaceMethod java/util/Set.iterator:()Ljava/util/Iterator;
+      64: invokeinterface #122,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      74: invokeinterface #126,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      93: invokeinterface #203,  1          // InterfaceMethod java/util/Map$Entry.getKey:()Ljava/lang/Object;
+     105: invokeinterface #208,  1          // InterfaceMethod java/util/Map$Entry.getValue:()Ljava/lang/Object;
+     117: invokevirtual #214                // Method net/minecraft/resource/Resource.getInputStream:()Ljava/io/InputStream;
+     141: invokestatic  #222                // Method kotlin/jvm/internal/Intrinsics.checkNotNull:(Ljava/lang/Object;)V
+     148: getstatic     #228                // Field kotlin/text/Charsets.UTF_8:Ljava/nio/charset/Charset;
+     161: invokespecial #233                // Method java/io/InputStreamReader."<init>":(Ljava/io/InputStream;Ljava/nio/charset/Charset;)V
+     176: instanceof    #237                // class java/io/BufferedReader
+     198: invokespecial #242                // Method java/io/BufferedReader."<init>":(Ljava/io/Reader;I)V
+     222: invokevirtual #246                // Method net/minecraft/util/Identifier.getNamespace:()Ljava/lang/String;
+     231: invokevirtual #251                // Method net/minecraft/util/Identifier.getPath:()Ljava/lang/String;
+     234: invokespecial #253                // Method java/io/File."<init>":(Ljava/lang/String;)V
+     237: invokestatic  #259                // Method kotlin/io/FilesKt.getNameWithoutExtension:(Ljava/io/File;)Ljava/lang/String;
+     240: invokestatic  #263                // Method net/minecraft/util/Identifier.of:(Ljava/lang/String;Ljava/lang/String;)Lnet/minecraft/util/Identifier;

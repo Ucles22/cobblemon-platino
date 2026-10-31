@@ -1,0 +1,426 @@
+==== com.cobblemon.mod.common.client.storage.ClientPC
+Compiled from "ClientPC.java"
+public final class com.cobblemon.mod.common.client.storage.ClientPC extends com.cobblemon.mod.common.client.storage.ClientStorage<com.cobblemon.mod.common.api.storage.pc.PCPosition> {
+  private final java.util.List<com.cobblemon.mod.common.client.storage.ClientBox> boxes;
+  public com.cobblemon.mod.common.client.storage.ClientPC(java.util.UUID, int);
+  public final java.util.List<com.cobblemon.mod.common.client.storage.ClientBox> getBoxes();
+  public com.cobblemon.mod.common.pokemon.Pokemon findByUUID(java.util.UUID);
+  public void set(com.cobblemon.mod.common.api.storage.pc.PCPosition, com.cobblemon.mod.common.pokemon.Pokemon);
+  public com.cobblemon.mod.common.pokemon.Pokemon get(com.cobblemon.mod.common.api.storage.pc.PCPosition);
+  public com.cobblemon.mod.common.api.storage.pc.PCPosition getPosition(com.cobblemon.mod.common.pokemon.Pokemon);
+  public final void renameBox(int, java.lang.String);
+  public final void changeBoxWallpaper(int, net.minecraft.util.Identifier);
+  public void set(com.cobblemon.mod.common.api.storage.StorePosition, com.cobblemon.mod.common.pokemon.Pokemon);
+  public com.cobblemon.mod.common.pokemon.Pokemon get(com.cobblemon.mod.common.api.storage.StorePosition);
+  public com.cobblemon.mod.common.api.storage.StorePosition getPosition(com.cobblemon.mod.common.pokemon.Pokemon);
+}
+==== com.cobblemon.mod.common.client.storage.ClientBox
+Compiled from "ClientBox.java"
+public final class com.cobblemon.mod.common.client.storage.ClientBox implements java.lang.Iterable<com.cobblemon.mod.common.pokemon.Pokemon>, kotlin.jvm.internal.markers.KMappedMarker {
+  private net.minecraft.text.MutableText name;
+  private net.minecraft.util.Identifier wallpaper;
+  private final java.util.List<com.cobblemon.mod.common.pokemon.Pokemon> slots;
+  public com.cobblemon.mod.common.client.storage.ClientBox(net.minecraft.text.MutableText, net.minecraft.util.Identifier);
+  public final net.minecraft.text.MutableText getName();
+  public final void setName(net.minecraft.text.MutableText);
+  public final net.minecraft.util.Identifier getWallpaper();
+  public final void setWallpaper(net.minecraft.util.Identifier);
+  public com.cobblemon.mod.common.client.storage.ClientBox();
+  public final java.util.List<com.cobblemon.mod.common.pokemon.Pokemon> getSlots();
+  public java.util.Iterator<com.cobblemon.mod.common.pokemon.Pokemon> iterator();
+}
+==== com.cobblemon.mod.common.api.storage.pc.PCPosition
+Compiled from "PCPosition.java"
+public final class com.cobblemon.mod.common.api.storage.pc.PCPosition implements com.cobblemon.mod.common.api.storage.StorePosition {
+  private final int box;
+  private final int slot;
+  public com.cobblemon.mod.common.api.storage.pc.PCPosition(int, int);
+  public final int getBox();
+  public final int getSlot();
+  public final int component1();
+  public final int component2();
+  public final com.cobblemon.mod.common.api.storage.pc.PCPosition copy(int, int);
+  public static com.cobblemon.mod.common.api.storage.pc.PCPosition copy$default(com.cobblemon.mod.common.api.storage.pc.PCPosition, int, int, int, java.lang.Object);
+  public java.lang.String toString();
+  public int hashCode();
+  public boolean equals(java.lang.Object);
+}
+==== com.cobblemon.mod.common.client.gui.pc.PCGUIConfiguration
+Compiled from "PCGUIConfiguration.java"
+public class com.cobblemon.mod.common.client.gui.pc.PCGUIConfiguration {
+  private final kotlin.jvm.functions.Function1<com.cobblemon.mod.common.client.gui.pc.PCGUI, kotlin.Unit> exitFunction;
+  private final kotlin.jvm.functions.Function3<com.cobblemon.mod.common.client.gui.pc.PCGUI, com.cobblemon.mod.common.api.storage.StorePosition, com.cobblemon.mod.common.pokemon.Pokemon, kotlin.Unit> selectOverride;
+  private boolean showParty;
+  private final kotlin.jvm.functions.Function1<com.cobblemon.mod.common.pokemon.Pokemon, java.lang.Boolean> canSelect;
+  public com.cobblemon.mod.common.client.gui.pc.PCGUIConfiguration(kotlin.jvm.functions.Function1<? super com.cobblemon.mod.common.client.gui.pc.PCGUI, kotlin.Unit>, kotlin.jvm.functions.Function3<? super com.cobblemon.mod.common.client.gui.pc.PCGUI, ? super com.cobblemon.mod.common.api.storage.StorePosition, ? super com.cobblemon.mod.common.pokemon.Pokemon, kotlin.Unit>, boolean, kotlin.jvm.functions.Function1<? super com.cobblemon.mod.common.pokemon.Pokemon, java.lang.Boolean>);
+  public com.cobblemon.mod.common.client.gui.pc.PCGUIConfiguration(kotlin.jvm.functions.Function1, kotlin.jvm.functions.Function3, boolean, kotlin.jvm.functions.Function1, int, kotlin.jvm.internal.DefaultConstructorMarker);
+  public final kotlin.jvm.functions.Function1<com.cobblemon.mod.common.client.gui.pc.PCGUI, kotlin.Unit> getExitFunction();
+  public final kotlin.jvm.functions.Function3<com.cobblemon.mod.common.client.gui.pc.PCGUI, com.cobblemon.mod.common.api.storage.StorePosition, com.cobblemon.mod.common.pokemon.Pokemon, kotlin.Unit> getSelectOverride();
+  public final boolean getShowParty();
+  public final void setShowParty(boolean);
+  public final kotlin.jvm.functions.Function1<com.cobblemon.mod.common.pokemon.Pokemon, java.lang.Boolean> getCanSelect();
+  public com.cobblemon.mod.common.client.gui.pc.PCGUIConfiguration();
+}
+==== com.cobblemon.mod.common.client.gui.pc.PCGUI$Companion
+Compiled from "PCGUI.java"
+public final class com.cobblemon.mod.common.client.gui.pc.PCGUI$Companion {
+  private com.cobblemon.mod.common.client.gui.pc.PCGUI$Companion();
+  public com.cobblemon.mod.common.client.gui.pc.PCGUI$Companion(kotlin.jvm.internal.DefaultConstructorMarker);
+}
+==== com.cobblemon.mod.common.net.messages.server.storage.pc.MovePCPokemonPacket
+Compiled from "MovePCPokemonPacket.java"
+public final class com.cobblemon.mod.common.net.messages.server.storage.pc.MovePCPokemonPacket implements com.cobblemon.mod.common.api.net.NetworkPacket<com.cobblemon.mod.common.net.messages.server.storage.pc.MovePCPokemonPacket> {
+  public static final com.cobblemon.mod.common.net.messages.server.storage.pc.MovePCPokemonPacket$Companion Companion;
+  private final java.util.UUID pokemonID;
+  private final com.cobblemon.mod.common.api.storage.pc.PCPosition oldPosition;
+  private final com.cobblemon.mod.common.api.storage.pc.PCPosition newPosition;
+  private final net.minecraft.util.Identifier id;
+  private static final net.minecraft.util.Identifier ID;
+  public com.cobblemon.mod.common.net.messages.server.storage.pc.MovePCPokemonPacket(java.util.UUID, com.cobblemon.mod.common.api.storage.pc.PCPosition, com.cobblemon.mod.common.api.storage.pc.PCPosition);
+  public final java.util.UUID getPokemonID();
+  public final com.cobblemon.mod.common.api.storage.pc.PCPosition getOldPosition();
+  public final com.cobblemon.mod.common.api.storage.pc.PCPosition getNewPosition();
+  public net.minecraft.util.Identifier getId();
+  public void sendToServer();
+  public net.minecraft.network.packet.CustomPayload$Id<com.cobblemon.mod.common.net.messages.server.storage.pc.MovePCPokemonPacket> getId();
+  static {};
+}
+==== com.cobblemon.mod.common.net.messages.server.storage.pc.SwapPCPokemonPacket
+Compiled from "SwapPCPokemonPacket.java"
+public final class com.cobblemon.mod.common.net.messages.server.storage.pc.SwapPCPokemonPacket implements com.cobblemon.mod.common.api.net.NetworkPacket<com.cobblemon.mod.common.net.messages.server.storage.pc.SwapPCPokemonPacket> {
+  public static final com.cobblemon.mod.common.net.messages.server.storage.pc.SwapPCPokemonPacket$Companion Companion;
+  private final java.util.UUID pokemon1ID;
+  private final com.cobblemon.mod.common.api.storage.pc.PCPosition position1;
+  private final java.util.UUID pokemon2ID;
+  private final com.cobblemon.mod.common.api.storage.pc.PCPosition position2;
+  private final net.minecraft.util.Identifier id;
+  private static final net.minecraft.util.Identifier ID;
+  public com.cobblemon.mod.common.net.messages.server.storage.pc.SwapPCPokemonPacket(java.util.UUID, com.cobblemon.mod.common.api.storage.pc.PCPosition, java.util.UUID, com.cobblemon.mod.common.api.storage.pc.PCPosition);
+  public final java.util.UUID getPokemon1ID();
+  public final com.cobblemon.mod.common.api.storage.pc.PCPosition getPosition1();
+  public final java.util.UUID getPokemon2ID();
+  public final com.cobblemon.mod.common.api.storage.pc.PCPosition getPosition2();
+  public net.minecraft.util.Identifier getId();
+  public void sendToServer();
+  public net.minecraft.network.packet.CustomPayload$Id<com.cobblemon.mod.common.net.messages.server.storage.pc.SwapPCPokemonPacket> getId();
+  static {};
+}
+==== com.cobblemon.mod.common.net.messages.server.storage.pc.MovePCPokemonToPartyPacket
+Compiled from "MovePCPokemonToPartyPacket.java"
+public final class com.cobblemon.mod.common.net.messages.server.storage.pc.MovePCPokemonToPartyPacket implements com.cobblemon.mod.common.api.net.NetworkPacket<com.cobblemon.mod.common.net.messages.server.storage.pc.MovePCPokemonToPartyPacket> {
+  public static final com.cobblemon.mod.common.net.messages.server.storage.pc.MovePCPokemonToPartyPacket$Companion Companion;
+  private final java.util.UUID pokemonID;
+  private final com.cobblemon.mod.common.api.storage.pc.PCPosition pcPosition;
+  private final com.cobblemon.mod.common.api.storage.party.PartyPosition partyPosition;
+  private final net.minecraft.util.Identifier id;
+  private static final net.minecraft.util.Identifier ID;
+  public com.cobblemon.mod.common.net.messages.server.storage.pc.MovePCPokemonToPartyPacket(java.util.UUID, com.cobblemon.mod.common.api.storage.pc.PCPosition, com.cobblemon.mod.common.api.storage.party.PartyPosition);
+  public final java.util.UUID getPokemonID();
+  public final com.cobblemon.mod.common.api.storage.pc.PCPosition getPcPosition();
+  public final com.cobblemon.mod.common.api.storage.party.PartyPosition getPartyPosition();
+  public net.minecraft.util.Identifier getId();
+  public void sendToServer();
+  public net.minecraft.network.packet.CustomPayload$Id<com.cobblemon.mod.common.net.messages.server.storage.pc.MovePCPokemonToPartyPacket> getId();
+  static {};
+}
+==== com.cobblemon.mod.common.net.messages.server.storage.pc.MovePartyPokemonToPCPacket
+Compiled from "MovePartyPokemonToPCPacket.java"
+public final class com.cobblemon.mod.common.net.messages.server.storage.pc.MovePartyPokemonToPCPacket implements com.cobblemon.mod.common.api.net.NetworkPacket<com.cobblemon.mod.common.net.messages.server.storage.pc.MovePartyPokemonToPCPacket> {
+  public static final com.cobblemon.mod.common.net.messages.server.storage.pc.MovePartyPokemonToPCPacket$Companion Companion;
+  private final java.util.UUID pokemonID;
+  private final com.cobblemon.mod.common.api.storage.party.PartyPosition partyPosition;
+  private final com.cobblemon.mod.common.api.storage.pc.PCPosition pcPosition;
+  private final net.minecraft.util.Identifier id;
+  private static final net.minecraft.util.Identifier ID;
+  public com.cobblemon.mod.common.net.messages.server.storage.pc.MovePartyPokemonToPCPacket(java.util.UUID, com.cobblemon.mod.common.api.storage.party.PartyPosition, com.cobblemon.mod.common.api.storage.pc.PCPosition);
+  public final java.util.UUID getPokemonID();
+  public final com.cobblemon.mod.common.api.storage.party.PartyPosition getPartyPosition();
+  public final com.cobblemon.mod.common.api.storage.pc.PCPosition getPcPosition();
+  public net.minecraft.util.Identifier getId();
+  public void sendToServer();
+  public net.minecraft.network.packet.CustomPayload$Id<com.cobblemon.mod.common.net.messages.server.storage.pc.MovePartyPokemonToPCPacket> getId();
+  static {};
+}
+==== com.cobblemon.mod.common.net.messages.server.storage.SwapPCPartyPokemonPacket
+Compiled from "SwapPCPartyPokemonPacket.java"
+public final class com.cobblemon.mod.common.net.messages.server.storage.SwapPCPartyPokemonPacket implements com.cobblemon.mod.common.api.net.NetworkPacket<com.cobblemon.mod.common.net.messages.server.storage.SwapPCPartyPokemonPacket> {
+  public static final com.cobblemon.mod.common.net.messages.server.storage.SwapPCPartyPokemonPacket$Companion Companion;
+  private final java.util.UUID partyPokemonID;
+  private final com.cobblemon.mod.common.api.storage.party.PartyPosition partyPosition;
+  private final java.util.UUID pcPokemonID;
+  private final com.cobblemon.mod.common.api.storage.pc.PCPosition pcPosition;
+  private final net.minecraft.util.Identifier id;
+  private static final net.minecraft.util.Identifier ID;
+  public com.cobblemon.mod.common.net.messages.server.storage.SwapPCPartyPokemonPacket(java.util.UUID, com.cobblemon.mod.common.api.storage.party.PartyPosition, java.util.UUID, com.cobblemon.mod.common.api.storage.pc.PCPosition);
+  public final java.util.UUID getPartyPokemonID();
+  public final com.cobblemon.mod.common.api.storage.party.PartyPosition getPartyPosition();
+  public final java.util.UUID getPcPokemonID();
+  public final com.cobblemon.mod.common.api.storage.pc.PCPosition getPcPosition();
+  public net.minecraft.util.Identifier getId();
+  public void sendToServer();
+  public net.minecraft.network.packet.CustomPayload$Id<com.cobblemon.mod.common.net.messages.server.storage.SwapPCPartyPokemonPacket> getId();
+  static {};
+}
+==== com.cobblemon.mod.common.net.messages.server.storage.pc.ReleasePCPokemonPacket
+Compiled from "ReleasePCPokemonPacket.java"
+public final class com.cobblemon.mod.common.net.messages.server.storage.pc.ReleasePCPokemonPacket implements com.cobblemon.mod.common.api.net.NetworkPacket<com.cobblemon.mod.common.net.messages.server.storage.pc.ReleasePCPokemonPacket> {
+  public static final com.cobblemon.mod.common.net.messages.server.storage.pc.ReleasePCPokemonPacket$Companion Companion;
+  private final java.util.UUID pokemonID;
+  private final com.cobblemon.mod.common.api.storage.pc.PCPosition position;
+  private final net.minecraft.util.Identifier id;
+  private static final net.minecraft.util.Identifier ID;
+  public com.cobblemon.mod.common.net.messages.server.storage.pc.ReleasePCPokemonPacket(java.util.UUID, com.cobblemon.mod.common.api.storage.pc.PCPosition);
+  public final java.util.UUID getPokemonID();
+  public final com.cobblemon.mod.common.api.storage.pc.PCPosition getPosition();
+  public net.minecraft.util.Identifier getId();
+  public void sendToServer();
+  public net.minecraft.network.packet.CustomPayload$Id<com.cobblemon.mod.common.net.messages.server.storage.pc.ReleasePCPokemonPacket> getId();
+  static {};
+}
+==== com.cobblemon.mod.common.net.messages.server.storage.party.ReleasePartyPokemonPacket
+Compiled from "ReleasePartyPokemonPacket.java"
+public final class com.cobblemon.mod.common.net.messages.server.storage.party.ReleasePartyPokemonPacket implements com.cobblemon.mod.common.api.net.NetworkPacket<com.cobblemon.mod.common.net.messages.server.storage.party.ReleasePartyPokemonPacket> {
+  public static final com.cobblemon.mod.common.net.messages.server.storage.party.ReleasePartyPokemonPacket$Companion Companion;
+  private final java.util.UUID pokemonID;
+  private final com.cobblemon.mod.common.api.storage.party.PartyPosition position;
+  private final net.minecraft.util.Identifier id;
+  private static final net.minecraft.util.Identifier ID;
+  public com.cobblemon.mod.common.net.messages.server.storage.party.ReleasePartyPokemonPacket(java.util.UUID, com.cobblemon.mod.common.api.storage.party.PartyPosition);
+  public final java.util.UUID getPokemonID();
+  public final com.cobblemon.mod.common.api.storage.party.PartyPosition getPosition();
+  public net.minecraft.util.Identifier getId();
+  public void sendToServer();
+  public net.minecraft.network.packet.CustomPayload$Id<com.cobblemon.mod.common.net.messages.server.storage.party.ReleasePartyPokemonPacket> getId();
+  static {};
+}
+==== com.cobblemon.mod.common.net.messages.server.storage.pc.UnlinkPlayerFromPCPacket
+Compiled from "UnlinkPlayerFromPCPacket.java"
+public final class com.cobblemon.mod.common.net.messages.server.storage.pc.UnlinkPlayerFromPCPacket implements com.cobblemon.mod.common.api.net.NetworkPacket<com.cobblemon.mod.common.net.messages.server.storage.pc.UnlinkPlayerFromPCPacket> {
+  public static final com.cobblemon.mod.common.net.messages.server.storage.pc.UnlinkPlayerFromPCPacket$Companion Companion;
+  private final net.minecraft.util.Identifier id;
+  private static final net.minecraft.util.Identifier ID;
+  public com.cobblemon.mod.common.net.messages.server.storage.pc.UnlinkPlayerFromPCPacket();
+  public net.minecraft.util.Identifier getId();
+  public void sendToServer();
+  public net.minecraft.network.packet.CustomPayload$Id<com.cobblemon.mod.common.net.messages.server.storage.pc.UnlinkPlayerFromPCPacket> getId();
+  static {};
+}
+==== com.cobblemon.mod.common.net.messages.server.storage.pc.SortPCBoxPacket
+Compiled from "SortPCBoxPacket.java"
+public final class com.cobblemon.mod.common.net.messages.server.storage.pc.SortPCBoxPacket implements com.cobblemon.mod.common.api.net.NetworkPacket<com.cobblemon.mod.common.net.messages.server.storage.pc.SortPCBoxPacket>, com.cobblemon.mod.common.api.net.UnsplittablePacket {
+  public static final com.cobblemon.mod.common.net.messages.server.storage.pc.SortPCBoxPacket$Companion Companion;
+  private final java.util.UUID storeID;
+  private final int boxNumber;
+  private final com.cobblemon.mod.common.api.pokemon.PokemonSortMode sortMode;
+  private final boolean descending;
+  private final net.minecraft.util.Identifier id;
+  private static final net.minecraft.util.Identifier ID;
+  public com.cobblemon.mod.common.net.messages.server.storage.pc.SortPCBoxPacket(java.util.UUID, int, com.cobblemon.mod.common.api.pokemon.PokemonSortMode, boolean);
+  public final java.util.UUID getStoreID();
+  public final int getBoxNumber();
+  public final com.cobblemon.mod.common.api.pokemon.PokemonSortMode getSortMode();
+  public final boolean getDescending();
+  public net.minecraft.util.Identifier getId();
+  public void sendToServer();
+  public net.minecraft.network.packet.CustomPayload$Id<com.cobblemon.mod.common.net.messages.server.storage.pc.SortPCBoxPacket> getId();
+  static {};
+}
+==== com.cobblemon.mod.common.net.messages.server.SendOutPokemonPacket
+Compiled from "SendOutPokemonPacket.java"
+public final class com.cobblemon.mod.common.net.messages.server.SendOutPokemonPacket implements com.cobblemon.mod.common.api.net.NetworkPacket<com.cobblemon.mod.common.net.messages.server.SendOutPokemonPacket> {
+  public static final com.cobblemon.mod.common.net.messages.server.SendOutPokemonPacket$Companion Companion;
+  private final int slot;
+  private final net.minecraft.util.Identifier id;
+  private static final net.minecraft.util.Identifier ID;
+  public com.cobblemon.mod.common.net.messages.server.SendOutPokemonPacket(int);
+  public final int getSlot();
+  public net.minecraft.util.Identifier getId();
+  public void sendToServer();
+  public net.minecraft.network.packet.CustomPayload$Id<com.cobblemon.mod.common.net.messages.server.SendOutPokemonPacket> getId();
+  static {};
+}
+==== com.cobblemon.mod.common.net.messages.client.storage.pc.OpenPCPacket
+Compiled from "OpenPCPacket.java"
+public final class com.cobblemon.mod.common.net.messages.client.storage.pc.OpenPCPacket implements com.cobblemon.mod.common.api.net.NetworkPacket<com.cobblemon.mod.common.net.messages.client.storage.pc.OpenPCPacket> {
+  public static final com.cobblemon.mod.common.net.messages.client.storage.pc.OpenPCPacket$Companion Companion;
+  private final java.util.UUID storeID;
+  private final java.lang.Integer box;
+  private final java.util.Set<net.minecraft.util.Identifier> unseenWallpapers;
+  private final net.minecraft.util.Identifier id;
+  private static final net.minecraft.util.Identifier ID;
+  public final java.util.UUID getStoreID();
+  public final java.lang.Integer getBox();
+  public final java.util.Set<net.minecraft.util.Identifier> getUnseenWallpapers();
+  public com.cobblemon.mod.common.net.messages.client.storage.pc.OpenPCPacket(java.util.UUID, java.lang.Integer, java.util.Set<net.minecraft.util.Identifier>);
+  public com.cobblemon.mod.common.net.messages.client.storage.pc.OpenPCPacket(java.util.UUID, java.lang.Integer, java.util.Set, int, kotlin.jvm.internal.DefaultConstructorMarker);
+  public com.cobblemon.mod.common.net.messages.client.storage.pc.OpenPCPacket(com.cobblemon.mod.common.api.storage.pc.PCStore, java.lang.Integer);
+  public com.cobblemon.mod.common.net.messages.client.storage.pc.OpenPCPacket(com.cobblemon.mod.common.api.storage.pc.PCStore, java.lang.Integer, int, kotlin.jvm.internal.DefaultConstructorMarker);
+  public net.minecraft.util.Identifier getId();
+  public void sendToServer();
+  public net.minecraft.network.packet.CustomPayload$Id<com.cobblemon.mod.common.net.messages.client.storage.pc.OpenPCPacket> getId();
+  public com.cobblemon.mod.common.net.messages.client.storage.pc.OpenPCPacket(java.util.UUID, java.lang.Integer);
+  public com.cobblemon.mod.common.net.messages.client.storage.pc.OpenPCPacket(java.util.UUID);
+  public com.cobblemon.mod.common.net.messages.client.storage.pc.OpenPCPacket(com.cobblemon.mod.common.api.storage.pc.PCStore);
+  static {};
+}
+==== com.cobblemon.mod.common.client.storage.ClientStorageManager
+Compiled from "ClientStorageManager.java"
+public final class com.cobblemon.mod.common.client.storage.ClientStorageManager {
+  private com.cobblemon.mod.common.client.storage.ClientParty party;
+  private final java.util.Map<java.util.UUID, com.cobblemon.mod.common.client.storage.ClientParty> partyStores;
+  private final java.util.Map<java.util.UUID, com.cobblemon.mod.common.client.storage.ClientPC> pcStores;
+  private int selectedSlot;
+  private java.util.UUID selectedPokemon;
+  public com.cobblemon.mod.common.client.storage.ClientStorageManager();
+  public final com.cobblemon.mod.common.client.storage.ClientParty getParty();
+  public final void setParty(com.cobblemon.mod.common.client.storage.ClientParty);
+  public final java.util.Map<java.util.UUID, com.cobblemon.mod.common.client.storage.ClientParty> getPartyStores();
+  public final java.util.Map<java.util.UUID, com.cobblemon.mod.common.client.storage.ClientPC> getPcStores();
+  public final int getSelectedSlot();
+  public final void setSelectedSlot(int);
+  public final void shiftSelected(boolean);
+  public final void switchToPokemon(java.util.UUID);
+  public final void checkSelectedPokemon();
+  public final com.cobblemon.mod.common.pokemon.Pokemon locatePokemon(java.util.UUID, java.util.UUID);
+  public final void createParty(boolean, java.util.UUID, int);
+  public final void setPartyPokemon(java.util.UUID, com.cobblemon.mod.common.api.storage.party.PartyPosition, com.cobblemon.mod.common.pokemon.Pokemon);
+  public final void setPCPokemon(java.util.UUID, com.cobblemon.mod.common.api.storage.pc.PCPosition, com.cobblemon.mod.common.pokemon.Pokemon);
+  public final void setPartyStore(java.util.UUID);
+  public final void removeFromParty(java.util.UUID, java.util.UUID);
+  public final void moveInParty(java.util.UUID, java.util.UUID, com.cobblemon.mod.common.api.storage.party.PartyPosition);
+  public final void swapInParty(java.util.UUID, java.util.UUID, java.util.UUID);
+  public final void swapInPC(java.util.UUID, java.util.UUID, java.util.UUID);
+  public final void moveInPC(java.util.UUID, java.util.UUID, com.cobblemon.mod.common.api.storage.pc.PCPosition);
+  public final void removeFromPC(java.util.UUID, java.util.UUID);
+  public final void renameBox(java.util.UUID, int, java.lang.String);
+  public final void changeBoxWallpaper(java.util.UUID, int, net.minecraft.util.Identifier);
+  public final void onLogin();
+  public final void onLogout();
+}
+==== PCGUI.closeNormally / onClose / init (bytecode)
+  protected void init();
+      23: new           #314                // class com/cobblemon/mod/common/client/gui/ExitButton
+      38: invokedynamic #332,  0            // InvokeDynamic #0:onPress:(Lcom/cobblemon/mod/common/client/gui/pc/PCGUI;)Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;
+      43: invokespecial #335                // Method com/cobblemon/mod/common/client/gui/ExitButton."<init>":(IILnet/minecraft/client/gui/widget/ButtonWidget$PressAction;)V
+      49: invokevirtual #341                // Method addDrawableChild:(Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;
+      54: new           #343                // class com/cobblemon/mod/common/client/gui/pc/NavigationButton
+      69: invokedynamic #348,  0            // InvokeDynamic #1:onPress:(Lcom/cobblemon/mod/common/client/gui/pc/PCGUI;)Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;
+      74: invokespecial #351                // Method com/cobblemon/mod/common/client/gui/pc/NavigationButton."<init>":(IIZLnet/minecraft/client/gui/widget/ButtonWidget$PressAction;)V
+      80: invokevirtual #341                // Method addDrawableChild:(Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;
+      85: new           #343                // class com/cobblemon/mod/common/client/gui/pc/NavigationButton
+      99: invokedynamic #356,  0            // InvokeDynamic #2:onPress:(Lcom/cobblemon/mod/common/client/gui/pc/PCGUI;)Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;
+     104: invokespecial #351                // Method com/cobblemon/mod/common/client/gui/pc/NavigationButton."<init>":(IIZLnet/minecraft/client/gui/widget/ButtonWidget$PressAction;)V
+     110: invokevirtual #341                // Method addDrawableChild:(Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;
+     115: new           #358                // class com/cobblemon/mod/common/client/gui/pc/FilterWidget
+     130: invokedynamic #371,  0            // InvokeDynamic #3:invoke:(Lcom/cobblemon/mod/common/client/gui/pc/PCGUI;)Lkotlin/jvm/functions/Function0;
+     137: invokespecial #374                // Method com/cobblemon/mod/common/client/gui/pc/FilterWidget."<init>":(IILnet/minecraft/text/Text;Lkotlin/jvm/functions/Function0;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+     156: invokestatic  #285                // Method kotlin/jvm/internal/Intrinsics.throwUninitializedPropertyAccessException:(Ljava/lang/String;)V
+     163: invokevirtual #341                // Method addDrawableChild:(Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;
+     168: new           #287                // class com/cobblemon/mod/common/client/gui/pc/StorageWidget
+     189: invokespecial #380                // Method com/cobblemon/mod/common/client/gui/pc/StorageWidget."<init>":(IILcom/cobblemon/mod/common/client/gui/pc/PCGUI;Lcom/cobblemon/mod/common/client/storage/ClientPC;Lcom/cobblemon/mod/common/client/storage/ClientParty;)V
+     207: invokestatic  #285                // Method kotlin/jvm/internal/Intrinsics.throwUninitializedPropertyAccessException:(Ljava/lang/String;)V
+     219: invokevirtual #386                // Method com/cobblemon/mod/common/client/storage/ClientPC.getBoxes:()Ljava/util/List;
+     222: invokeinterface #389,  1          // InterfaceMethod java/util/List.size:()I
+     238: invokevirtual #392                // Method com/cobblemon/mod/common/client/gui/pc/StorageWidget.setBox:(I)V
+     254: invokestatic  #285                // Method kotlin/jvm/internal/Intrinsics.throwUninitializedPropertyAccessException:(Ljava/lang/String;)V
+     261: invokevirtual #341                // Method addDrawableChild:(Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;
+     266: new           #394                // class com/cobblemon/mod/common/client/gui/pc/BoxNameWidget
+     292: invokestatic  #285                // Method kotlin/jvm/internal/Intrinsics.throwUninitializedPropertyAccessException:(Ljava/lang/String;)V
+     298: invokespecial #397                // Method com/cobblemon/mod/common/client/gui/pc/BoxNameWidget."<init>":(IILnet/minecraft/text/Text;Lcom/cobblemon/mod/common/client/gui/pc/PCGUI;Lcom/cobblemon/mod/common/client/gui/pc/StorageWidget;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+     317: invokestatic  #285                // Method kotlin/jvm/internal/Intrinsics.throwUninitializedPropertyAccessException:(Ljava/lang/String;)V
+     324: invokevirtual #341                // Method addDrawableChild:(Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;
+     340: invokestatic  #285                // Method kotlin/jvm/internal/Intrinsics.throwUninitializedPropertyAccessException:(Ljava/lang/String;)V
+     344: invokevirtual #404                // Method com/cobblemon/mod/common/client/gui/pc/StorageWidget.getPastureWidget:()Lcom/cobblemon/mod/common/client/gui/pasture/PastureWidget;
+     354: invokeinterface #407,  1          // InterfaceMethod java/util/List.clear:()V
+     360: new           #409                // class com/cobblemon/mod/common/client/gui/pc/IconButton
+     387: invokedynamic #418,  0            // InvokeDynamic #4:onPress:(Lcom/cobblemon/mod/common/client/gui/pc/PCGUI;)Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;
+     395: invokespecial #421                // Method com/cobblemon/mod/common/client/gui/pc/IconButton."<init>":(IIIILnet/minecraft/util/Identifier;Lnet/minecraft/util/Identifier;Ljava/lang/String;Ljava/lang/String;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+     413: invokevirtual #424                // Method com/cobblemon/mod/common/client/gui/pc/IconButton.setHighlighted:(Z)V
+     422: invokevirtual #341                // Method addDrawableChild:(Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;
+     427: new           #426                // class com/cobblemon/mod/common/client/gui/pc/WallpapersScrollingWidget
+     453: invokestatic  #285                // Method kotlin/jvm/internal/Intrinsics.throwUninitializedPropertyAccessException:(Ljava/lang/String;)V
+     457: invokespecial #429                // Method com/cobblemon/mod/common/client/gui/pc/WallpapersScrollingWidget."<init>":(IILcom/cobblemon/mod/common/client/gui/pc/PCGUI;Lcom/cobblemon/mod/common/client/gui/pc/StorageWidget;)V
+     480: invokevirtual #437                // Method com/cobblemon/mod/common/client/gui/pc/PCGUIConfiguration.setShowParty:(Z)V
+     503: invokestatic  #285                // Method kotlin/jvm/internal/Intrinsics.throwUninitializedPropertyAccessException:(Ljava/lang/String;)V
+     510: invokevirtual #341                // Method addDrawableChild:(Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;
+     515: new           #409                // class com/cobblemon/mod/common/client/gui/pc/IconButton
+     541: invokedynamic #449,  0            // InvokeDynamic #5:onPress:(Lcom/cobblemon/mod/common/client/gui/pc/PCGUI;)Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;
+     549: invokespecial #421                // Method com/cobblemon/mod/common/client/gui/pc/IconButton."<init>":(IIIILnet/minecraft/util/Identifier;Lnet/minecraft/util/Identifier;Ljava/lang/String;Ljava/lang/String;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+     576: invokeinterface #454,  2          // InterfaceMethod java/util/List.add:(Ljava/lang/Object;)Z
+     589: invokevirtual #341                // Method addDrawableChild:(Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;
+     593: invokestatic  #460                // Method com/cobblemon/mod/common/api/pokemon/PokemonSortMode.getEntries:()Lkotlin/enums/EnumEntries;
+     607: invokeinterface #466,  1          // InterfaceMethod java/lang/Iterable.iterator:()Ljava/util/Iterator;
+     616: invokeinterface #471,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+     626: invokeinterface #474,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+     645: invokestatic  #479                // Method kotlin/collections/CollectionsKt.throwIndexOverflow:()V
+     664: invokevirtual #485                // Method com/cobblemon/mod/common/api/pokemon/PokemonSortMode.name:()Ljava/lang/String;
+     670: invokevirtual #497                // Method java/lang/String.toLowerCase:(Ljava/util/Locale;)Ljava/lang/String;
+     677: invokestatic  #502                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+     683: new           #409                // class com/cobblemon/mod/common/client/gui/pc/IconButton
+     707: invokedynamic #514,  0            // InvokeDynamic #6:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+     712: invokestatic  #520                // Method com/cobblemon/mod/common/util/MiscUtilsKt.cobblemonResource:(Ljava/lang/String;)Lnet/minecraft/util/Identifier;
+     717: invokedynamic #523,  0            // InvokeDynamic #7:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+     722: invokestatic  #520                // Method com/cobblemon/mod/common/util/MiscUtilsKt.cobblemonResource:(Ljava/lang/String;)Lnet/minecraft/util/Identifier;
+     727: invokedynamic #526,  0            // InvokeDynamic #8:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+     734: invokedynamic #529,  0            // InvokeDynamic #9:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+     742: invokedynamic #537,  0            // InvokeDynamic #10:onPress:(Lcom/cobblemon/mod/common/client/gui/pc/PCGUI;Lcom/cobblemon/mod/common/api/pokemon/PokemonSortMode;)Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;
+     747: invokespecial #540                // Method com/cobblemon/mod/common/client/gui/pc/IconButton."<init>":(IIIILnet/minecraft/util/Identifier;Lnet/minecraft/util/Identifier;Ljava/lang/String;Ljava/lang/String;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;)V
+     776: invokeinterface #454,  2          // InterfaceMethod java/util/List.add:(Ljava/lang/Object;)Z
+     790: invokevirtual #341                // Method addDrawableChild:(Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;
+     801: new           #542                // class com/cobblemon/mod/common/client/gui/summary/widgets/MarkingsWidget
+     809: invokestatic  #548                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+     821: invokestatic  #557                // Method java/lang/Double.valueOf:(D)Ljava/lang/Double;
+     829: invokespecial #560                // Method com/cobblemon/mod/common/client/gui/summary/widgets/MarkingsWidget."<init>":(Ljava/lang/Number;Ljava/lang/Number;Lcom/cobblemon/mod/common/pokemon/Pokemon;Z)V
+     848: invokestatic  #285                // Method kotlin/jvm/internal/Intrinsics.throwUninitializedPropertyAccessException:(Ljava/lang/String;)V
+     855: invokevirtual #341                // Method addDrawableChild:(Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;
+     878: invokevirtual #572                // Method com/cobblemon/mod/common/client/gui/summary/Summary$Companion.getIconCosmeticItemResource:()Lnet/minecraft/util/Identifier;
+     886: invokevirtual #575                // Method com/cobblemon/mod/common/client/gui/summary/Summary$Companion.getIconHeldItemResource:()Lnet/minecraft/util/Identifier;
+     892: invokedynamic #580,  0            // InvokeDynamic #11:onPress:(Lcom/cobblemon/mod/common/client/gui/pc/PCGUI;)Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;
+     899: new           #582                // class com/cobblemon/mod/common/client/gui/summary/SummaryButton
+     908: invokestatic  #548                // Method java/lang/Integer.valueOf:(I)Ljava/lang/Integer;
+==== OpenPCHandler
+==== StorageWidget handling (packets)
+  public com.cobblemon.mod.common.client.gui.pc.StorageWidget(int, int, com.cobblemon.mod.common.client.gui.pc.PCGUI, com.cobblemon.mod.common.client.storage.ClientPC, com.cobblemon.mod.common.client.storage.ClientParty);
+  public final com.cobblemon.mod.common.client.gui.pc.PCGUI getPcGui();
+  public final com.cobblemon.mod.common.client.gui.pasture.PastureWidget getPastureWidget();
+  public final void setPastureWidget(com.cobblemon.mod.common.client.gui.pasture.PastureWidget);
+  public final boolean getDisplayConfirmRelease();
+  public final void setDisplayConfirmRelease(boolean);
+  public final boolean getScreenLoaded();
+  public final void setScreenLoaded(boolean);
+  public final com.cobblemon.mod.common.api.storage.StorePosition getSelectedPosition();
+  public final void setSelectedPosition(com.cobblemon.mod.common.api.storage.StorePosition);
+  public final com.cobblemon.mod.common.client.gui.pc.GrabbedStorageSlot getGrabbedSlot();
+  public final void setGrabbedSlot(com.cobblemon.mod.common.client.gui.pc.GrabbedStorageSlot);
+  public final int getBox();
+  public final void setBox(int);
+  public final boolean canDeleteSelected();
+  public final void setupStorageSlots();
+      94: invokespecial #309                // Method com/cobblemon/mod/common/api/storage/pc/PCPosition."<init>":(II)V
+     281: invokespecial #331                // Method com/cobblemon/mod/common/api/storage/party/PartyPosition."<init>":(I)V
+  private final com.cobblemon.mod.common.pokemon.Pokemon getSelectedPokemon();
+  protected void renderWidget(net.minecraft.client.gui.DrawContext, int, int, float);
+  public boolean mouseClicked(double, double, int);
+  private final void resetStorageSlots();
+  private final void playSound(net.minecraft.sound.SoundEvent);
+  private final void onStorageSlotClicked(net.minecraft.client.gui.widget.ButtonWidget);
+     337: invokespecial #331                // Method com/cobblemon/mod/common/api/storage/party/PartyPosition."<init>":(I)V
+     340: invokespecial #705                // Method com/cobblemon/mod/common/net/messages/server/storage/pc/MovePCPokemonToPartyPacket."<init>":(Ljava/util/UUID;Lcom/cobblemon/mod/common/api/storage/pc/PCPosition;Lcom/cobblemon/mod/common/api/storage/party/PartyPosition;)V
+     621: invokespecial #309                // Method com/cobblemon/mod/common/api/storage/pc/PCPosition."<init>":(II)V
+     624: invokespecial #732                // Method com/cobblemon/mod/common/net/messages/server/storage/pc/MovePartyPokemonToPCPacket."<init>":(Ljava/util/UUID;Lcom/cobblemon/mod/common/api/storage/party/PartyPosition;Lcom/cobblemon/mod/common/api/storage/pc/PCPosition;)V
+     863: invokespecial #746                // Method com/cobblemon/mod/common/net/messages/server/storage/pc/SwapPCPokemonPacket."<init>":(Ljava/util/UUID;Lcom/cobblemon/mod/common/api/storage/pc/PCPosition;Ljava/util/UUID;Lcom/cobblemon/mod/common/api/storage/pc/PCPosition;)V
+     908: invokespecial #753                // Method com/cobblemon/mod/common/net/messages/server/storage/pc/MovePCPokemonPacket."<init>":(Ljava/util/UUID;Lcom/cobblemon/mod/common/api/storage/pc/PCPosition;Lcom/cobblemon/mod/common/api/storage/pc/PCPosition;)V
+    1009: invokespecial #759                // Method com/cobblemon/mod/common/net/messages/server/storage/SwapPCPartyPokemonPacket."<init>":(Ljava/util/UUID;Lcom/cobblemon/mod/common/api/storage/party/PartyPosition;Ljava/util/UUID;Lcom/cobblemon/mod/common/api/storage/pc/PCPosition;)V
+    1054: invokespecial #705                // Method com/cobblemon/mod/common/net/messages/server/storage/pc/MovePCPokemonToPartyPacket."<init>":(Ljava/util/UUID;Lcom/cobblemon/mod/common/api/storage/pc/PCPosition;Lcom/cobblemon/mod/common/api/storage/party/PartyPosition;)V
+    1188: invokespecial #759                // Method com/cobblemon/mod/common/net/messages/server/storage/SwapPCPartyPokemonPacket."<init>":(Ljava/util/UUID;Lcom/cobblemon/mod/common/api/storage/party/PartyPosition;Ljava/util/UUID;Lcom/cobblemon/mod/common/api/storage/pc/PCPosition;)V
+    1233: invokespecial #732                // Method com/cobblemon/mod/common/net/messages/server/storage/pc/MovePartyPokemonToPCPacket."<init>":(Ljava/util/UUID;Lcom/cobblemon/mod/common/api/storage/party/PartyPosition;Lcom/cobblemon/mod/common/api/storage/pc/PCPosition;)V
+    1335: invokespecial #764                // Method com/cobblemon/mod/common/net/messages/server/storage/party/SwapPartyPokemonPacket."<init>":(Ljava/util/UUID;Lcom/cobblemon/mod/common/api/storage/party/PartyPosition;Ljava/util/UUID;Lcom/cobblemon/mod/common/api/storage/party/PartyPosition;)V
+    1380: invokespecial #769                // Method com/cobblemon/mod/common/net/messages/server/storage/party/MovePartyPokemonPacket."<init>":(Ljava/util/UUID;Lcom/cobblemon/mod/common/api/storage/party/PartyPosition;Lcom/cobblemon/mod/common/api/storage/party/PartyPosition;)V
+  public final void resetSelected();
+  private static final void _init_$lambda$0(com.cobblemon.mod.common.client.gui.pc.StorageWidget, net.minecraft.client.gui.widget.ButtonWidget);
+  private static final void _init_$lambda$1(com.cobblemon.mod.common.client.gui.pc.StorageWidget, net.minecraft.client.gui.widget.ButtonWidget);
+      66: invokespecial #811                // Method com/cobblemon/mod/common/net/messages/server/storage/party/ReleasePartyPokemonPacket."<init>":(Ljava/util/UUID;Lcom/cobblemon/mod/common/api/storage/party/PartyPosition;)V
+     102: invokespecial #816                // Method com/cobblemon/mod/common/net/messages/server/storage/pc/ReleasePCPokemonPacket."<init>":(Ljava/util/UUID;Lcom/cobblemon/mod/common/api/storage/pc/PCPosition;)V
+  private static final void _init_$lambda$2(com.cobblemon.mod.common.client.gui.pc.StorageWidget, net.minecraft.client.gui.widget.ButtonWidget);
+  private static final void setupStorageSlots$lambda$0(com.cobblemon.mod.common.client.gui.pc.StorageWidget, net.minecraft.client.gui.widget.ButtonWidget);
+  private static final void setupStorageSlots$lambda$2(com.cobblemon.mod.common.client.gui.pc.StorageWidget, net.minecraft.client.gui.widget.ButtonWidget);

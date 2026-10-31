@@ -1,0 +1,133 @@
+  private final void renderPKM(net.minecraft.client.gui.DrawContext, float, int, int);
+    Code:
+       0: aload_1
+       1: invokevirtual #281                // Method net/minecraft/client/gui/DrawContext.getMatrices:()Lnet/minecraft/client/util/math/MatrixStack;
+       4: astore        5
+       6: aload         5
+       8: invokevirtual #286                // Method net/minecraft/client/util/math/MatrixStack.push:()V
+      11: aload_1
+      12: aload_0
+      13: invokevirtual #259                // Method getX:()I
+      16: aload_0
+      17: invokevirtual #262                // Method getY:()I
+      20: aload_0
+      21: invokevirtual #259                // Method getX:()I
+      24: aload_0
+      25: getfield      #265                // Field width:I
+      28: iadd
+      29: aload_0
+      30: invokevirtual #262                // Method getY:()I
+      33: aload_0
+      34: getfield      #268                // Field height:I
+      37: iadd
+      38: invokevirtual #290                // Method net/minecraft/client/gui/DrawContext.enableScissor:(IIII)V
+      41: aload         5
+      43: aload_0
+      44: invokevirtual #259                // Method getX:()I
+      47: i2d
+      48: aload_0
+      49: getfield      #265                // Field width:I
+      52: i2d
+      53: ldc2_w        #291                // double 0.5d
+      56: dmul
+      57: dadd
+      58: aload_0
+      59: invokevirtual #262                // Method getY:()I
+      62: i2d
+      63: aload_0
+      64: getfield      #141                // Field offsetY:D
+      67: dadd
+      68: dconst_0
+      69: invokevirtual #296                // Method net/minecraft/client/util/math/MatrixStack.translate:(DDD)V
+      72: aload         5
+      74: aload_0
+      75: getfield      #137                // Field baseScale:F
+      78: aload_0
+      79: getfield      #137                // Field baseScale:F
+      82: aload_0
+      83: getfield      #137                // Field baseScale:F
+      86: invokevirtual #299                // Method net/minecraft/client/util/math/MatrixStack.scale:(FFF)V
+      89: aload         5
+      91: invokevirtual #286                // Method net/minecraft/client/util/math/MatrixStack.push:()V
+      94: aload_0
+      95: getfield      #273                // Field hovered:Z
+      98: ifeq          111
+     101: aload_0
+     102: invokestatic  #305                // Method java/lang/System.currentTimeMillis:()J
+     105: invokestatic  #310                // Method java/lang/Long.valueOf:(J)Ljava/lang/Long;
+     108: putfield      #249                // Field lookStartTime:Ljava/lang/Long;
+     111: aload_0
+     112: getfield      #249                // Field lookStartTime:Ljava/lang/Long;
+     115: dup
+     116: ifnull        145
+     119: checkcast     #312                // class java/lang/Number
+     122: invokevirtual #315                // Method java/lang/Number.longValue:()J
+     125: lstore        11
+     127: iconst_0
+     128: istore        13
+     130: invokestatic  #305                // Method java/lang/System.currentTimeMillis:()J
+     133: lload         11
+     135: lsub
+     136: sipush        1000
+     139: i2l
+     140: ldiv
+     141: nop
+     142: goto          149
+     145: pop
+     146: ldc2_w        #111                // long 6l
+     149: lstore        6
+     151: lload         6
+     153: ldc2_w        #111                // long 6l
+     156: lcmp
+     157: iflt          164
+     160: iconst_1
+     161: goto          165
+     164: iconst_0
+     165: istore        8
+     167: aload_0
+     168: getfield      #273                // Field hovered:Z
+     171: ifne          179
+     174: iload         8
+     176: ifne          198
+     179: aload_0
+     180: getfield      #145                // Field shouldFollowCursor:Z
+     183: ifeq          198
+     186: getstatic     #321                // Field com/cobblemon/mod/common/Cobblemon.INSTANCE:Lcom/cobblemon/mod/common/Cobblemon;
+     189: invokevirtual #325                // Method com/cobblemon/mod/common/Cobblemon.getConfig:()Lcom/cobblemon/mod/common/config/CobblemonConfig;
+     192: invokevirtual #330                // Method com/cobblemon/mod/common/config/CobblemonConfig.getSummaryPokemonFollowCursor:()Z
+     195: ifne          202
+     198: iconst_1
+     199: goto          203
+     202: iconst_0
+     203: istore        9
+     205: iload         9
+     207: ifeq          215
+     210: aload_0
+     211: aconst_null
+     212: putfield      #249                // Field lookStartTime:Ljava/lang/Long;
+     215: new           #332                // class org/joml/Quaternionf
+     218: dup
+     219: invokespecial #333                // Method org/joml/Quaternionf."<init>":()V
+     222: aload_0
+     223: getfield      #179                // Field rotationVector:Lorg/joml/Vector3f;
+     226: invokestatic  #339                // Method com/cobblemon/mod/common/util/math/QuaternionUtilsKt.fromEulerXYZDegrees:(Lorg/joml/Quaternionf;Lorg/joml/Vector3f;)Lorg/joml/Quaternionf;
+     229: astore        10
+     231: aload_0
+     232: getfield      #145                // Field shouldFollowCursor:Z
+     235: ifeq          304
+     238: aload_0
+     239: aload_0
+     240: invokevirtual #259                // Method getX:()I
+     885: bipush        66
+     887: bipush        66
+     889: aload_0
+     890: getfield      #251                // Field selectedPokemon:Lcom/cobblemon/mod/common/pokemon/Pokemon;
+     893: invokevirtual #516                // Method com/cobblemon/mod/common/pokemon/Pokemon.asRenderablePokemon:()Lcom/cobblemon/mod/common/pokemon/RenderablePokemon;
+     896: fconst_2
+     897: ldc_w         #517                // float 325.0f
+     900: ldc2_w        #518                // double -10.0d
+     903: iconst_0
+     904: iconst_1
+     905: sipush        256
+     908: aconst_null
+     909: invokespecial #522                // Method com/cobblemon/mod/common/client/gui/summary/widgets/ModelWidget."<init>":(IIIILcom/cobblemon/mod/common/pokemon/RenderablePokemon;FFDZZILkotlin/jvm/internal/DefaultConstructorMarker;)V

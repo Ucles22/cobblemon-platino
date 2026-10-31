@@ -1,0 +1,4 @@
+  public void setScreen(net.minecraft.client.gui.screen.Screen);
+  public void openGameMenu(boolean);
+  public void setScreenAndRender(net.minecraft.client.gui.screen.Screen);
+  public static java.util.List<net.minecraft.text.Text> getTooltipFromItem(net.minecraft.client.MinecraftClient, net.minecraft.item.ItemStack);

@@ -1,0 +1,80 @@
+  public static final com.cobblemon.mod.common.client.gui.pc.StorageSlot$Companion Companion;
+  private final com.cobblemon.mod.common.client.gui.pc.StorageWidget parent;
+  private final com.cobblemon.mod.common.client.render.models.blockbench.FloatingState state;
+  private boolean isSlotSelected;
+  public static final int SIZE = 25;
+  private static final net.minecraft.util.Identifier genderIconMale;
+  private static final net.minecraft.util.Identifier genderIconFemale;
+  private static final net.minecraft.util.Identifier selectPointerResource;
+  private static final net.minecraft.util.Identifier slotOverlayResource;
+  private static final net.minecraft.util.Identifier slotOverlayPastureIconResource;
+  private static final net.minecraft.util.Identifier slotOverlayMoveIconResource;
+  public com.cobblemon.mod.common.client.gui.pc.StorageSlot(int, int, com.cobblemon.mod.common.client.gui.pc.StorageWidget, net.minecraft.client.gui.widget.ButtonWidget$PressAction);
+       1: ldc           #101                // String parent
+       8: ldc           #108                // String onPress
+      16: bipush        25
+      18: bipush        25
+      20: ldc           #110                // String StorageSlot
+  public final com.cobblemon.mod.common.client.render.models.blockbench.FloatingState getState();
+  protected final boolean isSlotSelected();
+  protected final void setSlotSelected(boolean);
+  public void playDownSound(net.minecraft.client.sound.SoundManager);
+       1: ldc           #139                // String soundManager
+  protected void renderWidget(net.minecraft.client.gui.DrawContext, int, int, float);
+       1: ldc           #142                // String context
+  public final void renderSlot(net.minecraft.client.gui.DrawContext, int, int, float);
+       1: ldc           #142                // String context
+      32: bipush        25
+      38: bipush        25
+      55: ldc2_w        #175                // double 12.5d
+      61: dconst_1
+      63: dconst_0
+      64: invokevirtual #180                // Method net/minecraft/client/util/math/MatrixStack.translate:(DDD)V
+      69: ldc           #181                // float 2.5f
+      71: ldc           #181                // float 2.5f
+      73: fconst_1
+      74: invokevirtual #185                // Method net/minecraft/client/util/math/MatrixStack.scale:(FFF)V
+     181: new           #231                // class org/joml/Quaternionf
+     185: invokespecial #232                // Method org/joml/Quaternionf."<init>":()V
+     188: new           #234                // class org/joml/Vector3f
+     192: ldc           #235                // float 13.0f
+     194: ldc           #236                // float 35.0f
+     196: fconst_0
+     197: invokespecial #238                // Method org/joml/Vector3f."<init>":(FFF)V
+     200: invokestatic  #244                // Method com/cobblemon/mod/common/util/math/QuaternionUtilsKt.fromEulerXYZDegrees:(Lorg/joml/Quaternionf;Lorg/joml/Vector3f;)Lorg/joml/Quaternionf;
+     221: fconst_0
+     222: ldc           #249                // float 4.5f
+     226: fconst_0
+     227: fconst_0
+     228: fconst_0
+     229: fconst_0
+     230: fconst_0
+     231: fconst_0
+     232: sipush        32648
+     236: invokestatic  #255                // Method com/cobblemon/mod/common/client/gui/PokemonGuiUtilsKt.drawProfilePokemon$default:(Lcom/cobblemon/mod/common/pokemon/RenderablePokemon;Lnet/minecraft/client/util/math/MatrixStack;Lorg/joml/Quaternionf;Lcom/cobblemon/mod/common/entity/PoseType;Lcom/cobblemon/mod/common/client/render/models/blockbench/PosableState;FFZZFFFFFFILjava/lang/Object;)V
+     262: dconst_0
+     263: dconst_0
+     264: ldc2_w        #262                // double 100.0d
+     267: invokevirtual #180                // Method net/minecraft/client/util/math/MatrixStack.translate:(DDD)V
+     270: ldc_w         #265                // String ui.lv.number
+     297: ldc_w         #284                // String lang(...)
+     335: ldc_w         #290                // float 0.5f
+     345: sipush        7106
+     390: bipush        21
+     394: ldc_w         #290                // float 0.5f
+     404: ldc_w         #290                // float 0.5f
+     430: bipush        8
+     438: bipush        6
+     456: ldc_w         #290                // float 0.5f
+     459: ldc_w         #321                // int 65472
+     485: ldc2_w        #337                // double 16.0d
+     491: ldc2_w        #337                // double 16.0d
+     495: ldc2_w        #339                // double 0.5d
+     498: fconst_0
+     501: bipush        16
+     519: dconst_0
+     520: dconst_0
+     521: ldc2_w        #345                // double 500.0d
+     524: invokevirtual #180                // Method net/minecraft/client/util/math/MatrixStack.translate:(DDD)V
+     588: bipush        25
+     596: bipush        25

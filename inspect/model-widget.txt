@@ -1,0 +1,104 @@
+  public static final com.cobblemon.mod.common.entity.PoseType STAND;
+  public static final com.cobblemon.mod.common.entity.PoseType WALK;
+  public static final com.cobblemon.mod.common.entity.PoseType SLEEP;
+  public static final com.cobblemon.mod.common.entity.PoseType HOVER;
+  public static final com.cobblemon.mod.common.entity.PoseType FLY;
+  public static final com.cobblemon.mod.common.entity.PoseType FLOAT;
+  public static final com.cobblemon.mod.common.entity.PoseType SWIM;
+  public static final com.cobblemon.mod.common.entity.PoseType GLIDE;
+  public static final com.cobblemon.mod.common.entity.PoseType SHOULDER_LEFT;
+  public static final com.cobblemon.mod.common.entity.PoseType SHOULDER_RIGHT;
+  public static final com.cobblemon.mod.common.entity.PoseType PROFILE;
+  public static final com.cobblemon.mod.common.entity.PoseType PORTRAIT;
+  public static final com.cobblemon.mod.common.entity.PoseType OPEN;
+  public static final com.cobblemon.mod.common.entity.PoseType NONE;
+  protected void renderWidget(net.minecraft.client.gui.DrawContext, int, int, float);
+       1: ldc           #253                // String context
+       3: invokestatic  #119                // Method kotlin/jvm/internal/Intrinsics.checkNotNullParameter:(Ljava/lang/Object;Ljava/lang/String;)V
+       6: getstatic     #255                // Field render:Z
+      16: invokevirtual #259                // Method getX:()I
+      24: invokevirtual #262                // Method getY:()I
+      32: invokevirtual #259                // Method getX:()I
+      45: invokevirtual #262                // Method getY:()I
+      70: invokespecial #276                // Method renderPKM:(Lnet/minecraft/client/gui/DrawContext;FII)V
+  private final void renderPKM(net.minecraft.client.gui.DrawContext, float, int, int);
+       1: invokevirtual #281                // Method net/minecraft/client/gui/DrawContext.getMatrices:()Lnet/minecraft/client/util/math/MatrixStack;
+       8: invokevirtual #286                // Method net/minecraft/client/util/math/MatrixStack.push:()V
+      13: invokevirtual #259                // Method getX:()I
+      17: invokevirtual #262                // Method getY:()I
+      21: invokevirtual #259                // Method getX:()I
+      30: invokevirtual #262                // Method getY:()I
+      38: invokevirtual #290                // Method net/minecraft/client/gui/DrawContext.enableScissor:(IIII)V
+      44: invokevirtual #259                // Method getX:()I
+      53: ldc2_w        #291                // double 0.5d
+      59: invokevirtual #262                // Method getY:()I
+      68: dconst_0
+      69: invokevirtual #296                // Method net/minecraft/client/util/math/MatrixStack.translate:(DDD)V
+      86: invokevirtual #299                // Method net/minecraft/client/util/math/MatrixStack.scale:(FFF)V
+      91: invokevirtual #286                // Method net/minecraft/client/util/math/MatrixStack.push:()V
+     102: invokestatic  #305                // Method java/lang/System.currentTimeMillis:()J
+     105: invokestatic  #310                // Method java/lang/Long.valueOf:(J)Ljava/lang/Long;
+     122: invokevirtual #315                // Method java/lang/Number.longValue:()J
+     130: invokestatic  #305                // Method java/lang/System.currentTimeMillis:()J
+     136: sipush        1000
+     146: ldc2_w        #111                // long 6l
+     153: ldc2_w        #111                // long 6l
+     186: getstatic     #321                // Field com/cobblemon/mod/common/Cobblemon.INSTANCE:Lcom/cobblemon/mod/common/Cobblemon;
+     189: invokevirtual #325                // Method com/cobblemon/mod/common/Cobblemon.getConfig:()Lcom/cobblemon/mod/common/config/CobblemonConfig;
+     192: invokevirtual #330                // Method com/cobblemon/mod/common/config/CobblemonConfig.getSummaryPokemonFollowCursor:()Z
+     219: invokespecial #333                // Method org/joml/Quaternionf."<init>":()V
+     226: invokestatic  #339                // Method com/cobblemon/mod/common/util/math/QuaternionUtilsKt.fromEulerXYZDegrees:(Lorg/joml/Quaternionf;Lorg/joml/Vector3f;)Lorg/joml/Quaternionf;
+     240: invokevirtual #259                // Method getX:()I
+     249: fconst_2
+     253: invokevirtual #262                // Method getY:()I
+     262: fconst_2
+     274: invokevirtual #343                // Method kotlin/Pair.getFirst:()Ljava/lang/Object;
+     280: invokevirtual #346                // Method java/lang/Number.floatValue:()F
+     287: invokevirtual #349                // Method kotlin/Pair.getSecond:()Ljava/lang/Object;
+     293: invokevirtual #346                // Method java/lang/Number.floatValue:()F
+     298: invokestatic  #355                // Method com/cobblemon/mod/common/client/gui/PokemonGuiUtilsKt.calculateHeadYawAndPitch:(FFLorg/joml/Quaternionf;IIFFZ)Lkotlin/Pair;
+     310: invokestatic  #359                // Method kotlin/jvm/internal/Intrinsics.checkNotNull:(Ljava/lang/Object;)V
+     326: fconst_0
+     329: fconst_0
+     330: fconst_0
+     331: fconst_0
+     332: fconst_0
+     337: invokevirtual #343                // Method kotlin/Pair.getFirst:()Ljava/lang/Object;
+     343: invokevirtual #346                // Method java/lang/Number.floatValue:()F
+     350: invokevirtual #349                // Method kotlin/Pair.getSecond:()Ljava/lang/Object;
+     356: invokevirtual #346                // Method java/lang/Number.floatValue:()F
+     359: sipush        8136
+     363: invokestatic  #365                // Method com/cobblemon/mod/common/client/gui/PokemonGuiUtilsKt.drawProfilePokemon$default:(Lcom/cobblemon/mod/common/pokemon/RenderablePokemon;Lnet/minecraft/client/util/math/MatrixStack;Lorg/joml/Quaternionf;Lcom/cobblemon/mod/common/entity/PoseType;Lcom/cobblemon/mod/common/client/render/models/blockbench/PosableState;FFZZFFFFFFILjava/lang/Object;)V
+     374: invokevirtual #371                // Method com/cobblemon/mod/common/pokemon/RenderablePokemon.getHeldItem:()Lnet/minecraft/item/ItemStack;
+     387: invokevirtual #375                // Method net/minecraft/client/gui/DrawContext.getVertexConsumers:()Lnet/minecraft/client/render/VertexConsumerProvider$Immediate;
+     391: ldc_w         #377                // String bufferSource(...)
+     394: invokestatic  #132                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+     400: ldc_w         #378                // int 15728880
+     405: bipush        64
+     408: invokestatic  #382                // Method com/cobblemon/mod/common/client/render/item/HeldItemRenderer.renderOnModel$default:(Lcom/cobblemon/mod/common/client/render/item/HeldItemRenderer;Lnet/minecraft/item/ItemStack;Lcom/cobblemon/mod/common/client/render/models/blockbench/PosableState;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IZLnet/minecraft/entity/LivingEntity;ILjava/lang/Object;)V
+     413: invokevirtual #385                // Method net/minecraft/client/util/math/MatrixStack.pop:()V
+     417: invokevirtual #388                // Method net/minecraft/client/gui/DrawContext.disableScissor:()V
+     422: invokevirtual #385                // Method net/minecraft/client/util/math/MatrixStack.pop:()V
+  public boolean mouseClicked(double, double, int);
+       8: invokespecial #399                // Method playCry:()V
+      16: invokespecial #401                // Method com/cobblemon/mod/common/client/gui/summary/widgets/SoundlessWidget.mouseClicked:(DDI)Z
+  private final void playCry();
+      11: invokevirtual #405                // Method com/cobblemon/mod/common/client/render/models/blockbench/FloatingState.getActiveAnimations:()Ljava/util/List;
+      14: invokeinterface #410,  1          // InterfaceMethod java/util/List.clear:()V
+      23: ldc_w         #412                // String cry
+      26: invokestatic  #418                // Method kotlin/collections/SetsKt.setOf:(Ljava/lang/Object;)Ljava/util/Set;
+      29: invokevirtual #422                // Method com/cobblemon/mod/common/client/render/models/blockbench/FloatingState.addFirstAnimation:(Ljava/util/Set;)V
+  private static final java.lang.Object _set_pokemon_$lambda$0(com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget, com.bedrockk.molang.runtime.MoParams);
+       4: invokevirtual #371                // Method com/cobblemon/mod/common/pokemon/RenderablePokemon.getHeldItem:()Lnet/minecraft/item/ItemStack;
+      11: invokevirtual #428                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+      18: getstatic     #434                // Field com/cobblemon/mod/common/api/tags/CobblemonItemTags.WEARABLE_HAT_ITEMS:Lnet/minecraft/registry/tag/TagKey;
+      21: invokevirtual #438                // Method net/minecraft/item/ItemStack.isIn:(Lnet/minecraft/registry/tag/TagKey;)Z
+      28: getstatic     #441                // Field com/cobblemon/mod/common/api/tags/CobblemonItemTags.WEARABLE_FACE_ITEMS:Lnet/minecraft/registry/tag/TagKey;
+      31: invokevirtual #438                // Method net/minecraft/item/ItemStack.isIn:(Lnet/minecraft/registry/tag/TagKey;)Z
+      42: invokestatic  #446                // Method java/lang/Boolean.valueOf:(Z)Ljava/lang/Boolean;
+      54: invokespecial #450                // Method com/bedrockk/molang/runtime/value/DoubleValue."<init>":(Ljava/lang/Object;)V
+  private static final java.lang.Object _set_pokemon_$lambda$1(com.cobblemon.mod.common.client.gui.summary.widgets.ModelWidget, com.bedrockk.molang.runtime.MoParams);
+       8: invokevirtual #371                // Method com/cobblemon/mod/common/pokemon/RenderablePokemon.getHeldItem:()Lnet/minecraft/item/ItemStack;
+      11: getstatic     #434                // Field com/cobblemon/mod/common/api/tags/CobblemonItemTags.WEARABLE_HAT_ITEMS:Lnet/minecraft/registry/tag/TagKey;
+      14: invokevirtual #438                // Method net/minecraft/item/ItemStack.isIn:(Lnet/minecraft/registry/tag/TagKey;)Z
+      17: invokestatic  #446                // Method java/lang/Boolean.valueOf:(Z)Ljava/lang/Boolean;

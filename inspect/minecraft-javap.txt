@@ -1,0 +1,1057 @@
+==== net.minecraft.client.gui.screen.ingame.InventoryScreen
+  private float mouseX;
+  private float mouseY;
+  private final net.minecraft.client.gui.screen.recipebook.RecipeBookWidget recipeBook;
+  private boolean narrow;
+  private boolean mouseDown;
+  public net.minecraft.client.gui.screen.ingame.InventoryScreen(net.minecraft.entity.player.PlayerEntity);
+       6: invokevirtual #48                 // Method net/minecraft/entity/player/PlayerEntity.getInventory:()Lnet/minecraft/entity/player/PlayerInventory;
+      11: invokestatic  #56                 // InterfaceMethod net/minecraft/text/Text.translatable:(Ljava/lang/String;)Lnet/minecraft/text/MutableText;
+      14: invokespecial #59                 // Method net/minecraft/client/gui/screen/ingame/AbstractInventoryScreen."<init>":(Lnet/minecraft/screen/ScreenHandler;Lnet/minecraft/entity/player/PlayerInventory;Lnet/minecraft/text/Text;)V
+      22: invokespecial #64                 // Method net/minecraft/client/gui/screen/recipebook/RecipeBookWidget."<init>":()V
+  public void handledScreenTick();
+       7: invokevirtual #90                 // Method net/minecraft/client/network/ClientPlayerInteractionManager.hasCreativeInventory:()Z
+      38: invokevirtual #107                // Method net/minecraft/client/network/ClientPlayNetworkHandler.getEnabledFeatures:()Lnet/minecraft/resource/featuretoggle/FeatureSet;
+      48: invokevirtual #117                // Method net/minecraft/client/option/GameOptions.getOperatorItemsTab:()Lnet/minecraft/client/option/SimpleOption;
+      51: invokevirtual #123                // Method net/minecraft/client/option/SimpleOption.getValue:()Ljava/lang/Object;
+      57: invokevirtual #128                // Method java/lang/Boolean.booleanValue:()Z
+      60: invokespecial #131                // Method net/minecraft/client/gui/screen/ingame/CreativeInventoryScreen."<init>":(Lnet/minecraft/client/network/ClientPlayerEntity;Lnet/minecraft/resource/featuretoggle/FeatureSet;Z)V
+      63: invokevirtual #135                // Method net/minecraft/client/MinecraftClient.setScreen:(Lnet/minecraft/client/gui/screen/Screen;)V
+      71: invokevirtual #138                // Method net/minecraft/client/gui/screen/recipebook/RecipeBookWidget.update:()V
+  protected void init();
+       7: invokevirtual #90                 // Method net/minecraft/client/network/ClientPlayerInteractionManager.hasCreativeInventory:()Z
+      38: invokevirtual #107                // Method net/minecraft/client/network/ClientPlayNetworkHandler.getEnabledFeatures:()Lnet/minecraft/resource/featuretoggle/FeatureSet;
+      48: invokevirtual #117                // Method net/minecraft/client/option/GameOptions.getOperatorItemsTab:()Lnet/minecraft/client/option/SimpleOption;
+      51: invokevirtual #123                // Method net/minecraft/client/option/SimpleOption.getValue:()Ljava/lang/Object;
+      57: invokevirtual #128                // Method java/lang/Boolean.booleanValue:()Z
+      60: invokespecial #131                // Method net/minecraft/client/gui/screen/ingame/CreativeInventoryScreen."<init>":(Lnet/minecraft/client/network/ClientPlayerEntity;Lnet/minecraft/resource/featuretoggle/FeatureSet;Z)V
+      63: invokevirtual #135                // Method net/minecraft/client/MinecraftClient.setScreen:(Lnet/minecraft/client/gui/screen/Screen;)V
+      68: invokespecial #141                // Method net/minecraft/client/gui/screen/ingame/AbstractInventoryScreen.init:()V
+     117: invokevirtual #159                // Method net/minecraft/client/gui/screen/recipebook/RecipeBookWidget.initialize:(IILnet/minecraft/client/MinecraftClient;ZLnet/minecraft/screen/AbstractRecipeScreenHandler;)V
+     133: invokevirtual #166                // Method net/minecraft/client/gui/screen/recipebook/RecipeBookWidget.findLeftEdge:(II)I
+     168: invokedynamic #192,  0            // InvokeDynamic #0:onPress:(Lnet/minecraft/client/gui/screen/ingame/InventoryScreen;)Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;
+     173: invokespecial #195                // Method net/minecraft/client/gui/widget/TexturedButtonWidget."<init>":(IIIILnet/minecraft/client/gui/screen/ButtonTextures;Lnet/minecraft/client/gui/widget/ButtonWidget$PressAction;)V
+     176: invokevirtual #199                // Method addDrawableChild:(Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;
+     185: invokevirtual #202                // Method addSelectableChild:(Lnet/minecraft/client/gui/Element;)Lnet/minecraft/client/gui/Element;
+  protected void drawForeground(net.minecraft.client.gui.DrawContext, int, int);
+      20: invokevirtual #223                // Method net/minecraft/client/gui/DrawContext.drawText:(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;IIIZ)I
+  public void render(net.minecraft.client.gui.DrawContext, int, int, float);
+       4: invokevirtual #230                // Method net/minecraft/client/gui/screen/recipebook/RecipeBookWidget.isOpen:()Z
+      23: invokevirtual #233                // Method renderBackground:(Lnet/minecraft/client/gui/DrawContext;IIF)V
+      35: invokevirtual #235                // Method net/minecraft/client/gui/screen/recipebook/RecipeBookWidget.render:(Lnet/minecraft/client/gui/DrawContext;IIF)V
+      47: invokespecial #236                // Method net/minecraft/client/gui/screen/ingame/AbstractInventoryScreen.render:(Lnet/minecraft/client/gui/DrawContext;IIF)V
+      59: invokevirtual #235                // Method net/minecraft/client/gui/screen/recipebook/RecipeBookWidget.render:(Lnet/minecraft/client/gui/DrawContext;IIF)V
+      78: invokevirtual #243                // Method net/minecraft/client/gui/screen/recipebook/RecipeBookWidget.drawGhostSlots:(Lnet/minecraft/client/gui/DrawContext;IIZF)V
+      85: invokevirtual #246                // Method drawMouseoverTooltip:(Lnet/minecraft/client/gui/DrawContext;II)V
+     103: invokevirtual #250                // Method net/minecraft/client/gui/screen/recipebook/RecipeBookWidget.drawTooltip:(Lnet/minecraft/client/gui/DrawContext;IIII)V
+  protected void drawBackground(net.minecraft.client.gui.DrawContext, float, int, int);
+      30: invokevirtual #267                // Method net/minecraft/client/gui/DrawContext.drawTexture:(Lnet/minecraft/util/Identifier;IIIIII)V
+      74: invokestatic  #272                // Method drawEntity:(Lnet/minecraft/client/gui/DrawContext;IIIIIFFFLnet/minecraft/entity/LivingEntity;)V
+  public static void drawEntity(net.minecraft.client.gui.DrawContext, int, int, int, int, int, float, float, float, net.minecraft.entity.LivingEntity);
+      23: invokevirtual #285                // Method net/minecraft/client/gui/DrawContext.enableScissor:(IIII)V
+      36: invokestatic  #292                // Method java/lang/Math.atan:(D)D
+      52: invokestatic  #292                // Method java/lang/Math.atan:(D)D
+      62: invokespecial #295                // Method org/joml/Quaternionf."<init>":()V
+      68: invokevirtual #300                // Method org/joml/Quaternionf.rotateZ:(F)Lorg/joml/Quaternionf;
+      77: invokespecial #295                // Method org/joml/Quaternionf."<init>":()V
+      90: invokevirtual #305                // Method org/joml/Quaternionf.rotateX:(F)Lorg/joml/Quaternionf;
+      99: invokevirtual #309                // Method org/joml/Quaternionf.mul:(Lorg/joml/Quaternionfc;)Lorg/joml/Quaternionf;
+     112: invokevirtual #318                // Method net/minecraft/entity/LivingEntity.getYaw:()F
+     119: invokevirtual #321                // Method net/minecraft/entity/LivingEntity.getPitch:()F
+     165: invokevirtual #332                // Method net/minecraft/entity/LivingEntity.setYaw:(F)V
+     177: invokevirtual #335                // Method net/minecraft/entity/LivingEntity.setPitch:(F)V
+     184: invokevirtual #318                // Method net/minecraft/entity/LivingEntity.getYaw:()F
+     194: invokevirtual #318                // Method net/minecraft/entity/LivingEntity.getYaw:()F
+     202: invokevirtual #338                // Method net/minecraft/entity/LivingEntity.getScale:()F
+     214: invokevirtual #343                // Method net/minecraft/entity/LivingEntity.getHeight:()F
+     226: invokespecial #346                // Method org/joml/Vector3f."<init>":(FFF)V
+     254: invokestatic  #349                // Method drawEntity:(Lnet/minecraft/client/gui/DrawContext;FFFLorg/joml/Vector3f;Lorg/joml/Quaternionf;Lorg/joml/Quaternionf;Lnet/minecraft/entity/LivingEntity;)V
+     268: invokevirtual #332                // Method net/minecraft/entity/LivingEntity.setYaw:(F)V
+     275: invokevirtual #335                // Method net/minecraft/entity/LivingEntity.setPitch:(F)V
+     293: invokevirtual #352                // Method net/minecraft/client/gui/DrawContext.disableScissor:()V
+  public static void drawEntity(net.minecraft.client.gui.DrawContext, float, float, float, org.joml.Vector3f, org.joml.Quaternionf, org.joml.Quaternionf, net.minecraft.entity.LivingEntity);
+       1: invokevirtual #372                // Method net/minecraft/client/gui/DrawContext.getMatrices:()Lnet/minecraft/client/util/math/MatrixStack;
+       4: invokevirtual #377                // Method net/minecraft/client/util/math/MatrixStack.push:()V
+       8: invokevirtual #372                // Method net/minecraft/client/gui/DrawContext.getMatrices:()Lnet/minecraft/client/util/math/MatrixStack;
+      18: invokevirtual #383                // Method net/minecraft/client/util/math/MatrixStack.translate:(DDD)V
+      22: invokevirtual #372                // Method net/minecraft/client/gui/DrawContext.getMatrices:()Lnet/minecraft/client/util/math/MatrixStack;
+      29: invokevirtual #386                // Method net/minecraft/client/util/math/MatrixStack.scale:(FFF)V
+      33: invokevirtual #372                // Method net/minecraft/client/gui/DrawContext.getMatrices:()Lnet/minecraft/client/util/math/MatrixStack;
+      51: invokevirtual #395                // Method net/minecraft/client/util/math/MatrixStack.translate:(FFF)V
+      55: invokevirtual #372                // Method net/minecraft/client/gui/DrawContext.getMatrices:()Lnet/minecraft/client/util/math/MatrixStack;
+      60: invokevirtual #399                // Method net/minecraft/client/util/math/MatrixStack.multiply:(Lorg/joml/Quaternionf;)V
+      63: invokestatic  #404                // Method net/minecraft/client/render/DiffuseLighting.method_34742:()V
+      66: invokestatic  #408                // Method net/minecraft/client/MinecraftClient.getInstance:()Lnet/minecraft/client/MinecraftClient;
+      69: invokevirtual #412                // Method net/minecraft/client/MinecraftClient.getEntityRenderDispatcher:()Lnet/minecraft/client/render/entity/EntityRenderDispatcher;
+      87: invokespecial #295                // Method org/joml/Quaternionf."<init>":()V
+      90: invokevirtual #416                // Method org/joml/Quaternionf.conjugate:(Lorg/joml/Quaternionf;)Lorg/joml/Quaternionf;
+      96: invokevirtual #419                // Method org/joml/Quaternionf.rotateY:(F)Lorg/joml/Quaternionf;
+      99: invokevirtual #424                // Method net/minecraft/client/render/entity/EntityRenderDispatcher.setRotation:(Lorg/joml/Quaternionf;)V
+     105: invokevirtual #428                // Method net/minecraft/client/render/entity/EntityRenderDispatcher.setRenderShadows:(Z)V
+     113: invokedynamic #438,  0            // InvokeDynamic #1:run:(Lnet/minecraft/client/render/entity/EntityRenderDispatcher;Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/client/gui/DrawContext;)Ljava/lang/Runnable;
+     118: invokestatic  #444                // Method com/mojang/blaze3d/systems/RenderSystem.runAsFancy:(Ljava/lang/Runnable;)V
+     122: invokevirtual #447                // Method net/minecraft/client/gui/DrawContext.draw:()V
+     128: invokevirtual #428                // Method net/minecraft/client/render/entity/EntityRenderDispatcher.setRenderShadows:(Z)V
+     132: invokevirtual #372                // Method net/minecraft/client/gui/DrawContext.getMatrices:()Lnet/minecraft/client/util/math/MatrixStack;
+     135: invokevirtual #450                // Method net/minecraft/client/util/math/MatrixStack.pop:()V
+     138: invokestatic  #453                // Method net/minecraft/client/render/DiffuseLighting.enableGuiDepthLighting:()V
+  public boolean keyPressed(int, int, int);
+       7: invokevirtual #462                // Method net/minecraft/client/gui/screen/recipebook/RecipeBookWidget.keyPressed:(III)Z
+      19: invokespecial #463                // Method net/minecraft/client/gui/screen/ingame/AbstractInventoryScreen.keyPressed:(III)Z
+  public boolean charTyped(char, int);
+       6: invokevirtual #468                // Method net/minecraft/client/gui/screen/recipebook/RecipeBookWidget.charTyped:(CI)Z
+      17: invokespecial #469                // Method net/minecraft/client/gui/screen/ingame/AbstractInventoryScreen.charTyped:(CI)Z
+  protected boolean isPointWithinBounds(int, int, int, int, double, double);
+      11: invokevirtual #230                // Method net/minecraft/client/gui/screen/recipebook/RecipeBookWidget.isOpen:()Z
+      27: invokespecial #476                // Method net/minecraft/client/gui/screen/ingame/AbstractInventoryScreen.isPointWithinBounds:(IIIIDD)Z
+  public boolean mouseClicked(double, double, int);
+       8: invokevirtual #482                // Method net/minecraft/client/gui/screen/recipebook/RecipeBookWidget.mouseClicked:(DDI)Z
+      19: invokevirtual #486                // Method setFocused:(Lnet/minecraft/client/gui/Element;)V
+      35: invokevirtual #230                // Method net/minecraft/client/gui/screen/recipebook/RecipeBookWidget.isOpen:()Z
+      48: invokespecial #487                // Method net/minecraft/client/gui/screen/ingame/AbstractInventoryScreen.mouseClicked:(DDI)Z
+  public boolean mouseReleased(double, double, int);
+      19: invokespecial #492                // Method net/minecraft/client/gui/screen/ingame/AbstractInventoryScreen.mouseReleased:(DDI)Z
+  protected boolean isClickOutsideBounds(double, double, int, int, int);
+      73: invokevirtual #499                // Method net/minecraft/client/gui/screen/recipebook/RecipeBookWidget.isClickOutsideBounds:(DDIIIII)Z
+  protected void onMouseClick(net.minecraft.screen.slot.Slot, int, int, net.minecraft.screen.slot.SlotActionType);
+       6: invokespecial #507                // Method net/minecraft/client/gui/screen/ingame/AbstractInventoryScreen.onMouseClick:(Lnet/minecraft/screen/slot/Slot;IILnet/minecraft/screen/slot/SlotActionType;)V
+      14: invokevirtual #511                // Method net/minecraft/client/gui/screen/recipebook/RecipeBookWidget.slotClicked:(Lnet/minecraft/screen/slot/Slot;)V
+  public void refreshRecipeBook();
+       4: invokevirtual #517                // Method net/minecraft/client/gui/screen/recipebook/RecipeBookWidget.refresh:()V
+  public net.minecraft.client.gui.screen.recipebook.RecipeBookWidget getRecipeBookWidget();
+  private static void method_29977(net.minecraft.client.render.entity.EntityRenderDispatcher, net.minecraft.entity.LivingEntity, net.minecraft.client.gui.DrawContext);
+       8: invokevirtual #372                // Method net/minecraft/client/gui/DrawContext.getMatrices:()Lnet/minecraft/client/util/math/MatrixStack;
+      12: invokevirtual #525                // Method net/minecraft/client/gui/DrawContext.getVertexConsumers:()Lnet/minecraft/client/render/VertexConsumerProvider$Immediate;
+      18: invokevirtual #529                // Method net/minecraft/client/render/entity/EntityRenderDispatcher.render:(Lnet/minecraft/entity/Entity;DDDFFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V
+  private void method_19891(net.minecraft.client.gui.widget.ButtonWidget);
+       4: invokevirtual #532                // Method net/minecraft/client/gui/screen/recipebook/RecipeBookWidget.toggleOpen:()V
+      20: invokevirtual #166                // Method net/minecraft/client/gui/screen/recipebook/RecipeBookWidget.findLeftEdge:(II)I
+      43: invokevirtual #536                // Method net/minecraft/client/gui/widget/ButtonWidget.setPosition:(II)V
+==== net.minecraft.client.gui.screen.ingame.HandledScreen
+  public static final net.minecraft.util.Identifier BACKGROUND_TEXTURE;
+  private static final float field_32318;
+  private static final int field_32319;
+  public static final int field_32322;
+  private static final int field_32321;
+  protected int backgroundWidth;
+  protected int backgroundHeight;
+  protected int titleX;
+  protected int titleY;
+  protected int playerInventoryTitleX;
+  protected int playerInventoryTitleY;
+  protected final T handler;
+  protected final net.minecraft.text.Text playerInventoryTitle;
+  protected net.minecraft.screen.slot.Slot focusedSlot;
+  private net.minecraft.screen.slot.Slot touchDragSlotStart;
+  private net.minecraft.screen.slot.Slot touchDropOriginSlot;
+  private net.minecraft.screen.slot.Slot touchHoveredSlot;
+  private net.minecraft.screen.slot.Slot lastClickedSlot;
+  protected int x;
+  protected int y;
+  private boolean touchIsRightClickDrag;
+  private net.minecraft.item.ItemStack touchDragStack;
+  private int touchDropX;
+  private int touchDropY;
+  private long touchDropTime;
+  private net.minecraft.item.ItemStack touchDropReturningStack;
+  private long touchDropTimer;
+  protected final java.util.Set<net.minecraft.screen.slot.Slot> cursorDragSlots;
+  protected boolean cursorDragging;
+  private int heldButtonType;
+  private int heldButtonCode;
+  private boolean cancelNextRelease;
+  private int draggedStackRemainder;
+  private long lastButtonClickTime;
+  private int lastClickedButton;
+  private boolean doubleClicking;
+  private net.minecraft.item.ItemStack quickMovingStack;
+  public net.minecraft.client.gui.screen.ingame.HandledScreen(T, net.minecraft.entity.player.PlayerInventory, net.minecraft.text.Text);
+       2: invokespecial #79                 // Method net/minecraft/client/gui/screen/Screen."<init>":(Lnet/minecraft/text/Text;)V
+      34: invokestatic  #98                 // Method com/google/common/collect/Sets.newHashSet:()Ljava/util/HashSet;
+      54: invokevirtual #110                // Method net/minecraft/entity/player/PlayerInventory.getDisplayName:()Lnet/minecraft/text/Text;
+  protected void init();
+  public void render(net.minecraft.client.gui.DrawContext, int, int, float);
+      18: invokespecial #146                // Method net/minecraft/client/gui/screen/Screen.render:(Lnet/minecraft/client/gui/DrawContext;IIF)V
+      21: invokestatic  #151                // Method com/mojang/blaze3d/systems/RenderSystem.disableDepthTest:()V
+      25: invokevirtual #157                // Method net/minecraft/client/gui/DrawContext.getMatrices:()Lnet/minecraft/client/util/math/MatrixStack;
+      28: invokevirtual #162                // Method net/minecraft/client/util/math/MatrixStack.push:()V
+      32: invokevirtual #157                // Method net/minecraft/client/gui/DrawContext.getMatrices:()Lnet/minecraft/client/util/math/MatrixStack;
+      42: invokevirtual #166                // Method net/minecraft/client/util/math/MatrixStack.translate:(FFF)V
+      62: invokevirtual #180                // Method net/minecraft/util/collection/DefaultedList.size:()I
+      77: invokevirtual #184                // Method net/minecraft/util/collection/DefaultedList.get:(I)Ljava/lang/Object;
+      87: invokevirtual #190                // Method net/minecraft/screen/slot/Slot.isEnabled:()Z
+      97: invokevirtual #194                // Method drawSlot:(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/screen/slot/Slot;)V
+     107: invokevirtual #198                // Method isPointOverSlot:(Lnet/minecraft/screen/slot/Slot;DD)Z
+     115: invokevirtual #190                // Method net/minecraft/screen/slot/Slot.isEnabled:()Z
+     145: invokevirtual #203                // Method net/minecraft/screen/slot/Slot.canBeHighlighted:()Z
+     157: invokestatic  #207                // Method drawSlotHighlight:(Lnet/minecraft/client/gui/DrawContext;III)V
+     170: invokevirtual #211                // Method drawForeground:(Lnet/minecraft/client/gui/DrawContext;II)V
+     177: invokevirtual #214                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+     187: invokevirtual #218                // Method net/minecraft/screen/ScreenHandler.getCursorStack:()Lnet/minecraft/item/ItemStack;
+     201: invokevirtual #214                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+     215: invokevirtual #214                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+     237: invokevirtual #214                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+     254: invokevirtual #223                // Method net/minecraft/item/ItemStack.getCount:()I
+     260: invokestatic  #229                // Method net/minecraft/util/math/MathHelper.ceil:(F)I
+     263: invokevirtual #233                // Method net/minecraft/item/ItemStack.copyWithCount:(I)Lnet/minecraft/item/ItemStack;
+     282: invokeinterface #238,  1          // InterfaceMethod java/util/Set.size:()I
+     297: invokevirtual #233                // Method net/minecraft/item/ItemStack.copyWithCount:(I)Lnet/minecraft/item/ItemStack;
+     304: invokevirtual #214                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+     313: invokestatic  #252                // Method java/lang/String.valueOf:(Ljava/lang/Object;)Ljava/lang/String;
+     316: invokedynamic #264,  0            // InvokeDynamic #0:makeConcatWithConstants:(Ljava/lang/String;)Ljava/lang/String;
+     343: invokevirtual #268                // Method drawItem:(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V
+     350: invokevirtual #214                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+     356: invokestatic  #274                // Method net/minecraft/util/Util.getMeasuringTimeMs:()J
+     454: invokevirtual #268                // Method drawItem:(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V
+     458: invokevirtual #157                // Method net/minecraft/client/gui/DrawContext.getMatrices:()Lnet/minecraft/client/util/math/MatrixStack;
+     461: invokevirtual #285                // Method net/minecraft/client/util/math/MatrixStack.pop:()V
+     464: invokestatic  #288                // Method com/mojang/blaze3d/systems/RenderSystem.enableDepthTest:()V
+  public void renderBackground(net.minecraft.client.gui.DrawContext, int, int, float);
+       2: invokevirtual #307                // Method renderInGameBackground:(Lnet/minecraft/client/gui/DrawContext;)V
+      11: invokevirtual #311                // Method drawBackground:(Lnet/minecraft/client/gui/DrawContext;FII)V
+  public static void drawSlotHighlight(net.minecraft.client.gui.DrawContext, int, int, int);
+       1: invokestatic  #318                // Method net/minecraft/client/render/RenderLayer.getGuiOverlay:()Lnet/minecraft/client/render/RenderLayer;
+      21: invokevirtual #323                // Method net/minecraft/client/gui/DrawContext.fillGradient:(Lnet/minecraft/client/render/RenderLayer;IIIIIII)V
+  protected void drawMouseoverTooltip(net.minecraft.client.gui.DrawContext, int, int);
+       4: invokevirtual #218                // Method net/minecraft/screen/ScreenHandler.getCursorStack:()Lnet/minecraft/item/ItemStack;
+       7: invokevirtual #214                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+      24: invokevirtual #327                // Method net/minecraft/screen/slot/Slot.hasStack:()Z
+      34: invokevirtual #330                // Method net/minecraft/screen/slot/Slot.getStack:()Lnet/minecraft/item/ItemStack;
+      47: invokevirtual #338                // Method getTooltipFromItem:(Lnet/minecraft/item/ItemStack;)Ljava/util/List;
+      52: invokevirtual #342                // Method net/minecraft/item/ItemStack.getTooltipData:()Ljava/util/Optional;
+      57: invokevirtual #346                // Method net/minecraft/client/gui/DrawContext.drawTooltip:(Lnet/minecraft/client/font/TextRenderer;Ljava/util/List;Ljava/util/Optional;II)V
+  protected java.util.List<net.minecraft.text.Text> getTooltipFromItem(net.minecraft.item.ItemStack);
+       5: invokestatic  #355                // Method getTooltipFromItem:(Lnet/minecraft/client/MinecraftClient;Lnet/minecraft/item/ItemStack;)Ljava/util/List;
+  private void drawItem(net.minecraft.client.gui.DrawContext, net.minecraft.item.ItemStack, int, int, java.lang.String);
+       1: invokevirtual #157                // Method net/minecraft/client/gui/DrawContext.getMatrices:()Lnet/minecraft/client/util/math/MatrixStack;
+       4: invokevirtual #162                // Method net/minecraft/client/util/math/MatrixStack.push:()V
+       8: invokevirtual #157                // Method net/minecraft/client/gui/DrawContext.getMatrices:()Lnet/minecraft/client/util/math/MatrixStack;
+      16: invokevirtual #166                // Method net/minecraft/client/util/math/MatrixStack.translate:(FFF)V
+      24: invokevirtual #360                // Method net/minecraft/client/gui/DrawContext.drawItem:(Lnet/minecraft/item/ItemStack;II)V
+      40: invokevirtual #214                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+      55: invokevirtual #366                // Method net/minecraft/client/gui/DrawContext.drawItemInSlot:(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V
+      59: invokevirtual #157                // Method net/minecraft/client/gui/DrawContext.getMatrices:()Lnet/minecraft/client/util/math/MatrixStack;
+      62: invokevirtual #285                // Method net/minecraft/client/util/math/MatrixStack.pop:()V
+  protected void drawForeground(net.minecraft.client.gui.DrawContext, int, int);
+      21: invokevirtual #373                // Method net/minecraft/client/gui/DrawContext.drawText:(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;IIIZ)I
+      46: invokevirtual #373                // Method net/minecraft/client/gui/DrawContext.drawText:(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;IIIZ)I
+  protected abstract void drawBackground(net.minecraft.client.gui.DrawContext, float, int, int);
+  protected void drawSlot(net.minecraft.client.gui.DrawContext, net.minecraft.screen.slot.Slot);
+      12: invokevirtual #330                // Method net/minecraft/screen/slot/Slot.getStack:()Lnet/minecraft/item/ItemStack;
+      32: invokevirtual #214                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+      56: invokevirtual #218                // Method net/minecraft/screen/ScreenHandler.getCursorStack:()Lnet/minecraft/item/ItemStack;
+      76: invokevirtual #214                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+      91: invokevirtual #214                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+     101: invokevirtual #223                // Method net/minecraft/item/ItemStack.getCount:()I
+     106: invokevirtual #233                // Method net/minecraft/item/ItemStack.copyWithCount:(I)Lnet/minecraft/item/ItemStack;
+     126: invokeinterface #379,  2          // InterfaceMethod java/util/Set.contains:(Ljava/lang/Object;)Z
+     136: invokevirtual #214                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+     146: invokeinterface #238,  1          // InterfaceMethod java/util/Set.size:()I
+     160: invokestatic  #383                // Method net/minecraft/screen/ScreenHandler.canInsertItemIntoSlot:(Lnet/minecraft/screen/slot/Slot;Lnet/minecraft/item/ItemStack;Z)Z
+     171: invokevirtual #387                // Method net/minecraft/screen/ScreenHandler.canInsertIntoSlot:(Lnet/minecraft/screen/slot/Slot;)Z
+     182: invokevirtual #390                // Method net/minecraft/item/ItemStack.getMaxCount:()I
+     188: invokevirtual #394                // Method net/minecraft/screen/slot/Slot.getMaxItemCount:(Lnet/minecraft/item/ItemStack;)I
+     191: invokestatic  #400                // Method java/lang/Math.min:(II)I
+     197: invokevirtual #330                // Method net/minecraft/screen/slot/Slot.getStack:()Lnet/minecraft/item/ItemStack;
+     200: invokevirtual #214                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+     211: invokevirtual #330                // Method net/minecraft/screen/slot/Slot.getStack:()Lnet/minecraft/item/ItemStack;
+     214: invokevirtual #223                // Method net/minecraft/item/ItemStack.getCount:()I
+     229: invokestatic  #406                // Method net/minecraft/screen/ScreenHandler.calculateStackSize:(Ljava/util/Set;ILnet/minecraft/item/ItemStack;)I
+     251: invokevirtual #410                // Method net/minecraft/util/Formatting.toString:()Ljava/lang/String;
+     256: invokedynamic #415,  0            // InvokeDynamic #1:makeConcatWithConstants:(Ljava/lang/String;I)Ljava/lang/String;
+     267: invokevirtual #233                // Method net/minecraft/item/ItemStack.copyWithCount:(I)Lnet/minecraft/item/ItemStack;
+     280: invokeinterface #418,  2          // InterfaceMethod java/util/Set.remove:(Ljava/lang/Object;)Z
+     287: invokevirtual #421                // Method calculateOffset:()V
+     291: invokevirtual #157                // Method net/minecraft/client/gui/DrawContext.getMatrices:()Lnet/minecraft/client/util/math/MatrixStack;
+     294: invokevirtual #162                // Method net/minecraft/client/util/math/MatrixStack.push:()V
+     298: invokevirtual #157                // Method net/minecraft/client/gui/DrawContext.getMatrices:()Lnet/minecraft/client/util/math/MatrixStack;
+     305: invokevirtual #166                // Method net/minecraft/client/util/math/MatrixStack.translate:(FFF)V
+     310: invokevirtual #214                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+     317: invokevirtual #190                // Method net/minecraft/screen/slot/Slot.isEnabled:()Z
+     324: invokevirtual #425                // Method net/minecraft/screen/slot/Slot.getBackgroundSprite:()Lcom/mojang/datafixers/util/Pair;
+     340: invokevirtual #431                // Method com/mojang/datafixers/util/Pair.getFirst:()Ljava/lang/Object;
+     346: invokevirtual #439                // Method net/minecraft/client/MinecraftClient.getSpriteAtlas:(Lnet/minecraft/util/Identifier;)Ljava/util/function/Function;
+     351: invokevirtual #442                // Method com/mojang/datafixers/util/Pair.getSecond:()Ljava/lang/Object;
+     357: invokeinterface #448,  2          // InterfaceMethod java/util/function/Function.apply:(Ljava/lang/Object;)Ljava/lang/Object;
+     378: invokevirtual #454                // Method net/minecraft/client/gui/DrawContext.drawSprite:(IIIIILnet/minecraft/client/texture/Sprite;)V
+     410: invokevirtual #458                // Method net/minecraft/client/gui/DrawContext.fill:(IIIII)V
+     430: invokevirtual #461                // Method net/minecraft/screen/slot/Slot.disablesDynamicDisplay:()Z
+     444: invokevirtual #465                // Method net/minecraft/client/gui/DrawContext.drawItemWithoutEntity:(Lnet/minecraft/item/ItemStack;III)V
+     458: invokevirtual #467                // Method net/minecraft/client/gui/DrawContext.drawItem:(Lnet/minecraft/item/ItemStack;III)V
+     473: invokevirtual #366                // Method net/minecraft/client/gui/DrawContext.drawItemInSlot:(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V
+     477: invokevirtual #157                // Method net/minecraft/client/gui/DrawContext.getMatrices:()Lnet/minecraft/client/util/math/MatrixStack;
+     480: invokevirtual #285                // Method net/minecraft/client/util/math/MatrixStack.pop:()V
+  private void calculateOffset();
+       4: invokevirtual #218                // Method net/minecraft/screen/ScreenHandler.getCursorStack:()Lnet/minecraft/item/ItemStack;
+       9: invokevirtual #214                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+      33: invokevirtual #390                // Method net/minecraft/item/ItemStack.getMaxCount:()I
+      42: invokevirtual #223                // Method net/minecraft/item/ItemStack.getCount:()I
+      52: invokeinterface #479,  1          // InterfaceMethod java/util/Set.iterator:()Ljava/util/Iterator;
+      59: invokeinterface #484,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      68: invokeinterface #487,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      78: invokevirtual #330                // Method net/minecraft/screen/slot/Slot.getStack:()Lnet/minecraft/item/ItemStack;
+      85: invokevirtual #214                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+      97: invokevirtual #223                // Method net/minecraft/item/ItemStack.getCount:()I
+     103: invokevirtual #390                // Method net/minecraft/item/ItemStack.getMaxCount:()I
+     108: invokevirtual #394                // Method net/minecraft/screen/slot/Slot.getMaxItemCount:(Lnet/minecraft/item/ItemStack;)I
+     111: invokestatic  #400                // Method java/lang/Math.min:(II)I
+     125: invokestatic  #406                // Method net/minecraft/screen/ScreenHandler.calculateStackSize:(Ljava/util/Set;ILnet/minecraft/item/ItemStack;)I
+     133: invokestatic  #400                // Method java/lang/Math.min:(II)I
+  private net.minecraft.screen.slot.Slot getSlotAt(double, double);
+      12: invokevirtual #180                // Method net/minecraft/util/collection/DefaultedList.size:()I
+      27: invokevirtual #184                // Method net/minecraft/util/collection/DefaultedList.get:(I)Ljava/lang/Object;
+      40: invokevirtual #198                // Method isPointOverSlot:(Lnet/minecraft/screen/slot/Slot;DD)Z
+      48: invokevirtual #190                // Method net/minecraft/screen/slot/Slot.isEnabled:()Z
+  public boolean mouseClicked(double, double, int);
+       5: invokespecial #495                // Method net/minecraft/client/gui/screen/Screen.mouseClicked:(DDI)Z
+      25: invokevirtual #511                // Method net/minecraft/client/option/KeyBinding.matchesMouse:(I)Z
+      38: invokevirtual #520                // Method net/minecraft/client/network/ClientPlayerInteractionManager.hasCreativeInventory:()Z
+      54: invokevirtual #522                // Method getSlotAt:(DD)Lnet/minecraft/screen/slot/Slot;
+      59: invokestatic  #274                // Method net/minecraft/util/Util.getMeasuringTimeMs:()J
+     147: invokevirtual #536                // Method isClickOutsideBounds:(DDIII)Z
+     184: invokevirtual #543                // Method net/minecraft/client/option/GameOptions.getTouchscreen:()Lnet/minecraft/client/option/SimpleOption;
+     187: invokevirtual #548                // Method net/minecraft/client/option/SimpleOption.getValue:()Ljava/lang/Object;
+     193: invokevirtual #553                // Method java/lang/Boolean.booleanValue:()Z
+     208: invokevirtual #218                // Method net/minecraft/screen/ScreenHandler.getCursorStack:()Lnet/minecraft/item/ItemStack;
+     211: invokevirtual #214                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+     218: invokevirtual #556                // Method close:()V
+     236: invokevirtual #543                // Method net/minecraft/client/option/GameOptions.getTouchscreen:()Lnet/minecraft/client/option/SimpleOption;
+     239: invokevirtual #548                // Method net/minecraft/client/option/SimpleOption.getValue:()Ljava/lang/Object;
+     245: invokevirtual #553                // Method java/lang/Boolean.booleanValue:()Z
+     258: invokevirtual #327                // Method net/minecraft/screen/slot/Slot.hasStack:()Z
+     314: invokevirtual #218                // Method net/minecraft/screen/ScreenHandler.getCursorStack:()Lnet/minecraft/item/ItemStack;
+     317: invokevirtual #214                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+     338: invokevirtual #566                // Method onMouseClick:(Lnet/minecraft/screen/slot/Slot;IILnet/minecraft/screen/slot/SlotActionType;)V
+     352: invokestatic  #570                // Method net/minecraft/client/MinecraftClient.getInstance:()Lnet/minecraft/client/MinecraftClient;
+     355: invokevirtual #574                // Method net/minecraft/client/MinecraftClient.getWindow:()Lnet/minecraft/client/util/Window;
+     358: invokevirtual #579                // Method net/minecraft/client/util/Window.getHandle:()J
+     364: invokestatic  #585                // Method net/minecraft/client/util/InputUtil.isKeyPressed:(JI)Z
+     370: invokestatic  #570                // Method net/minecraft/client/MinecraftClient.getInstance:()Lnet/minecraft/client/MinecraftClient;
+     373: invokevirtual #574                // Method net/minecraft/client/MinecraftClient.getWindow:()Lnet/minecraft/client/util/Window;
+     376: invokevirtual #579                // Method net/minecraft/client/util/Window.getHandle:()J
+     382: invokestatic  #585                // Method net/minecraft/client/util/InputUtil.isKeyPressed:(JI)Z
+     413: invokevirtual #327                // Method net/minecraft/screen/slot/Slot.hasStack:()Z
+     421: invokevirtual #330                // Method net/minecraft/screen/slot/Slot.getStack:()Lnet/minecraft/item/ItemStack;
+     424: invokevirtual #591                // Method net/minecraft/item/ItemStack.copy:()Lnet/minecraft/item/ItemStack;
+     466: invokevirtual #566                // Method onMouseClick:(Lnet/minecraft/screen/slot/Slot;IILnet/minecraft/screen/slot/SlotActionType;)V
+     492: invokeinterface #602,  1          // InterfaceMethod java/util/Set.clear:()V
+     540: invokevirtual #605                // Method onMouseClick:(I)V
+  private void onMouseClick(int);
+      11: invokevirtual #218                // Method net/minecraft/screen/ScreenHandler.getCursorStack:()Lnet/minecraft/item/ItemStack;
+      14: invokevirtual #214                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+      31: invokevirtual #511                // Method net/minecraft/client/option/KeyBinding.matchesMouse:(I)Z
+      54: invokevirtual #566                // Method onMouseClick:(Lnet/minecraft/screen/slot/Slot;IILnet/minecraft/screen/slot/SlotActionType;)V
+      79: invokevirtual #511                // Method net/minecraft/client/option/KeyBinding.matchesMouse:(I)Z
+     101: invokevirtual #566                // Method onMouseClick:(Lnet/minecraft/screen/slot/Slot;IILnet/minecraft/screen/slot/SlotActionType;)V
+  protected boolean isClickOutsideBounds(double, double, int, int, int);
+  public boolean mouseDragged(double, double, int, double, double);
+       3: invokevirtual #522                // Method getSlotAt:(DD)Lnet/minecraft/screen/slot/Slot;
+      12: invokevirtual #218                // Method net/minecraft/screen/ScreenHandler.getCursorStack:()Lnet/minecraft/item/ItemStack;
+      31: invokevirtual #543                // Method net/minecraft/client/option/GameOptions.getTouchscreen:()Lnet/minecraft/client/option/SimpleOption;
+      34: invokevirtual #548                // Method net/minecraft/client/option/SimpleOption.getValue:()Ljava/lang/Object;
+      40: invokevirtual #553                // Method java/lang/Boolean.booleanValue:()Z
+      61: invokevirtual #214                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+      80: invokevirtual #330                // Method net/minecraft/screen/slot/Slot.getStack:()Lnet/minecraft/item/ItemStack;
+      83: invokevirtual #214                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+      94: invokevirtual #330                // Method net/minecraft/screen/slot/Slot.getStack:()Lnet/minecraft/item/ItemStack;
+      97: invokevirtual #591                // Method net/minecraft/item/ItemStack.copy:()Lnet/minecraft/item/ItemStack;
+     110: invokevirtual #223                // Method net/minecraft/item/ItemStack.getCount:()I
+     129: invokestatic  #383                // Method net/minecraft/screen/ScreenHandler.canInsertItemIntoSlot:(Lnet/minecraft/screen/slot/Slot;Lnet/minecraft/item/ItemStack;Z)Z
+     135: invokestatic  #274                // Method net/minecraft/util/Util.getMeasuringTimeMs:()J
+     179: invokevirtual #566                // Method onMouseClick:(Lnet/minecraft/screen/slot/Slot;IILnet/minecraft/screen/slot/SlotActionType;)V
+     194: invokevirtual #566                // Method onMouseClick:(Lnet/minecraft/screen/slot/Slot;IILnet/minecraft/screen/slot/SlotActionType;)V
+     213: invokevirtual #566                // Method onMouseClick:(Lnet/minecraft/screen/slot/Slot;IILnet/minecraft/screen/slot/SlotActionType;)V
+     231: invokevirtual #634                // Method net/minecraft/item/ItemStack.decrement:(I)V
+     266: invokevirtual #214                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+     274: invokevirtual #223                // Method net/minecraft/item/ItemStack.getCount:()I
+     281: invokeinterface #238,  1          // InterfaceMethod java/util/Set.size:()I
+     302: invokestatic  #383                // Method net/minecraft/screen/ScreenHandler.canInsertItemIntoSlot:(Lnet/minecraft/screen/slot/Slot;Lnet/minecraft/item/ItemStack;Z)Z
+     312: invokevirtual #638                // Method net/minecraft/screen/slot/Slot.canInsert:(Lnet/minecraft/item/ItemStack;)Z
+     324: invokevirtual #387                // Method net/minecraft/screen/ScreenHandler.canInsertIntoSlot:(Lnet/minecraft/screen/slot/Slot;)Z
+     336: invokeinterface #641,  2          // InterfaceMethod java/util/Set.add:(Ljava/lang/Object;)Z
+     343: invokevirtual #421                // Method calculateOffset:()V
+  public boolean mouseReleased(double, double, int);
+       3: invokevirtual #522                // Method getSlotAt:(DD)Lnet/minecraft/screen/slot/Slot;
+      29: invokevirtual #536                // Method isClickOutsideBounds:(DDIII)Z
+      85: invokevirtual #645                // Method net/minecraft/screen/ScreenHandler.canInsertIntoSlot:(Lnet/minecraft/item/ItemStack;Lnet/minecraft/screen/slot/Slot;)Z
+      91: invokestatic  #648                // Method hasShiftDown:()Z
+     101: invokevirtual #214                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+     114: invokevirtual #649                // Method net/minecraft/util/collection/DefaultedList.iterator:()Ljava/util/Iterator;
+     121: invokeinterface #484,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+     131: invokeinterface #487,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+     155: invokevirtual #657                // Method net/minecraft/screen/slot/Slot.canTakeItems:(Lnet/minecraft/entity/player/PlayerEntity;)Z
+     163: invokevirtual #327                // Method net/minecraft/screen/slot/Slot.hasStack:()Z
+     189: invokestatic  #383                // Method net/minecraft/screen/ScreenHandler.canInsertItemIntoSlot:(Lnet/minecraft/screen/slot/Slot;Lnet/minecraft/item/ItemStack;Z)Z
+     208: invokevirtual #566                // Method onMouseClick:(Lnet/minecraft/screen/slot/Slot;IILnet/minecraft/screen/slot/SlotActionType;)V
+     227: invokevirtual #566                // Method onMouseClick:(Lnet/minecraft/screen/slot/Slot;IILnet/minecraft/screen/slot/SlotActionType;)V
+     268: invokeinterface #602,  1          // InterfaceMethod java/util/Set.clear:()V
+     308: invokevirtual #543                // Method net/minecraft/client/option/GameOptions.getTouchscreen:()Lnet/minecraft/client/option/SimpleOption;
+     311: invokevirtual #548                // Method net/minecraft/client/option/SimpleOption.getValue:()Ljava/lang/Object;
+     317: invokevirtual #553                // Method java/lang/Boolean.booleanValue:()Z
+     338: invokevirtual #214                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+     358: invokevirtual #330                // Method net/minecraft/screen/slot/Slot.getStack:()Lnet/minecraft/item/ItemStack;
+     371: invokestatic  #383                // Method net/minecraft/screen/ScreenHandler.canInsertItemIntoSlot:(Lnet/minecraft/screen/slot/Slot;Lnet/minecraft/item/ItemStack;Z)Z
+     386: invokevirtual #214                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+     414: invokevirtual #566                // Method onMouseClick:(Lnet/minecraft/screen/slot/Slot;IILnet/minecraft/screen/slot/SlotActionType;)V
+     426: invokevirtual #566                // Method onMouseClick:(Lnet/minecraft/screen/slot/Slot;IILnet/minecraft/screen/slot/SlotActionType;)V
+     433: invokevirtual #218                // Method net/minecraft/screen/ScreenHandler.getCursorStack:()Lnet/minecraft/item/ItemStack;
+     436: invokevirtual #214                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+     469: invokevirtual #566                // Method onMouseClick:(Lnet/minecraft/screen/slot/Slot;IILnet/minecraft/screen/slot/SlotActionType;)V
+     478: invokestatic  #667                // Method net/minecraft/util/math/MathHelper.floor:(D)I
+     490: invokestatic  #667                // Method net/minecraft/util/math/MathHelper.floor:(D)I
+     513: invokestatic  #274                // Method net/minecraft/util/Util.getMeasuringTimeMs:()J
+     526: invokevirtual #214                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+     538: invokestatic  #667                // Method net/minecraft/util/math/MathHelper.floor:(D)I
+     550: invokestatic  #667                // Method net/minecraft/util/math/MathHelper.floor:(D)I
+     573: invokestatic  #274                // Method net/minecraft/util/Util.getMeasuringTimeMs:()J
+     580: invokevirtual #670                // Method endTouchDrag:()V
+     597: invokeinterface #671,  1          // InterfaceMethod java/util/Set.isEmpty:()Z
+     615: invokestatic  #674                // Method net/minecraft/screen/ScreenHandler.packQuickCraftData:(II)I
+     621: invokevirtual #566                // Method onMouseClick:(Lnet/minecraft/screen/slot/Slot;IILnet/minecraft/screen/slot/SlotActionType;)V
+     628: invokeinterface #479,  1          // InterfaceMethod java/util/Set.iterator:()Ljava/util/Iterator;
+     637: invokeinterface #484,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+     647: invokeinterface #487,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+     670: invokestatic  #674                // Method net/minecraft/screen/ScreenHandler.packQuickCraftData:(II)I
+     676: invokevirtual #566                // Method onMouseClick:(Lnet/minecraft/screen/slot/Slot;IILnet/minecraft/screen/slot/SlotActionType;)V
+     692: invokestatic  #674                // Method net/minecraft/screen/ScreenHandler.packQuickCraftData:(II)I
+     698: invokevirtual #566                // Method onMouseClick:(Lnet/minecraft/screen/slot/Slot;IILnet/minecraft/screen/slot/SlotActionType;)V
+     708: invokevirtual #218                // Method net/minecraft/screen/ScreenHandler.getCursorStack:()Lnet/minecraft/item/ItemStack;
+     711: invokevirtual #214                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+     729: invokevirtual #511                // Method net/minecraft/client/option/KeyBinding.matchesMouse:(I)Z
+     745: invokevirtual #566                // Method onMouseClick:(Lnet/minecraft/screen/slot/Slot;IILnet/minecraft/screen/slot/SlotActionType;)V
+     759: invokestatic  #570                // Method net/minecraft/client/MinecraftClient.getInstance:()Lnet/minecraft/client/MinecraftClient;
+     762: invokevirtual #574                // Method net/minecraft/client/MinecraftClient.getWindow:()Lnet/minecraft/client/util/Window;
+     765: invokevirtual #579                // Method net/minecraft/client/util/Window.getHandle:()J
+     771: invokestatic  #585                // Method net/minecraft/client/util/InputUtil.isKeyPressed:(JI)Z
+     777: invokestatic  #570                // Method net/minecraft/client/MinecraftClient.getInstance:()Lnet/minecraft/client/MinecraftClient;
+     780: invokevirtual #574                // Method net/minecraft/client/MinecraftClient.getWindow:()Lnet/minecraft/client/util/Window;
+     783: invokevirtual #579                // Method net/minecraft/client/util/Window.getHandle:()J
+     789: invokestatic  #585                // Method net/minecraft/client/util/InputUtil.isKeyPressed:(JI)Z
+     815: invokevirtual #327                // Method net/minecraft/screen/slot/Slot.hasStack:()Z
+     823: invokevirtual #330                // Method net/minecraft/screen/slot/Slot.getStack:()Lnet/minecraft/item/ItemStack;
+     826: invokevirtual #591                // Method net/minecraft/item/ItemStack.copy:()Lnet/minecraft/item/ItemStack;
+     859: invokevirtual #566                // Method onMouseClick:(Lnet/minecraft/screen/slot/Slot;IILnet/minecraft/screen/slot/SlotActionType;)V
+     866: invokevirtual #218                // Method net/minecraft/screen/ScreenHandler.getCursorStack:()Lnet/minecraft/item/ItemStack;
+     869: invokevirtual #214                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+  public void endTouchDrag();
+  private boolean isPointOverSlot(net.minecraft.screen.slot.Slot, double, double);
+      16: invokevirtual #684                // Method isPointWithinBounds:(IIIIDD)Z
+  protected boolean isPointWithinBounds(int, int, int, int, double, double);
+  protected void onMouseClick(net.minecraft.screen.slot.Slot, int, int, net.minecraft.screen.slot.SlotActionType);
+      34: invokevirtual #693                // Method net/minecraft/client/network/ClientPlayerInteractionManager.clickSlot:(IIILnet/minecraft/screen/slot/SlotActionType;Lnet/minecraft/entity/player/PlayerEntity;)V
+  protected void onSlotChangedState(int, int, boolean);
+      10: invokevirtual #700                // Method net/minecraft/client/network/ClientPlayerInteractionManager.slotChangedState:(IIZ)V
+  public boolean keyPressed(int, int, int);
+       4: invokespecial #707                // Method net/minecraft/client/gui/screen/Screen.keyPressed:(III)Z
+      24: invokevirtual #714                // Method net/minecraft/client/option/KeyBinding.matchesKey:(II)Z
+      31: invokevirtual #556                // Method close:()V
+      39: invokevirtual #717                // Method handleHotbarKeyPressed:(II)Z
+      54: invokevirtual #327                // Method net/minecraft/screen/slot/Slot.hasStack:()Z
+      72: invokevirtual #714                // Method net/minecraft/client/option/KeyBinding.matchesKey:(II)Z
+      94: invokevirtual #566                // Method onMouseClick:(Lnet/minecraft/screen/slot/Slot;IILnet/minecraft/screen/slot/SlotActionType;)V
+     112: invokevirtual #714                // Method net/minecraft/client/option/KeyBinding.matchesKey:(II)Z
+     130: invokestatic  #723                // Method hasControlDown:()Z
+     144: invokevirtual #566                // Method onMouseClick:(Lnet/minecraft/screen/slot/Slot;IILnet/minecraft/screen/slot/SlotActionType;)V
+  protected boolean handleHotbarKeyPressed(int, int);
+       4: invokevirtual #218                // Method net/minecraft/screen/ScreenHandler.getCursorStack:()Lnet/minecraft/item/ItemStack;
+       7: invokevirtual #214                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+      32: invokevirtual #714                // Method net/minecraft/client/option/KeyBinding.matchesKey:(II)Z
+      55: invokevirtual #566                // Method onMouseClick:(Lnet/minecraft/screen/slot/Slot;IILnet/minecraft/screen/slot/SlotActionType;)V
+      82: invokevirtual #714                // Method net/minecraft/client/option/KeyBinding.matchesKey:(II)Z
+     104: invokevirtual #566                // Method onMouseClick:(Lnet/minecraft/screen/slot/Slot;IILnet/minecraft/screen/slot/SlotActionType;)V
+  public void removed();
+      22: invokevirtual #728                // Method net/minecraft/screen/ScreenHandler.onClosed:(Lnet/minecraft/entity/player/PlayerEntity;)V
+  public boolean shouldPause();
+  public final void tick();
+       1: invokespecial #732                // Method net/minecraft/client/gui/screen/Screen.tick:()V
+      11: invokevirtual #737                // Method net/minecraft/client/network/ClientPlayerEntity.isAlive:()Z
+      24: invokevirtual #740                // Method net/minecraft/client/network/ClientPlayerEntity.isRemoved:()Z
+      37: invokevirtual #743                // Method net/minecraft/client/network/ClientPlayerEntity.closeHandledScreen:()V
+      44: invokevirtual #746                // Method handledScreenTick:()V
+  protected void handledScreenTick();
+  public T getScreenHandler();
+  public void close();
+       7: invokevirtual #743                // Method net/minecraft/client/network/ClientPlayerEntity.closeHandledScreen:()V
+      11: invokespecial #750                // Method net/minecraft/client/gui/screen/Screen.close:()V
+  static {};
+       3: invokestatic  #757                // Method net/minecraft/util/Identifier.ofVanilla:(Ljava/lang/String;)Lnet/minecraft/util/Identifier;
+==== net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen
+  private static final net.minecraft.util.Identifier EFFECT_BACKGROUND_LARGE_TEXTURE;
+  private static final net.minecraft.util.Identifier EFFECT_BACKGROUND_SMALL_TEXTURE;
+  public net.minecraft.client.gui.screen.ingame.AbstractInventoryScreen(T, net.minecraft.entity.player.PlayerInventory, net.minecraft.text.Text);
+       4: invokespecial #26                 // Method net/minecraft/client/gui/screen/ingame/HandledScreen."<init>":(Lnet/minecraft/screen/ScreenHandler;Lnet/minecraft/entity/player/PlayerInventory;Lnet/minecraft/text/Text;)V
+  public void render(net.minecraft.client.gui.DrawContext, int, int, float);
+       6: invokespecial #41                 // Method net/minecraft/client/gui/screen/ingame/HandledScreen.render:(Lnet/minecraft/client/gui/DrawContext;IIF)V
+      13: invokevirtual #45                 // Method drawStatusEffects:(Lnet/minecraft/client/gui/DrawContext;II)V
+  public boolean hideStatusEffectHud();
+  private void drawStatusEffects(net.minecraft.client.gui.DrawContext, int, int);
+      29: invokevirtual #77                 // Method net/minecraft/client/network/ClientPlayerEntity.getStatusEffects:()Ljava/util/Collection;
+      36: invokeinterface #82,  1           // InterfaceMethod java/util/Collection.isEmpty:()Z
+      72: invokeinterface #88,  1           // InterfaceMethod java/util/Collection.size:()I
+      86: invokeinterface #88,  1           // InterfaceMethod java/util/Collection.size:()I
+      96: invokestatic  #94                 // Method com/google/common/collect/Ordering.natural:()Lcom/google/common/collect/Ordering;
+     101: invokevirtual #98                 // Method com/google/common/collect/Ordering.sortedCopy:(Ljava/lang/Iterable;)Ljava/util/List;
+     116: invokevirtual #102                // Method drawStatusEffectBackgrounds:(Lnet/minecraft/client/gui/DrawContext;IILjava/lang/Iterable;Z)V
+     129: invokevirtual #105                // Method drawStatusEffectSprites:(Lnet/minecraft/client/gui/DrawContext;IILjava/lang/Iterable;Z)V
+     145: invokevirtual #109                // Method drawStatusEffectDescriptions:(Lnet/minecraft/client/gui/DrawContext;IILjava/lang/Iterable;)V
+     177: invokeinterface #120,  1          // InterfaceMethod java/lang/Iterable.iterator:()Ljava/util/Iterator;
+     186: invokeinterface #127,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+     196: invokeinterface #131,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+     243: invokevirtual #135                // Method getStatusEffectDescription:(Lnet/minecraft/entity/effect/StatusEffectInstance;)Lnet/minecraft/text/Text;
+     256: invokevirtual #145                // Method net/minecraft/client/world/ClientWorld.getTickManager:()Lnet/minecraft/world/tick/TickManager;
+     259: invokevirtual #151                // Method net/minecraft/world/tick/TickManager.getTickRate:()F
+     262: invokestatic  #157                // Method net/minecraft/entity/effect/StatusEffectUtil.getDurationText:(Lnet/minecraft/entity/effect/StatusEffectInstance;FF)Lnet/minecraft/text/Text;
+     265: invokestatic  #161                // InterfaceMethod java/util/List.of:(Ljava/lang/Object;Ljava/lang/Object;)Ljava/util/List;
+     277: invokestatic  #171                // Method java/util/Optional.empty:()Ljava/util/Optional;
+     282: invokevirtual #175                // Method net/minecraft/client/gui/DrawContext.drawTooltip:(Lnet/minecraft/client/font/TextRenderer;Ljava/util/List;Ljava/util/Optional;II)V
+  private void drawStatusEffectBackgrounds(net.minecraft.client.gui.DrawContext, int, int, java.lang.Iterable<net.minecraft.entity.effect.StatusEffectInstance>, boolean);
+       8: invokeinterface #120,  1          // InterfaceMethod java/lang/Iterable.iterator:()Ljava/util/Iterator;
+      17: invokeinterface #127,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      27: invokeinterface #131,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      53: invokevirtual #201                // Method net/minecraft/client/gui/DrawContext.drawGuiTexture:(Lnet/minecraft/util/Identifier;IIII)V
+      70: invokevirtual #201                // Method net/minecraft/client/gui/DrawContext.drawGuiTexture:(Lnet/minecraft/util/Identifier;IIII)V
+  private void drawStatusEffectSprites(net.minecraft.client.gui.DrawContext, int, int, java.lang.Iterable<net.minecraft.entity.effect.StatusEffectInstance>, boolean);
+       4: invokevirtual #207                // Method net/minecraft/client/MinecraftClient.getStatusEffectSpriteManager:()Lnet/minecraft/client/texture/StatusEffectSpriteManager;
+      17: invokeinterface #120,  1          // InterfaceMethod java/lang/Iterable.iterator:()Ljava/util/Iterator;
+      26: invokeinterface #127,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      36: invokeinterface #131,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      48: invokevirtual #213                // Method net/minecraft/entity/effect/StatusEffectInstance.getEffectType:()Lnet/minecraft/registry/entry/RegistryEntry;
+      57: invokevirtual #217                // Method net/minecraft/client/texture/StatusEffectSpriteManager.getSprite:(Lnet/minecraft/registry/entry/RegistryEntry;)Lnet/minecraft/client/texture/Sprite;
+      89: invokevirtual #223                // Method net/minecraft/client/gui/DrawContext.drawSprite:(IIIIILnet/minecraft/client/texture/Sprite;)V
+  private void drawStatusEffectDescriptions(net.minecraft.client.gui.DrawContext, int, int, java.lang.Iterable<net.minecraft.entity.effect.StatusEffectInstance>);
+       8: invokeinterface #120,  1          // InterfaceMethod java/lang/Iterable.iterator:()Ljava/util/Iterator;
+      17: invokeinterface #127,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      27: invokeinterface #131,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      40: invokevirtual #135                // Method getStatusEffectDescription:(Lnet/minecraft/entity/effect/StatusEffectInstance;)Lnet/minecraft/text/Text;
+      66: invokevirtual #236                // Method net/minecraft/client/gui/DrawContext.drawTextWithShadow:(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)I
+      80: invokevirtual #145                // Method net/minecraft/client/world/ClientWorld.getTickManager:()Lnet/minecraft/world/tick/TickManager;
+      83: invokevirtual #151                // Method net/minecraft/world/tick/TickManager.getTickRate:()F
+      86: invokestatic  #157                // Method net/minecraft/entity/effect/StatusEffectUtil.getDurationText:(Lnet/minecraft/entity/effect/StatusEffectInstance;FF)Lnet/minecraft/text/Text;
+     115: invokevirtual #236                // Method net/minecraft/client/gui/DrawContext.drawTextWithShadow:(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)I
+  private net.minecraft.text.Text getStatusEffectDescription(net.minecraft.entity.effect.StatusEffectInstance);
+       1: invokevirtual #213                // Method net/minecraft/entity/effect/StatusEffectInstance.getEffectType:()Lnet/minecraft/registry/entry/RegistryEntry;
+       4: invokeinterface #243,  1          // InterfaceMethod net/minecraft/registry/entry/RegistryEntry.value:()Ljava/lang/Object;
+      12: invokevirtual #249                // Method net/minecraft/entity/effect/StatusEffect.getName:()Lnet/minecraft/text/Text;
+      15: invokeinterface #255,  1          // InterfaceMethod net/minecraft/text/Text.copy:()Lnet/minecraft/text/MutableText;
+      22: invokevirtual #258                // Method net/minecraft/entity/effect/StatusEffectInstance.getAmplifier:()I
+      30: invokevirtual #258                // Method net/minecraft/entity/effect/StatusEffectInstance.getAmplifier:()I
+      42: invokevirtual #269                // Method net/minecraft/text/MutableText.append:(Lnet/minecraft/text/Text;)Lnet/minecraft/text/MutableText;
+      46: invokevirtual #258                // Method net/minecraft/entity/effect/StatusEffectInstance.getAmplifier:()I
+      51: invokedynamic #281,  0            // InvokeDynamic #0:makeConcatWithConstants:(I)Ljava/lang/String;
+      56: invokestatic  #285                // InterfaceMethod net/minecraft/text/Text.translatable:(Ljava/lang/String;)Lnet/minecraft/text/MutableText;
+      59: invokevirtual #269                // Method net/minecraft/text/MutableText.append:(Lnet/minecraft/text/Text;)Lnet/minecraft/text/MutableText;
+  static {};
+       3: invokestatic  #297                // Method net/minecraft/util/Identifier.ofVanilla:(Ljava/lang/String;)Lnet/minecraft/util/Identifier;
+      12: invokestatic  #297                // Method net/minecraft/util/Identifier.ofVanilla:(Ljava/lang/String;)Lnet/minecraft/util/Identifier;
+==== net.minecraft.client.gui.DrawContext
+  public static final float field_44931;
+  public static final float field_44932;
+  private static final int field_44655;
+  private final net.minecraft.client.MinecraftClient client;
+  private final net.minecraft.client.util.math.MatrixStack matrices;
+  private final net.minecraft.client.render.VertexConsumerProvider$Immediate vertexConsumers;
+  private final net.minecraft.client.gui.DrawContext$ScissorStack scissorStack;
+  private final net.minecraft.client.texture.GuiAtlasManager guiAtlasManager;
+  private boolean runningDrawCallback;
+  private net.minecraft.client.gui.DrawContext(net.minecraft.client.MinecraftClient, net.minecraft.client.util.math.MatrixStack, net.minecraft.client.render.VertexConsumerProvider$Immediate);
+       1: invokespecial #92                 // Method java/lang/Object."<init>":()V
+       9: invokespecial #93                 // Method net/minecraft/client/gui/DrawContext$ScissorStack."<init>":()V
+      32: invokevirtual #107                // Method net/minecraft/client/MinecraftClient.getGuiAtlasManager:()Lnet/minecraft/client/texture/GuiAtlasManager;
+  public net.minecraft.client.gui.DrawContext(net.minecraft.client.MinecraftClient, net.minecraft.client.render.VertexConsumerProvider$Immediate);
+       6: invokespecial #113                // Method net/minecraft/client/util/math/MatrixStack."<init>":()V
+      10: invokespecial #115                // Method "<init>":(Lnet/minecraft/client/MinecraftClient;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider$Immediate;)V
+  public void draw(java.lang.Runnable);
+       1: invokevirtual #121                // Method draw:()V
+      10: invokeinterface #128,  1          // InterfaceMethod java/lang/Runnable.run:()V
+      21: invokevirtual #121                // Method draw:()V
+  private void tryDraw();
+       8: invokevirtual #121                // Method draw:()V
+  private void drawIfRunning();
+       8: invokevirtual #121                // Method draw:()V
+  public int getScaledWindowWidth();
+       4: invokevirtual #137                // Method net/minecraft/client/MinecraftClient.getWindow:()Lnet/minecraft/client/util/Window;
+       7: invokevirtual #142                // Method net/minecraft/client/util/Window.getScaledWidth:()I
+  public int getScaledWindowHeight();
+       4: invokevirtual #137                // Method net/minecraft/client/MinecraftClient.getWindow:()Lnet/minecraft/client/util/Window;
+       7: invokevirtual #146                // Method net/minecraft/client/util/Window.getScaledHeight:()I
+  public net.minecraft.client.util.math.MatrixStack getMatrices();
+  public net.minecraft.client.render.VertexConsumerProvider$Immediate getVertexConsumers();
+  public void draw();
+       0: invokestatic  #155                // Method com/mojang/blaze3d/systems/RenderSystem.disableDepthTest:()V
+       7: invokevirtual #156                // Method net/minecraft/client/render/VertexConsumerProvider$Immediate.draw:()V
+      10: invokestatic  #159                // Method com/mojang/blaze3d/systems/RenderSystem.enableDepthTest:()V
+  public void drawHorizontalLine(int, int, int, int);
+       1: invokestatic  #171                // Method net/minecraft/client/render/RenderLayer.getGui:()Lnet/minecraft/client/render/RenderLayer;
+       9: invokevirtual #174                // Method drawHorizontalLine:(Lnet/minecraft/client/render/RenderLayer;IIII)V
+  public void drawHorizontalLine(net.minecraft.client.render.RenderLayer, int, int, int, int);
+      27: invokevirtual #179                // Method fill:(Lnet/minecraft/client/render/RenderLayer;IIIII)V
+  public void drawVerticalLine(int, int, int, int);
+       1: invokestatic  #171                // Method net/minecraft/client/render/RenderLayer.getGui:()Lnet/minecraft/client/render/RenderLayer;
+       9: invokevirtual #187                // Method drawVerticalLine:(Lnet/minecraft/client/render/RenderLayer;IIII)V
+  public void drawVerticalLine(net.minecraft.client.render.RenderLayer, int, int, int, int);
+      29: invokevirtual #179                // Method fill:(Lnet/minecraft/client/render/RenderLayer;IIIII)V
+  public void enableScissor(int, int, int, int);
+      18: invokespecial #192                // Method net/minecraft/client/gui/ScreenRect."<init>":(IIII)V
+      21: invokevirtual #196                // Method net/minecraft/client/gui/DrawContext$ScissorStack.push:(Lnet/minecraft/client/gui/ScreenRect;)Lnet/minecraft/client/gui/ScreenRect;
+      24: invokevirtual #200                // Method setScissor:(Lnet/minecraft/client/gui/ScreenRect;)V
+  public void disableScissor();
+       5: invokevirtual #205                // Method net/minecraft/client/gui/DrawContext$ScissorStack.pop:()Lnet/minecraft/client/gui/ScreenRect;
+       8: invokevirtual #200                // Method setScissor:(Lnet/minecraft/client/gui/ScreenRect;)V
+  public boolean scissorContains(int, int);
+       6: invokevirtual #210                // Method net/minecraft/client/gui/DrawContext$ScissorStack.contains:(II)Z
+  private void setScissor(net.minecraft.client.gui.ScreenRect);
+       1: invokevirtual #214                // Method drawIfRunning:()V
+       8: invokestatic  #218                // Method net/minecraft/client/MinecraftClient.getInstance:()Lnet/minecraft/client/MinecraftClient;
+      11: invokevirtual #137                // Method net/minecraft/client/MinecraftClient.getWindow:()Lnet/minecraft/client/util/Window;
+      16: invokevirtual #221                // Method net/minecraft/client/util/Window.getFramebufferHeight:()I
+      21: invokevirtual #225                // Method net/minecraft/client/util/Window.getScaleFactor:()D
+      27: invokevirtual #228                // Method net/minecraft/client/gui/ScreenRect.getLeft:()I
+      39: invokevirtual #231                // Method net/minecraft/client/gui/ScreenRect.getBottom:()I
+      50: invokevirtual #234                // Method net/minecraft/client/gui/ScreenRect.width:()I
+      60: invokevirtual #237                // Method net/minecraft/client/gui/ScreenRect.height:()I
+      79: invokestatic  #243                // Method java/lang/Math.max:(II)I
+      86: invokestatic  #243                // Method java/lang/Math.max:(II)I
+      89: invokestatic  #245                // Method com/mojang/blaze3d/systems/RenderSystem.enableScissor:(IIII)V
+      95: invokestatic  #247                // Method com/mojang/blaze3d/systems/RenderSystem.disableScissor:()V
+  public void setShaderColor(float, float, float, float);
+       1: invokevirtual #214                // Method drawIfRunning:()V
+       9: invokestatic  #264                // Method com/mojang/blaze3d/systems/RenderSystem.setShaderColor:(FFFF)V
+  public void fill(int, int, int, int, int);
+       9: invokevirtual #268                // Method fill:(IIIIII)V
+  public void fill(int, int, int, int, int, int);
+       1: invokestatic  #171                // Method net/minecraft/client/render/RenderLayer.getGui:()Lnet/minecraft/client/render/RenderLayer;
+      13: invokevirtual #272                // Method fill:(Lnet/minecraft/client/render/RenderLayer;IIIIII)V
+  public void fill(net.minecraft.client.render.RenderLayer, int, int, int, int, int);
+      11: invokevirtual #272                // Method fill:(Lnet/minecraft/client/render/RenderLayer;IIIIII)V
+  public void fill(net.minecraft.client.render.RenderLayer, int, int, int, int, int, int);
+       4: invokevirtual #276                // Method net/minecraft/client/util/math/MatrixStack.peek:()Lnet/minecraft/client/util/math/MatrixStack$Entry;
+       7: invokevirtual #280                // Method net/minecraft/client/util/math/MatrixStack$Entry.getPositionMatrix:()Lorg/joml/Matrix4f;
+      49: invokevirtual #286                // Method net/minecraft/client/render/VertexConsumerProvider$Immediate.getBuffer:(Lnet/minecraft/client/render/RenderLayer;)Lnet/minecraft/client/render/VertexConsumer;
+      65: invokeinterface #292,  5          // InterfaceMethod net/minecraft/client/render/VertexConsumer.vertex:(Lorg/joml/Matrix4f;FFF)Lnet/minecraft/client/render/VertexConsumer;
+      72: invokeinterface #295,  2          // InterfaceMethod net/minecraft/client/render/VertexConsumer.color:(I)Lnet/minecraft/client/render/VertexConsumer;
+      90: invokeinterface #292,  5          // InterfaceMethod net/minecraft/client/render/VertexConsumer.vertex:(Lorg/joml/Matrix4f;FFF)Lnet/minecraft/client/render/VertexConsumer;
+      97: invokeinterface #295,  2          // InterfaceMethod net/minecraft/client/render/VertexConsumer.color:(I)Lnet/minecraft/client/render/VertexConsumer;
+     116: invokeinterface #292,  5          // InterfaceMethod net/minecraft/client/render/VertexConsumer.vertex:(Lorg/joml/Matrix4f;FFF)Lnet/minecraft/client/render/VertexConsumer;
+     123: invokeinterface #295,  2          // InterfaceMethod net/minecraft/client/render/VertexConsumer.color:(I)Lnet/minecraft/client/render/VertexConsumer;
+     141: invokeinterface #292,  5          // InterfaceMethod net/minecraft/client/render/VertexConsumer.vertex:(Lorg/joml/Matrix4f;FFF)Lnet/minecraft/client/render/VertexConsumer;
+     148: invokeinterface #295,  2          // InterfaceMethod net/minecraft/client/render/VertexConsumer.color:(I)Lnet/minecraft/client/render/VertexConsumer;
+     155: invokevirtual #297                // Method tryDraw:()V
+  public void fillGradient(int, int, int, int, int, int);
+      11: invokevirtual #311                // Method fillGradient:(IIIIIII)V
+  public void fillGradient(int, int, int, int, int, int, int);
+       1: invokestatic  #171                // Method net/minecraft/client/render/RenderLayer.getGui:()Lnet/minecraft/client/render/RenderLayer;
+      15: invokevirtual #314                // Method fillGradient:(Lnet/minecraft/client/render/RenderLayer;IIIIIII)V
+  public void fillGradient(net.minecraft.client.render.RenderLayer, int, int, int, int, int, int, int);
+       5: invokevirtual #286                // Method net/minecraft/client/render/VertexConsumerProvider$Immediate.getBuffer:(Lnet/minecraft/client/render/RenderLayer;)Lnet/minecraft/client/render/VertexConsumer;
+      25: invokevirtual #317                // Method fillGradient:(Lnet/minecraft/client/render/VertexConsumer;IIIIIII)V
+      29: invokevirtual #297                // Method tryDraw:()V
+  private void fillGradient(net.minecraft.client.render.VertexConsumer, int, int, int, int, int, int, int);
+       4: invokevirtual #276                // Method net/minecraft/client/util/math/MatrixStack.peek:()Lnet/minecraft/client/util/math/MatrixStack$Entry;
+       7: invokevirtual #280                // Method net/minecraft/client/util/math/MatrixStack$Entry.getPositionMatrix:()Lorg/joml/Matrix4f;
+      22: invokeinterface #292,  5          // InterfaceMethod net/minecraft/client/render/VertexConsumer.vertex:(Lorg/joml/Matrix4f;FFF)Lnet/minecraft/client/render/VertexConsumer;
+      29: invokeinterface #295,  2          // InterfaceMethod net/minecraft/client/render/VertexConsumer.color:(I)Lnet/minecraft/client/render/VertexConsumer;
+      46: invokeinterface #292,  5          // InterfaceMethod net/minecraft/client/render/VertexConsumer.vertex:(Lorg/joml/Matrix4f;FFF)Lnet/minecraft/client/render/VertexConsumer;
+      53: invokeinterface #295,  2          // InterfaceMethod net/minecraft/client/render/VertexConsumer.color:(I)Lnet/minecraft/client/render/VertexConsumer;
+      71: invokeinterface #292,  5          // InterfaceMethod net/minecraft/client/render/VertexConsumer.vertex:(Lorg/joml/Matrix4f;FFF)Lnet/minecraft/client/render/VertexConsumer;
+      78: invokeinterface #295,  2          // InterfaceMethod net/minecraft/client/render/VertexConsumer.color:(I)Lnet/minecraft/client/render/VertexConsumer;
+      95: invokeinterface #292,  5          // InterfaceMethod net/minecraft/client/render/VertexConsumer.vertex:(Lorg/joml/Matrix4f;FFF)Lnet/minecraft/client/render/VertexConsumer;
+     102: invokeinterface #295,  2          // InterfaceMethod net/minecraft/client/render/VertexConsumer.color:(I)Lnet/minecraft/client/render/VertexConsumer;
+  public void fillWithLayer(net.minecraft.client.render.RenderLayer, int, int, int, int, int);
+       4: invokevirtual #276                // Method net/minecraft/client/util/math/MatrixStack.peek:()Lnet/minecraft/client/util/math/MatrixStack$Entry;
+       7: invokevirtual #280                // Method net/minecraft/client/util/math/MatrixStack$Entry.getPositionMatrix:()Lorg/joml/Matrix4f;
+      17: invokevirtual #286                // Method net/minecraft/client/render/VertexConsumerProvider$Immediate.getBuffer:(Lnet/minecraft/client/render/RenderLayer;)Lnet/minecraft/client/render/VertexConsumer;
+      33: invokeinterface #292,  5          // InterfaceMethod net/minecraft/client/render/VertexConsumer.vertex:(Lorg/joml/Matrix4f;FFF)Lnet/minecraft/client/render/VertexConsumer;
+      51: invokeinterface #292,  5          // InterfaceMethod net/minecraft/client/render/VertexConsumer.vertex:(Lorg/joml/Matrix4f;FFF)Lnet/minecraft/client/render/VertexConsumer;
+      70: invokeinterface #292,  5          // InterfaceMethod net/minecraft/client/render/VertexConsumer.vertex:(Lorg/joml/Matrix4f;FFF)Lnet/minecraft/client/render/VertexConsumer;
+      88: invokeinterface #292,  5          // InterfaceMethod net/minecraft/client/render/VertexConsumer.vertex:(Lorg/joml/Matrix4f;FFF)Lnet/minecraft/client/render/VertexConsumer;
+      95: invokevirtual #297                // Method tryDraw:()V
+  public void drawCenteredTextWithShadow(net.minecraft.client.font.TextRenderer, java.lang.String, int, int, int);
+       6: invokevirtual #327                // Method net/minecraft/client/font/TextRenderer.getWidth:(Ljava/lang/String;)I
+      16: invokevirtual #331                // Method drawTextWithShadow:(Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;III)I
+  public void drawCenteredTextWithShadow(net.minecraft.client.font.TextRenderer, net.minecraft.text.Text, int, int, int);
+       1: invokeinterface #340,  1          // InterfaceMethod net/minecraft/text/Text.asOrderedText:()Lnet/minecraft/text/OrderedText;
+      16: invokevirtual #343                // Method net/minecraft/client/font/TextRenderer.getWidth:(Lnet/minecraft/text/OrderedText;)I
+      26: invokevirtual #346                // Method drawTextWithShadow:(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/OrderedText;III)I
+  public void drawCenteredTextWithShadow(net.minecraft.client.font.TextRenderer, net.minecraft.text.OrderedText, int, int, int);
+       6: invokevirtual #343                // Method net/minecraft/client/font/TextRenderer.getWidth:(Lnet/minecraft/text/OrderedText;)I
+      16: invokevirtual #346                // Method drawTextWithShadow:(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/OrderedText;III)I
+  public int drawTextWithShadow(net.minecraft.client.font.TextRenderer, java.lang.String, int, int, int);
+       9: invokevirtual #354                // Method drawText:(Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;IIIZ)I
+  public int drawText(net.minecraft.client.font.TextRenderer, java.lang.String, int, int, int, boolean);
+      21: invokevirtual #276                // Method net/minecraft/client/util/math/MatrixStack.peek:()Lnet/minecraft/client/util/math/MatrixStack$Entry;
+      24: invokevirtual #280                // Method net/minecraft/client/util/math/MatrixStack$Entry.getPositionMatrix:()Lorg/joml/Matrix4f;
+      39: invokevirtual #364                // Method net/minecraft/client/font/TextRenderer.isRightToLeft:()Z
+      42: invokevirtual #367                // Method net/minecraft/client/font/TextRenderer.draw:(Ljava/lang/String;FFIZLorg/joml/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;Lnet/minecraft/client/font/TextRenderer$TextLayerType;IIZ)I
+      48: invokevirtual #297                // Method tryDraw:()V
+  public int drawTextWithShadow(net.minecraft.client.font.TextRenderer, net.minecraft.text.OrderedText, int, int, int);
+       9: invokevirtual #370                // Method drawText:(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/OrderedText;IIIZ)I
+  public int drawText(net.minecraft.client.font.TextRenderer, net.minecraft.text.OrderedText, int, int, int, boolean);
+      15: invokevirtual #276                // Method net/minecraft/client/util/math/MatrixStack.peek:()Lnet/minecraft/client/util/math/MatrixStack$Entry;
+      18: invokevirtual #280                // Method net/minecraft/client/util/math/MatrixStack$Entry.getPositionMatrix:()Lorg/joml/Matrix4f;
+      32: invokevirtual #373                // Method net/minecraft/client/font/TextRenderer.draw:(Lnet/minecraft/text/OrderedText;FFIZLorg/joml/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider;Lnet/minecraft/client/font/TextRenderer$TextLayerType;II)I
+      38: invokevirtual #297                // Method tryDraw:()V
+  public int drawTextWithShadow(net.minecraft.client.font.TextRenderer, net.minecraft.text.Text, int, int, int);
+       9: invokevirtual #377                // Method drawText:(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;IIIZ)I
+  public int drawText(net.minecraft.client.font.TextRenderer, net.minecraft.text.Text, int, int, int, boolean);
+       3: invokeinterface #340,  1          // InterfaceMethod net/minecraft/text/Text.asOrderedText:()Lnet/minecraft/text/OrderedText;
+      15: invokevirtual #370                // Method drawText:(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/OrderedText;IIIZ)I
+  public void drawTextWrapped(net.minecraft.client.font.TextRenderer, net.minecraft.text.StringVisitable, int, int, int, int);
+       4: invokevirtual #383                // Method net/minecraft/client/font/TextRenderer.wrapLines:(Lnet/minecraft/text/StringVisitable;I)Ljava/util/List;
+       7: invokeinterface #389,  1          // InterfaceMethod java/util/List.iterator:()Ljava/util/Iterator;
+      16: invokeinterface #394,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      26: invokeinterface #398,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      46: invokevirtual #370                // Method drawText:(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/OrderedText;IIIZ)I
+      53: invokestatic  #406                // Method java/util/Objects.requireNonNull:(Ljava/lang/Object;)Ljava/lang/Object;
+  public int drawTextWithBackground(net.minecraft.client.font.TextRenderer, net.minecraft.text.Text, int, int, int, int);
+       8: invokevirtual #419                // Method net/minecraft/client/option/GameOptions.getTextBackgroundColor:(F)I
+      38: invokestatic  #406                // Method java/util/Objects.requireNonNull:(Ljava/lang/Object;)Ljava/lang/Object;
+      51: invokestatic  #422                // Method net/minecraft/util/math/ColorHelper$Argb.mixColor:(II)I
+      54: invokevirtual #424                // Method fill:(IIIII)V
+      66: invokevirtual #377                // Method drawText:(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;IIIZ)I
+  public void drawSprite(int, int, int, int, int, net.minecraft.client.texture.Sprite);
+      10: invokevirtual #431                // Method drawSprite:(Lnet/minecraft/client/texture/Sprite;IIIII)V
+  public void drawSprite(int, int, int, int, int, net.minecraft.client.texture.Sprite, float, float, float, float);
+       3: invokevirtual #439                // Method net/minecraft/client/texture/Sprite.getAtlasId:()Lnet/minecraft/util/Identifier;
+      19: invokevirtual #443                // Method net/minecraft/client/texture/Sprite.getMinU:()F
+      24: invokevirtual #446                // Method net/minecraft/client/texture/Sprite.getMaxU:()F
+      29: invokevirtual #449                // Method net/minecraft/client/texture/Sprite.getMinV:()F
+      34: invokevirtual #452                // Method net/minecraft/client/texture/Sprite.getMaxV:()F
+      45: invokevirtual #456                // Method drawTexturedQuad:(Lnet/minecraft/util/Identifier;IIIIIFFFFFFFF)V
+  public void drawBorder(int, int, int, int, int);
+      11: invokevirtual #424                // Method fill:(IIIII)V
+      31: invokevirtual #424                // Method fill:(IIIII)V
+      50: invokevirtual #424                // Method fill:(IIIII)V
+      73: invokevirtual #424                // Method fill:(IIIII)V
+  public void drawGuiTexture(net.minecraft.util.Identifier, int, int, int, int);
+       9: invokevirtual #463                // Method drawGuiTexture:(Lnet/minecraft/util/Identifier;IIIII)V
+  public void drawGuiTexture(net.minecraft.util.Identifier, int, int, int, int, int);
+       5: invokevirtual #470                // Method net/minecraft/client/texture/GuiAtlasManager.getSprite:(Lnet/minecraft/util/Identifier;)Lnet/minecraft/client/texture/Sprite;
+      16: invokevirtual #474                // Method net/minecraft/client/texture/GuiAtlasManager.getScaling:(Lnet/minecraft/client/texture/Sprite;)Lnet/minecraft/client/texture/Scaling;
+      40: invokevirtual #431                // Method drawSprite:(Lnet/minecraft/client/texture/Sprite;IIIII)V
+      76: invokevirtual #475                // Method net/minecraft/client/texture/Scaling$Tile.width:()I
+      81: invokevirtual #476                // Method net/minecraft/client/texture/Scaling$Tile.height:()I
+      86: invokevirtual #475                // Method net/minecraft/client/texture/Scaling$Tile.width:()I
+      91: invokevirtual #476                // Method net/minecraft/client/texture/Scaling$Tile.height:()I
+      94: invokevirtual #480                // Method drawSpriteTiled:(Lnet/minecraft/client/texture/Sprite;IIIIIIIIIII)V
+     128: invokevirtual #483                // Method drawSprite:(Lnet/minecraft/client/texture/Sprite;Lnet/minecraft/client/texture/Scaling$NineSlice;IIIII)V
+  public void drawGuiTexture(net.minecraft.util.Identifier, int, int, int, int, int, int, int, int);
+      17: invokevirtual #495                // Method drawGuiTexture:(Lnet/minecraft/util/Identifier;IIIIIIIII)V
+  public void drawGuiTexture(net.minecraft.util.Identifier, int, int, int, int, int, int, int, int, int);
+       5: invokevirtual #470                // Method net/minecraft/client/texture/GuiAtlasManager.getSprite:(Lnet/minecraft/util/Identifier;)Lnet/minecraft/client/texture/Sprite;
+      16: invokevirtual #474                // Method net/minecraft/client/texture/GuiAtlasManager.getScaling:(Lnet/minecraft/client/texture/Sprite;)Lnet/minecraft/client/texture/Scaling;
+      48: invokevirtual #498                // Method drawSprite:(Lnet/minecraft/client/texture/Sprite;IIIIIIIII)V
+      67: invokevirtual #431                // Method drawSprite:(Lnet/minecraft/client/texture/Sprite;IIIII)V
+  private void drawSprite(net.minecraft.client.texture.Sprite, int, int, int, int, int, int, int, int, int);
+      13: invokevirtual #439                // Method net/minecraft/client/texture/Sprite.getAtlasId:()Lnet/minecraft/util/Identifier;
+      39: invokevirtual #502                // Method net/minecraft/client/texture/Sprite.getFrameU:(F)F
+      52: invokevirtual #502                // Method net/minecraft/client/texture/Sprite.getFrameU:(F)F
+      62: invokevirtual #505                // Method net/minecraft/client/texture/Sprite.getFrameV:(F)F
+      75: invokevirtual #505                // Method net/minecraft/client/texture/Sprite.getFrameV:(F)F
+      78: invokevirtual #508                // Method drawTexturedQuad:(Lnet/minecraft/util/Identifier;IIIIIFFFF)V
+  private void drawSprite(net.minecraft.client.texture.Sprite, int, int, int, int, int);
+      13: invokevirtual #439                // Method net/minecraft/client/texture/Sprite.getAtlasId:()Lnet/minecraft/util/Identifier;
+      29: invokevirtual #443                // Method net/minecraft/client/texture/Sprite.getMinU:()F
+      33: invokevirtual #446                // Method net/minecraft/client/texture/Sprite.getMaxU:()F
+      37: invokevirtual #449                // Method net/minecraft/client/texture/Sprite.getMinV:()F
+      41: invokevirtual #452                // Method net/minecraft/client/texture/Sprite.getMaxV:()F
+      44: invokevirtual #508                // Method drawTexturedQuad:(Lnet/minecraft/util/Identifier;IIIIIFFFF)V
+  public void drawTexture(net.minecraft.util.Identifier, int, int, int, int, int, int);
+      21: invokevirtual #515                // Method drawTexture:(Lnet/minecraft/util/Identifier;IIIFFIIII)V
+  public void drawTexture(net.minecraft.util.Identifier, int, int, int, float, float, int, int, int, int);
+      26: invokevirtual #520                // Method drawTexture:(Lnet/minecraft/util/Identifier;IIIIIIIFFII)V
+  public void drawTexture(net.minecraft.util.Identifier, int, int, int, int, float, float, int, int, int, int);
+      25: invokevirtual #520                // Method drawTexture:(Lnet/minecraft/util/Identifier;IIIIIIIFFII)V
+  public void drawTexture(net.minecraft.util.Identifier, int, int, float, float, int, int, int, int);
+      20: invokevirtual #526                // Method drawTexture:(Lnet/minecraft/util/Identifier;IIIIFFIIII)V
+  void drawTexture(net.minecraft.util.Identifier, int, int, int, int, int, int, int, float, float, int, int);
+      46: invokevirtual #508                // Method drawTexturedQuad:(Lnet/minecraft/util/Identifier;IIIIIFFFF)V
+  void drawTexturedQuad(net.minecraft.util.Identifier, int, int, int, int, int, float, float, float, float);
+       2: invokestatic  #534                // Method com/mojang/blaze3d/systems/RenderSystem.setShaderTexture:(ILnet/minecraft/util/Identifier;)V
+       5: invokedynamic #554,  0            // InvokeDynamic #0:get:()Ljava/util/function/Supplier;
+      10: invokestatic  #558                // Method com/mojang/blaze3d/systems/RenderSystem.setShader:(Ljava/util/function/Supplier;)V
+      17: invokevirtual #276                // Method net/minecraft/client/util/math/MatrixStack.peek:()Lnet/minecraft/client/util/math/MatrixStack$Entry;
+      20: invokevirtual #280                // Method net/minecraft/client/util/math/MatrixStack$Entry.getPositionMatrix:()Lorg/joml/Matrix4f;
+      25: invokestatic  #563                // Method net/minecraft/client/render/Tessellator.getInstance:()Lnet/minecraft/client/render/Tessellator;
+      34: invokevirtual #577                // Method net/minecraft/client/render/Tessellator.begin:(Lnet/minecraft/client/render/VertexFormat$DrawMode;Lnet/minecraft/client/render/VertexFormat;)Lnet/minecraft/client/render/BufferBuilder;
+      51: invokevirtual #580                // Method net/minecraft/client/render/BufferBuilder.vertex:(Lorg/joml/Matrix4f;FFF)Lnet/minecraft/client/render/VertexConsumer;
+      58: invokeinterface #583,  3          // InterfaceMethod net/minecraft/client/render/VertexConsumer.texture:(FF)Lnet/minecraft/client/render/VertexConsumer;
+      76: invokevirtual #580                // Method net/minecraft/client/render/BufferBuilder.vertex:(Lorg/joml/Matrix4f;FFF)Lnet/minecraft/client/render/VertexConsumer;
+      83: invokeinterface #583,  3          // InterfaceMethod net/minecraft/client/render/VertexConsumer.texture:(FF)Lnet/minecraft/client/render/VertexConsumer;
+     101: invokevirtual #580                // Method net/minecraft/client/render/BufferBuilder.vertex:(Lorg/joml/Matrix4f;FFF)Lnet/minecraft/client/render/VertexConsumer;
+     108: invokeinterface #583,  3          // InterfaceMethod net/minecraft/client/render/VertexConsumer.texture:(FF)Lnet/minecraft/client/render/VertexConsumer;
+     126: invokevirtual #580                // Method net/minecraft/client/render/BufferBuilder.vertex:(Lorg/joml/Matrix4f;FFF)Lnet/minecraft/client/render/VertexConsumer;
+     133: invokeinterface #583,  3          // InterfaceMethod net/minecraft/client/render/VertexConsumer.texture:(FF)Lnet/minecraft/client/render/VertexConsumer;
+     141: invokevirtual #587                // Method net/minecraft/client/render/BufferBuilder.end:()Lnet/minecraft/client/render/BuiltBuffer;
+     144: invokestatic  #593                // Method net/minecraft/client/render/BufferRenderer.drawWithGlobalProgram:(Lnet/minecraft/client/render/BuiltBuffer;)V
+  void drawTexturedQuad(net.minecraft.util.Identifier, int, int, int, int, int, float, float, float, float, float, float, float, float);
+       2: invokestatic  #534                // Method com/mojang/blaze3d/systems/RenderSystem.setShaderTexture:(ILnet/minecraft/util/Identifier;)V
+       5: invokedynamic #600,  0            // InvokeDynamic #1:get:()Ljava/util/function/Supplier;
+      10: invokestatic  #558                // Method com/mojang/blaze3d/systems/RenderSystem.setShader:(Ljava/util/function/Supplier;)V
+      13: invokestatic  #603                // Method com/mojang/blaze3d/systems/RenderSystem.enableBlend:()V
+      20: invokevirtual #276                // Method net/minecraft/client/util/math/MatrixStack.peek:()Lnet/minecraft/client/util/math/MatrixStack$Entry;
+      23: invokevirtual #280                // Method net/minecraft/client/util/math/MatrixStack$Entry.getPositionMatrix:()Lorg/joml/Matrix4f;
+      28: invokestatic  #563                // Method net/minecraft/client/render/Tessellator.getInstance:()Lnet/minecraft/client/render/Tessellator;
+      37: invokevirtual #577                // Method net/minecraft/client/render/Tessellator.begin:(Lnet/minecraft/client/render/VertexFormat$DrawMode;Lnet/minecraft/client/render/VertexFormat;)Lnet/minecraft/client/render/BufferBuilder;
+      54: invokevirtual #580                // Method net/minecraft/client/render/BufferBuilder.vertex:(Lorg/joml/Matrix4f;FFF)Lnet/minecraft/client/render/VertexConsumer;
+      61: invokeinterface #583,  3          // InterfaceMethod net/minecraft/client/render/VertexConsumer.texture:(FF)Lnet/minecraft/client/render/VertexConsumer;
+      74: invokeinterface #609,  5          // InterfaceMethod net/minecraft/client/render/VertexConsumer.color:(FFFF)Lnet/minecraft/client/render/VertexConsumer;
+      92: invokevirtual #580                // Method net/minecraft/client/render/BufferBuilder.vertex:(Lorg/joml/Matrix4f;FFF)Lnet/minecraft/client/render/VertexConsumer;
+      99: invokeinterface #583,  3          // InterfaceMethod net/minecraft/client/render/VertexConsumer.texture:(FF)Lnet/minecraft/client/render/VertexConsumer;
+     112: invokeinterface #609,  5          // InterfaceMethod net/minecraft/client/render/VertexConsumer.color:(FFFF)Lnet/minecraft/client/render/VertexConsumer;
+     130: invokevirtual #580                // Method net/minecraft/client/render/BufferBuilder.vertex:(Lorg/joml/Matrix4f;FFF)Lnet/minecraft/client/render/VertexConsumer;
+     137: invokeinterface #583,  3          // InterfaceMethod net/minecraft/client/render/VertexConsumer.texture:(FF)Lnet/minecraft/client/render/VertexConsumer;
+     150: invokeinterface #609,  5          // InterfaceMethod net/minecraft/client/render/VertexConsumer.color:(FFFF)Lnet/minecraft/client/render/VertexConsumer;
+     168: invokevirtual #580                // Method net/minecraft/client/render/BufferBuilder.vertex:(Lorg/joml/Matrix4f;FFF)Lnet/minecraft/client/render/VertexConsumer;
+     175: invokeinterface #583,  3          // InterfaceMethod net/minecraft/client/render/VertexConsumer.texture:(FF)Lnet/minecraft/client/render/VertexConsumer;
+     188: invokeinterface #609,  5          // InterfaceMethod net/minecraft/client/render/VertexConsumer.color:(FFFF)Lnet/minecraft/client/render/VertexConsumer;
+     196: invokevirtual #587                // Method net/minecraft/client/render/BufferBuilder.end:()Lnet/minecraft/client/render/BuiltBuffer;
+     199: invokestatic  #593                // Method net/minecraft/client/render/BufferRenderer.drawWithGlobalProgram:(Lnet/minecraft/client/render/BuiltBuffer;)V
+     202: invokestatic  #612                // Method com/mojang/blaze3d/systems/RenderSystem.disableBlend:()V
+  private void drawSprite(net.minecraft.client.texture.Sprite, net.minecraft.client.texture.Scaling$NineSlice, int, int, int, int, int);
+       1: invokevirtual #616                // Method net/minecraft/client/texture/Scaling$NineSlice.border:()Lnet/minecraft/client/texture/Scaling$NineSlice$Border;
+       8: invokevirtual #619                // Method net/minecraft/client/texture/Scaling$NineSlice$Border.left:()I
+      15: invokestatic  #622                // Method java/lang/Math.min:(II)I
+      22: invokevirtual #625                // Method net/minecraft/client/texture/Scaling$NineSlice$Border.right:()I
+      29: invokestatic  #622                // Method java/lang/Math.min:(II)I
+      36: invokevirtual #628                // Method net/minecraft/client/texture/Scaling$NineSlice$Border.top:()I
+      43: invokestatic  #622                // Method java/lang/Math.min:(II)I
+      50: invokevirtual #631                // Method net/minecraft/client/texture/Scaling$NineSlice$Border.bottom:()I
+      57: invokestatic  #622                // Method java/lang/Math.min:(II)I
+      65: invokevirtual #632                // Method net/minecraft/client/texture/Scaling$NineSlice.width:()I
+      74: invokevirtual #633                // Method net/minecraft/client/texture/Scaling$NineSlice.height:()I
+      83: invokevirtual #632                // Method net/minecraft/client/texture/Scaling$NineSlice.width:()I
+      87: invokevirtual #633                // Method net/minecraft/client/texture/Scaling$NineSlice.height:()I
+     101: invokevirtual #498                // Method drawSprite:(Lnet/minecraft/client/texture/Sprite;IIIIIIIII)V
+     108: invokevirtual #633                // Method net/minecraft/client/texture/Scaling$NineSlice.height:()I
+     117: invokevirtual #632                // Method net/minecraft/client/texture/Scaling$NineSlice.width:()I
+     121: invokevirtual #633                // Method net/minecraft/client/texture/Scaling$NineSlice.height:()I
+     135: invokevirtual #498                // Method drawSprite:(Lnet/minecraft/client/texture/Sprite;IIIIIIIII)V
+     162: invokevirtual #632                // Method net/minecraft/client/texture/Scaling$NineSlice.width:()I
+     172: invokevirtual #633                // Method net/minecraft/client/texture/Scaling$NineSlice.height:()I
+     176: invokevirtual #632                // Method net/minecraft/client/texture/Scaling$NineSlice.width:()I
+     180: invokevirtual #633                // Method net/minecraft/client/texture/Scaling$NineSlice.height:()I
+     183: invokevirtual #480                // Method drawSpriteTiled:(Lnet/minecraft/client/texture/Sprite;IIIIIIIIIII)V
+     189: invokevirtual #632                // Method net/minecraft/client/texture/Scaling$NineSlice.width:()I
+     193: invokevirtual #633                // Method net/minecraft/client/texture/Scaling$NineSlice.height:()I
+     197: invokevirtual #632                // Method net/minecraft/client/texture/Scaling$NineSlice.width:()I
+     219: invokevirtual #498                // Method drawSprite:(Lnet/minecraft/client/texture/Sprite;IIIIIIIII)V
+     226: invokevirtual #632                // Method net/minecraft/client/texture/Scaling$NineSlice.width:()I
+     235: invokevirtual #632                // Method net/minecraft/client/texture/Scaling$NineSlice.width:()I
+     239: invokevirtual #633                // Method net/minecraft/client/texture/Scaling$NineSlice.height:()I
+     253: invokevirtual #498                // Method drawSprite:(Lnet/minecraft/client/texture/Sprite;IIIIIIIII)V
+     280: invokevirtual #632                // Method net/minecraft/client/texture/Scaling$NineSlice.width:()I
+     284: invokevirtual #633                // Method net/minecraft/client/texture/Scaling$NineSlice.height:()I
+     294: invokevirtual #632                // Method net/minecraft/client/texture/Scaling$NineSlice.width:()I
+     298: invokevirtual #633                // Method net/minecraft/client/texture/Scaling$NineSlice.height:()I
+     301: invokevirtual #480                // Method drawSpriteTiled:(Lnet/minecraft/client/texture/Sprite;IIIIIIIIIII)V
+     307: invokevirtual #632                // Method net/minecraft/client/texture/Scaling$NineSlice.width:()I
+     311: invokevirtual #633                // Method net/minecraft/client/texture/Scaling$NineSlice.height:()I
+     316: invokevirtual #633                // Method net/minecraft/client/texture/Scaling$NineSlice.height:()I
+     337: invokevirtual #498                // Method drawSprite:(Lnet/minecraft/client/texture/Sprite;IIIIIIIII)V
+     344: invokevirtual #632                // Method net/minecraft/client/texture/Scaling$NineSlice.width:()I
+     348: invokevirtual #633                // Method net/minecraft/client/texture/Scaling$NineSlice.height:()I
+     362: invokevirtual #498                // Method drawSprite:(Lnet/minecraft/client/texture/Sprite;IIIIIIIII)V
+     389: invokevirtual #632                // Method net/minecraft/client/texture/Scaling$NineSlice.width:()I
+     401: invokevirtual #632                // Method net/minecraft/client/texture/Scaling$NineSlice.width:()I
+     405: invokevirtual #633                // Method net/minecraft/client/texture/Scaling$NineSlice.height:()I
+     408: invokevirtual #480                // Method drawSpriteTiled:(Lnet/minecraft/client/texture/Sprite;IIIIIIIIIII)V
+     414: invokevirtual #632                // Method net/minecraft/client/texture/Scaling$NineSlice.width:()I
+     418: invokevirtual #633                // Method net/minecraft/client/texture/Scaling$NineSlice.height:()I
+     422: invokevirtual #632                // Method net/minecraft/client/texture/Scaling$NineSlice.width:()I
+     444: invokevirtual #498                // Method drawSprite:(Lnet/minecraft/client/texture/Sprite;IIIIIIIII)V
+     450: invokevirtual #632                // Method net/minecraft/client/texture/Scaling$NineSlice.width:()I
+     454: invokevirtual #633                // Method net/minecraft/client/texture/Scaling$NineSlice.height:()I
+     459: invokevirtual #633                // Method net/minecraft/client/texture/Scaling$NineSlice.height:()I
+     480: invokevirtual #498                // Method drawSprite:(Lnet/minecraft/client/texture/Sprite;IIIIIIIII)V
+     512: invokevirtual #633                // Method net/minecraft/client/texture/Scaling$NineSlice.height:()I
+     519: invokevirtual #632                // Method net/minecraft/client/texture/Scaling$NineSlice.width:()I
+     531: invokevirtual #632                // Method net/minecraft/client/texture/Scaling$NineSlice.width:()I
+     535: invokevirtual #633                // Method net/minecraft/client/texture/Scaling$NineSlice.height:()I
+     538: invokevirtual #480                // Method drawSpriteTiled:(Lnet/minecraft/client/texture/Sprite;IIIIIIIIIII)V
+     544: invokevirtual #632                // Method net/minecraft/client/texture/Scaling$NineSlice.width:()I
+     548: invokevirtual #633                // Method net/minecraft/client/texture/Scaling$NineSlice.height:()I
+     552: invokevirtual #632                // Method net/minecraft/client/texture/Scaling$NineSlice.width:()I
+     559: invokevirtual #633                // Method net/minecraft/client/texture/Scaling$NineSlice.height:()I
+     586: invokevirtual #498                // Method drawSprite:(Lnet/minecraft/client/texture/Sprite;IIIIIIIII)V
+     615: invokevirtual #633                // Method net/minecraft/client/texture/Scaling$NineSlice.height:()I
+     625: invokevirtual #632                // Method net/minecraft/client/texture/Scaling$NineSlice.width:()I
+     629: invokevirtual #633                // Method net/minecraft/client/texture/Scaling$NineSlice.height:()I
+     632: invokevirtual #480                // Method drawSpriteTiled:(Lnet/minecraft/client/texture/Sprite;IIIIIIIIIII)V
+     669: invokevirtual #632                // Method net/minecraft/client/texture/Scaling$NineSlice.width:()I
+     679: invokevirtual #633                // Method net/minecraft/client/texture/Scaling$NineSlice.height:()I
+     689: invokevirtual #632                // Method net/minecraft/client/texture/Scaling$NineSlice.width:()I
+     693: invokevirtual #633                // Method net/minecraft/client/texture/Scaling$NineSlice.height:()I
+     696: invokevirtual #480                // Method drawSpriteTiled:(Lnet/minecraft/client/texture/Sprite;IIIIIIIIIII)V
+     726: invokevirtual #632                // Method net/minecraft/client/texture/Scaling$NineSlice.width:()I
+     737: invokevirtual #633                // Method net/minecraft/client/texture/Scaling$NineSlice.height:()I
+     747: invokevirtual #632                // Method net/minecraft/client/texture/Scaling$NineSlice.width:()I
+     751: invokevirtual #633                // Method net/minecraft/client/texture/Scaling$NineSlice.height:()I
+     754: invokevirtual #480                // Method drawSpriteTiled:(Lnet/minecraft/client/texture/Sprite;IIIIIIIIIII)V
+  private void drawSpriteTiled(net.minecraft.client.texture.Sprite, int, int, int, int, int, int, int, int, int, int, int);
+      29: invokedynamic #650,  0            // InvokeDynamic #2:makeConcatWithConstants:(II)Ljava/lang/String;
+      34: invokespecial #653                // Method java/lang/IllegalArgumentException."<init>":(Ljava/lang/String;)V
+      55: invokestatic  #622                // Method java/lang/Math.min:(II)I
+      77: invokestatic  #622                // Method java/lang/Math.min:(II)I
+     106: invokevirtual #498                // Method drawSprite:(Lnet/minecraft/client/texture/Sprite;IIIIIIIII)V
+  public void drawItem(net.minecraft.item.ItemStack, int, int);
+      19: invokevirtual #671                // Method drawItem:(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;III)V
+  public void drawItem(net.minecraft.item.ItemStack, int, int, int);
+      20: invokevirtual #671                // Method drawItem:(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;III)V
+  public void drawItem(net.minecraft.item.ItemStack, int, int, int, int);
+      22: invokevirtual #679                // Method drawItem:(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;IIII)V
+  public void drawItemWithoutEntity(net.minecraft.item.ItemStack, int, int);
+       5: invokevirtual #682                // Method drawItemWithoutEntity:(Lnet/minecraft/item/ItemStack;III)V
+  public void drawItemWithoutEntity(net.minecraft.item.ItemStack, int, int, int);
+      14: invokevirtual #671                // Method drawItem:(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;III)V
+  public void drawItem(net.minecraft.entity.LivingEntity, net.minecraft.item.ItemStack, int, int, int);
+       3: invokevirtual #690                // Method net/minecraft/entity/LivingEntity.getWorld:()Lnet/minecraft/world/World;
+      12: invokevirtual #671                // Method drawItem:(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;III)V
+  private void drawItem(net.minecraft.entity.LivingEntity, net.minecraft.world.World, net.minecraft.item.ItemStack, int, int, int);
+      11: invokevirtual #679                // Method drawItem:(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;IIII)V
+  private void drawItem(net.minecraft.entity.LivingEntity, net.minecraft.world.World, net.minecraft.item.ItemStack, int, int, int, int);
+       1: invokevirtual #699                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+      12: invokevirtual #703                // Method net/minecraft/client/MinecraftClient.getItemRenderer:()Lnet/minecraft/client/render/item/ItemRenderer;
+      20: invokevirtual #709                // Method net/minecraft/client/render/item/ItemRenderer.getModel:(Lnet/minecraft/item/ItemStack;Lnet/minecraft/world/World;Lnet/minecraft/entity/LivingEntity;I)Lnet/minecraft/client/render/model/BakedModel;
+      29: invokevirtual #711                // Method net/minecraft/client/util/math/MatrixStack.push:()V
+      53: invokeinterface #716,  1          // InterfaceMethod net/minecraft/client/render/model/BakedModel.hasDepth:()Z
+      69: invokevirtual #720                // Method net/minecraft/client/util/math/MatrixStack.translate:(FFF)V
+      85: invokevirtual #725                // Method net/minecraft/client/util/math/MatrixStack.scale:(FFF)V
+      90: invokeinterface #728,  1          // InterfaceMethod net/minecraft/client/render/model/BakedModel.isSideLit:()Z
+     110: invokestatic  #733                // Method net/minecraft/client/render/DiffuseLighting.disableGuiDepthLighting:()V
+     117: invokevirtual #703                // Method net/minecraft/client/MinecraftClient.getItemRenderer:()Lnet/minecraft/client/render/item/ItemRenderer;
+     130: invokevirtual #741                // Method getVertexConsumers:()Lnet/minecraft/client/render/VertexConsumerProvider$Immediate;
+     141: invokevirtual #750                // Method net/minecraft/client/render/item/ItemRenderer.renderItem:(Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformationMode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;IILnet/minecraft/client/render/model/BakedModel;)V
+     145: invokevirtual #121                // Method draw:()V
+     153: invokestatic  #753                // Method net/minecraft/client/render/DiffuseLighting.enableGuiDepthLighting:()V
+     166: invokestatic  #761                // Method net/minecraft/util/crash/CrashReport.create:(Ljava/lang/Throwable;Ljava/lang/String;)Lnet/minecraft/util/crash/CrashReport;
+     176: invokevirtual #767                // Method net/minecraft/util/crash/CrashReport.addElement:(Ljava/lang/String;)Lnet/minecraft/util/crash/CrashReportSection;
+     187: invokedynamic #780,  0            // InvokeDynamic #3:call:(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/util/crash/CrashCallable;
+     192: invokevirtual #786                // Method net/minecraft/util/crash/CrashReportSection.add:(Ljava/lang/String;Lnet/minecraft/util/crash/CrashCallable;)Lnet/minecraft/util/crash/CrashReportSection;
+     202: invokedynamic #793,  0            // InvokeDynamic #4:call:(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/util/crash/CrashCallable;
+     207: invokevirtual #786                // Method net/minecraft/util/crash/CrashReportSection.add:(Ljava/lang/String;Lnet/minecraft/util/crash/CrashCallable;)Lnet/minecraft/util/crash/CrashReportSection;
+     217: invokedynamic #800,  0            // InvokeDynamic #5:call:(Lnet/minecraft/item/ItemStack;)Lnet/minecraft/util/crash/CrashCallable;
+     222: invokevirtual #786                // Method net/minecraft/util/crash/CrashReportSection.add:(Ljava/lang/String;Lnet/minecraft/util/crash/CrashCallable;)Lnet/minecraft/util/crash/CrashReportSection;
+     232: invokespecial #805                // Method net/minecraft/util/crash/CrashException."<init>":(Lnet/minecraft/util/crash/CrashReport;)V
+     240: invokevirtual #807                // Method net/minecraft/client/util/math/MatrixStack.pop:()V
+  public void drawItemInSlot(net.minecraft.client.font.TextRenderer, net.minecraft.item.ItemStack, int, int);
+       7: invokevirtual #821                // Method drawItemInSlot:(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V
+  public void drawItemInSlot(net.minecraft.client.font.TextRenderer, net.minecraft.item.ItemStack, int, int, java.lang.String);
+       1: invokevirtual #699                // Method net/minecraft/item/ItemStack.isEmpty:()Z
+      12: invokevirtual #711                // Method net/minecraft/client/util/math/MatrixStack.push:()V
+      16: invokevirtual #825                // Method net/minecraft/item/ItemStack.getCount:()I
+      34: invokevirtual #825                // Method net/minecraft/item/ItemStack.getCount:()I
+      37: invokestatic  #831                // Method java/lang/String.valueOf:(I)Ljava/lang/String;
+      56: invokevirtual #720                // Method net/minecraft/client/util/math/MatrixStack.translate:(FFF)V
+      72: invokevirtual #327                // Method net/minecraft/client/font/TextRenderer.getWidth:(Ljava/lang/String;)I
+      87: invokevirtual #354                // Method drawText:(Lnet/minecraft/client/font/TextRenderer;Ljava/lang/String;IIIZ)I
+      92: invokevirtual #836                // Method net/minecraft/item/ItemStack.isItemBarVisible:()Z
+      99: invokevirtual #839                // Method net/minecraft/item/ItemStack.getItemBarStep:()I
+     105: invokevirtual #842                // Method net/minecraft/item/ItemStack.getItemBarColor:()I
+     123: invokestatic  #845                // Method net/minecraft/client/render/RenderLayer.getGuiOverlay:()Lnet/minecraft/client/render/RenderLayer;
+     142: invokevirtual #179                // Method fill:(Lnet/minecraft/client/render/RenderLayer;IIIII)V
+     146: invokestatic  #845                // Method net/minecraft/client/render/RenderLayer.getGuiOverlay:()Lnet/minecraft/client/render/RenderLayer;
+     168: invokevirtual #179                // Method fill:(Lnet/minecraft/client/render/RenderLayer;IIIII)V
+     191: invokevirtual #852                // Method net/minecraft/client/network/ClientPlayerEntity.getItemCooldownManager:()Lnet/minecraft/entity/player/ItemCooldownManager;
+     195: invokevirtual #856                // Method net/minecraft/item/ItemStack.getItem:()Lnet/minecraft/item/Item;
+     202: invokevirtual #860                // Method net/minecraft/client/MinecraftClient.getRenderTickCounter:()Lnet/minecraft/client/render/RenderTickCounter;
+     206: invokeinterface #866,  2          // InterfaceMethod net/minecraft/client/render/RenderTickCounter.getTickDelta:(Z)F
+     211: invokevirtual #872                // Method net/minecraft/entity/player/ItemCooldownManager.getCooldownProgress:(Lnet/minecraft/item/Item;F)F
+     233: invokestatic  #877                // Method net/minecraft/util/math/MathHelper.floor:(F)I
+     247: invokestatic  #880                // Method net/minecraft/util/math/MathHelper.ceil:(F)I
+     254: invokestatic  #845                // Method net/minecraft/client/render/RenderLayer.getGuiOverlay:()Lnet/minecraft/client/render/RenderLayer;
+     269: invokevirtual #179                // Method fill:(Lnet/minecraft/client/render/RenderLayer;IIIII)V
+     276: invokevirtual #807                // Method net/minecraft/client/util/math/MatrixStack.pop:()V
+  public void drawItemTooltip(net.minecraft.client.font.TextRenderer, net.minecraft.item.ItemStack, int, int);
+       7: invokestatic  #890                // Method net/minecraft/client/gui/screen/Screen.getTooltipFromItem:(Lnet/minecraft/client/MinecraftClient;Lnet/minecraft/item/ItemStack;)Ljava/util/List;
+      11: invokevirtual #894                // Method net/minecraft/item/ItemStack.getTooltipData:()Ljava/util/Optional;
+      17: invokevirtual #898                // Method drawTooltip:(Lnet/minecraft/client/font/TextRenderer;Ljava/util/List;Ljava/util/Optional;II)V
+  public void drawTooltip(net.minecraft.client.font.TextRenderer, java.util.List<net.minecraft.text.Text>, java.util.Optional<net.minecraft.item.tooltip.TooltipData>, int, int);
+       1: invokeinterface #904,  1          // InterfaceMethod java/util/List.stream:()Ljava/util/stream/Stream;
+       6: invokedynamic #912,  0            // InvokeDynamic #6:apply:()Ljava/util/function/Function;
+      11: invokeinterface #918,  2          // InterfaceMethod java/util/stream/Stream.map:(Ljava/util/function/Function;)Ljava/util/stream/Stream;
+      16: invokedynamic #927,  0            // InvokeDynamic #7:apply:()Ljava/util/function/Function;
+      21: invokeinterface #918,  2          // InterfaceMethod java/util/stream/Stream.map:(Ljava/util/function/Function;)Ljava/util/stream/Stream;
+      26: invokestatic  #933                // Method net/minecraft/util/Util.toArrayList:()Ljava/util/stream/Collector;
+      29: invokeinterface #937,  2          // InterfaceMethod java/util/stream/Stream.collect:(Ljava/util/stream/Collector;)Ljava/lang/Object;
+      42: invokedynamic #950,  0            // InvokeDynamic #8:accept:(Ljava/util/List;)Ljava/util/function/Consumer;
+      47: invokevirtual #956                // Method java/util/Optional.ifPresent:(Ljava/util/function/Consumer;)V
+      61: invokevirtual #965                // Method drawTooltip:(Lnet/minecraft/client/font/TextRenderer;Ljava/util/List;IILnet/minecraft/client/gui/tooltip/TooltipPositioner;)V
+  public void drawTooltip(net.minecraft.client.font.TextRenderer, net.minecraft.text.Text, int, int);
+       3: invokeinterface #340,  1          // InterfaceMethod net/minecraft/text/Text.asOrderedText:()Lnet/minecraft/text/OrderedText;
+       8: invokestatic  #975                // InterfaceMethod java/util/List.of:(Ljava/lang/Object;)Ljava/util/List;
+      14: invokevirtual #979                // Method drawOrderedTooltip:(Lnet/minecraft/client/font/TextRenderer;Ljava/util/List;II)V
+  public void drawTooltip(net.minecraft.client.font.TextRenderer, java.util.List<net.minecraft.text.Text>, int, int);
+       3: invokedynamic #983,  0            // InvokeDynamic #6:apply:()Lcom/google/common/base/Function;
+       8: invokestatic  #989                // Method com/google/common/collect/Lists.transform:(Ljava/util/List;Lcom/google/common/base/Function;)Ljava/util/List;
+      14: invokevirtual #979                // Method drawOrderedTooltip:(Lnet/minecraft/client/font/TextRenderer;Ljava/util/List;II)V
+  public void drawOrderedTooltip(net.minecraft.client.font.TextRenderer, java.util.List<? extends net.minecraft.text.OrderedText>, int, int);
+       3: invokeinterface #904,  1          // InterfaceMethod java/util/List.stream:()Ljava/util/stream/Stream;
+       8: invokedynamic #927,  0            // InvokeDynamic #7:apply:()Ljava/util/function/Function;
+      13: invokeinterface #918,  2          // InterfaceMethod java/util/stream/Stream.map:(Ljava/util/function/Function;)Ljava/util/stream/Stream;
+      18: invokestatic  #995                // Method java/util/stream/Collectors.toList:()Ljava/util/stream/Collector;
+      21: invokeinterface #937,  2          // InterfaceMethod java/util/stream/Stream.collect:(Ljava/util/stream/Collector;)Ljava/lang/Object;
+      35: invokevirtual #965                // Method drawTooltip:(Lnet/minecraft/client/font/TextRenderer;Ljava/util/List;IILnet/minecraft/client/gui/tooltip/TooltipPositioner;)V
+  public void drawTooltip(net.minecraft.client.font.TextRenderer, java.util.List<net.minecraft.text.OrderedText>, net.minecraft.client.gui.tooltip.TooltipPositioner, int, int);
+       3: invokeinterface #904,  1          // InterfaceMethod java/util/List.stream:()Ljava/util/stream/Stream;
+       8: invokedynamic #927,  0            // InvokeDynamic #7:apply:()Ljava/util/function/Function;
+      13: invokeinterface #918,  2          // InterfaceMethod java/util/stream/Stream.map:(Ljava/util/function/Function;)Ljava/util/stream/Stream;
+      18: invokestatic  #995                // Method java/util/stream/Collectors.toList:()Ljava/util/stream/Collector;
+      21: invokeinterface #937,  2          // InterfaceMethod java/util/stream/Stream.collect:(Ljava/util/stream/Collector;)Ljava/lang/Object;
+      34: invokevirtual #965                // Method drawTooltip:(Lnet/minecraft/client/font/TextRenderer;Ljava/util/List;IILnet/minecraft/client/gui/tooltip/TooltipPositioner;)V
+  private void drawTooltip(net.minecraft.client.font.TextRenderer, java.util.List<net.minecraft.client.gui.tooltip.TooltipComponent>, int, int, net.minecraft.client.gui.tooltip.TooltipPositioner);
+       1: invokeinterface #1003,  1         // InterfaceMethod java/util/List.isEmpty:()Z
+      14: invokeinterface #1006,  1         // InterfaceMethod java/util/List.size:()I
+      32: invokeinterface #389,  1          // InterfaceMethod java/util/List.iterator:()Ljava/util/Iterator;
+      41: invokeinterface #394,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      51: invokeinterface #398,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      64: invokeinterface #1009,  2         // InterfaceMethod net/minecraft/client/gui/tooltip/TooltipComponent.getWidth:(Lnet/minecraft/client/font/TextRenderer;)I
+      86: invokeinterface #1012,  1         // InterfaceMethod net/minecraft/client/gui/tooltip/TooltipComponent.getHeight:()I
+     108: invokevirtual #1014               // Method getScaledWindowWidth:()I
+     112: invokevirtual #1016               // Method getScaledWindowHeight:()I
+     122: invokeinterface #1022,  7         // InterfaceMethod net/minecraft/client/gui/tooltip/TooltipPositioner.getPosition:(IIIIII)Lorg/joml/Vector2ic;
+     131: invokeinterface #1026,  1         // InterfaceMethod org/joml/Vector2ic.x:()I
+     140: invokeinterface #1028,  1         // InterfaceMethod org/joml/Vector2ic.y:()I
+     151: invokevirtual #711                // Method net/minecraft/client/util/math/MatrixStack.push:()V
+     169: invokedynamic #1036,  0           // InvokeDynamic #9:run:(Lnet/minecraft/client/gui/DrawContext;IIII)Ljava/lang/Runnable;
+     174: invokevirtual #1038               // Method draw:(Ljava/lang/Runnable;)V
+     186: invokevirtual #720                // Method net/minecraft/client/util/math/MatrixStack.translate:(FFF)V
+     199: invokeinterface #1006,  1         // InterfaceMethod java/util/List.size:()I
+     210: invokeinterface #1042,  2         // InterfaceMethod java/util/List.get:(I)Ljava/lang/Object;
+     231: invokevirtual #276                // Method net/minecraft/client/util/math/MatrixStack.peek:()Lnet/minecraft/client/util/math/MatrixStack$Entry;
+     234: invokevirtual #280                // Method net/minecraft/client/util/math/MatrixStack$Entry.getPositionMatrix:()Lorg/joml/Matrix4f;
+     241: invokeinterface #1045,  6         // InterfaceMethod net/minecraft/client/gui/tooltip/TooltipComponent.drawText:(Lnet/minecraft/client/font/TextRenderer;IILorg/joml/Matrix4f;Lnet/minecraft/client/render/VertexConsumerProvider$Immediate;)V
+     250: invokeinterface #1012,  1         // InterfaceMethod net/minecraft/client/gui/tooltip/TooltipComponent.getHeight:()I
+     285: invokeinterface #1006,  1         // InterfaceMethod java/util/List.size:()I
+     296: invokeinterface #1042,  2         // InterfaceMethod java/util/List.get:(I)Ljava/lang/Object;
+     314: invokeinterface #1049,  5         // InterfaceMethod net/minecraft/client/gui/tooltip/TooltipComponent.drawItems:(Lnet/minecraft/client/font/TextRenderer;IILnet/minecraft/client/gui/DrawContext;)V
+     323: invokeinterface #1012,  1         // InterfaceMethod net/minecraft/client/gui/tooltip/TooltipComponent.getHeight:()I
+     352: invokevirtual #807                // Method net/minecraft/client/util/math/MatrixStack.pop:()V
+  public void drawHoverEvent(net.minecraft.client.font.TextRenderer, net.minecraft.text.Style, int, int);
+       5: invokevirtual #1065               // Method net/minecraft/text/Style.getHoverEvent:()Lnet/minecraft/text/HoverEvent;
+      13: invokevirtual #1065               // Method net/minecraft/text/Style.getHoverEvent:()Lnet/minecraft/text/HoverEvent;
+      23: invokevirtual #1073               // Method net/minecraft/text/HoverEvent.getValue:(Lnet/minecraft/text/HoverEvent$Action;)Ljava/lang/Object;
+      40: invokevirtual #1077               // Method net/minecraft/text/HoverEvent$ItemStackContent.asStack:()Lnet/minecraft/item/ItemStack;
+      46: invokevirtual #1079               // Method drawItemTooltip:(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;II)V
+      57: invokevirtual #1073               // Method net/minecraft/text/HoverEvent.getValue:(Lnet/minecraft/text/HoverEvent$Action;)Ljava/lang/Object;
+      87: invokevirtual #1089               // Method net/minecraft/text/HoverEvent$EntityContent.asTooltip:()Ljava/util/List;
+      93: invokevirtual #1091               // Method drawTooltip:(Lnet/minecraft/client/font/TextRenderer;Ljava/util/List;II)V
+     104: invokevirtual #1073               // Method net/minecraft/text/HoverEvent.getValue:(Lnet/minecraft/text/HoverEvent$Action;)Ljava/lang/Object;
+     123: invokevirtual #1014               // Method getScaledWindowWidth:()I
+     131: invokestatic  #243                // Method java/lang/Math.max:(II)I
+     134: invokevirtual #383                // Method net/minecraft/client/font/TextRenderer.wrapLines:(Lnet/minecraft/text/StringVisitable;I)Ljava/util/List;
+     140: invokevirtual #979                // Method drawOrderedTooltip:(Lnet/minecraft/client/font/TextRenderer;Ljava/util/List;II)V
+  private void method_51743(int, int, int, int);
+       9: invokestatic  #1107               // Method net/minecraft/client/gui/tooltip/TooltipBackgroundRenderer.render:(Lnet/minecraft/client/gui/DrawContext;IIIII)V
+  private static void method_51442(java.util.List, net.minecraft.item.tooltip.TooltipData);
+       2: invokeinterface #1003,  1         // InterfaceMethod java/util/List.isEmpty:()Z
+      16: invokestatic  #1112               // InterfaceMethod net/minecraft/client/gui/tooltip/TooltipComponent.of:(Lnet/minecraft/item/tooltip/TooltipData;)Lnet/minecraft/client/gui/tooltip/TooltipComponent;
+      19: invokeinterface #1115,  3         // InterfaceMethod java/util/List.add:(ILjava/lang/Object;)V
+  private static java.lang.String method_57708(net.minecraft.item.ItemStack) throws java.lang.Exception;
+       1: invokevirtual #1122               // Method net/minecraft/item/ItemStack.hasGlint:()Z
+       4: invokestatic  #1125               // Method java/lang/String.valueOf:(Z)Ljava/lang/String;
+  private static java.lang.String method_51449(net.minecraft.item.ItemStack) throws java.lang.Exception;
+       1: invokevirtual #1129               // Method net/minecraft/item/ItemStack.getComponents:()Lnet/minecraft/component/ComponentMap;
+       4: invokestatic  #1132               // Method java/lang/String.valueOf:(Ljava/lang/Object;)Ljava/lang/String;
+  private static java.lang.String method_51451(net.minecraft.item.ItemStack) throws java.lang.Exception;
+       1: invokevirtual #856                // Method net/minecraft/item/ItemStack.getItem:()Lnet/minecraft/item/Item;
+       4: invokestatic  #1132               // Method java/lang/String.valueOf:(Ljava/lang/Object;)Ljava/lang/String;

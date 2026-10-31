@@ -1,0 +1,508 @@
+==== com.cobblemon.mod.common.api.pokemon.PokemonSpecies
+public final class com.cobblemon.mod.common.api.pokemon.PokemonSpecies implements com.cobblemon.mod.common.api.data.JsonDataRegistry<com.cobblemon.mod.common.pokemon.Species> {
+  public static final com.cobblemon.mod.common.api.pokemon.PokemonSpecies INSTANCE;
+  public net.minecraft.util.Identifier getId();
+  public net.minecraft.resource.ResourceType getType();
+  public com.google.gson.Gson getGson();
+  public com.google.gson.reflect.TypeToken<com.cobblemon.mod.common.pokemon.Species> getTypeToken();
+  public java.lang.String getResourcePath();
+  public com.cobblemon.mod.common.api.reactive.SimpleObservable<com.cobblemon.mod.common.api.pokemon.PokemonSpecies> getObservable();
+  public static final java.util.Collection<com.cobblemon.mod.common.pokemon.Species> getSpecies();
+  public static void getSpecies$annotations();
+  public static final java.util.List<com.cobblemon.mod.common.pokemon.Species> getImplemented();
+  public static void getImplemented$annotations();
+  public static final com.cobblemon.mod.common.pokemon.Species getByName(java.lang.String);
+  public static final com.cobblemon.mod.common.pokemon.Species getByPokedexNumber(int, java.lang.String);
+  public static final com.cobblemon.mod.common.pokemon.Species getByIdentifier(net.minecraft.util.Identifier);
+  public static final int count();
+  public static final java.util.Map<java.lang.Integer, com.cobblemon.mod.common.pokemon.Species> getSpeciesInNamespace(java.lang.String);
+  public static final java.util.List<java.lang.String> getNamespaces();
+  public static final com.cobblemon.mod.common.pokemon.Species random();
+  public void reload(java.util.Map<net.minecraft.util.Identifier, com.cobblemon.mod.common.pokemon.Species>);
+  public void sync(net.minecraft.server.network.ServerPlayerEntity);
+  public final java.util.Map<java.lang.String, java.lang.String> allShowdownSpecies$common();
+  public void reload(net.minecraft.resource.ResourceManager);
+==== com.cobblemon.mod.common.pokemon.Species
+public final class com.cobblemon.mod.common.pokemon.Species implements com.cobblemon.mod.common.api.data.ClientDataSynchronizer<com.cobblemon.mod.common.pokemon.Species>, com.cobblemon.mod.common.api.data.ShowdownIdentifiable {
+  public static final com.cobblemon.mod.common.pokemon.Species$Companion Companion;
+  public transient net.minecraft.util.Identifier resourceIdentifier;
+  public com.cobblemon.mod.common.pokemon.Species();
+  public final java.lang.String getName();
+  public final void setName(java.lang.String);
+  public final net.minecraft.text.MutableText getTranslatedName();
+  public final int getNationalPokedexNumber();
+  public final void setNationalPokedexNumber(int);
+  public final java.util.HashMap<com.cobblemon.mod.common.api.pokemon.stats.Stat, java.lang.Integer> getBaseStats();
+  public final float getMaleRatio();
+  public final int getCatchRate();
+  public final float getBaseScale();
+  public final void setBaseScale(float);
+  public final int getBaseExperienceYield();
+  public final void setBaseExperienceYield(int);
+  public final int getBaseFriendship();
+  public final void setBaseFriendship(int);
+  public final java.util.HashMap<com.cobblemon.mod.common.api.pokemon.stats.Stat, java.lang.Integer> getEvYield();
+  public final com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroup getExperienceGroup();
+  public final void setExperienceGroup(com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroup);
+  public final net.minecraft.entity.EntityDimensions getHitbox();
+  public final void setHitbox(net.minecraft.entity.EntityDimensions);
+  public final com.cobblemon.mod.common.api.types.ElementalType getPrimaryType();
+  public final void setPrimaryType$common(com.cobblemon.mod.common.api.types.ElementalType);
+  public final com.cobblemon.mod.common.api.types.ElementalType getSecondaryType();
+  public final void setSecondaryType$common(com.cobblemon.mod.common.api.types.ElementalType);
+  public final com.cobblemon.mod.common.api.abilities.AbilityPool getAbilities();
+  public final boolean getShoulderMountable();
+  public final java.util.List<com.cobblemon.mod.common.api.pokemon.effect.ShoulderEffect> getShoulderEffects();
+  public final com.cobblemon.mod.common.api.pokemon.moves.Learnset getMoves();
+  public final java.util.Set<java.lang.String> getFeatures();
+  public final java.lang.Float getStandingEyeHeight();
+  public final void setStandingEyeHeight(java.lang.Float);
+  public final java.lang.Float getSwimmingEyeHeight();
+  public final void setSwimmingEyeHeight(java.lang.Float);
+  public final java.lang.Float getFlyingEyeHeight();
+  public final void setFlyingEyeHeight(java.lang.Float);
+  public final com.cobblemon.mod.common.pokemon.ai.PokemonBehaviour getBehaviour();
+  public final java.util.List<java.lang.String> getPokedex();
+  public final com.cobblemon.mod.common.api.drop.DropTable getDrops();
+  public final int getEggCycles();
+  public final java.util.HashSet<com.cobblemon.mod.common.api.pokemon.egg.EggGroup> getEggGroups();
+  public final boolean getDynamaxBlocked();
+  public final void setDynamaxBlocked(boolean);
+  public final boolean getImplemented();
+  public final void setImplemented(boolean);
+  public final java.util.List<com.cobblemon.mod.common.api.ai.config.BehaviourConfig> getBaseAI();
+  public final void setBaseAI(java.util.List<com.cobblemon.mod.common.api.ai.config.BehaviourConfig>);
+  public final java.util.List<com.cobblemon.mod.common.api.ai.config.BehaviourConfig> getAi();
+  public final void setAi(java.util.List<com.cobblemon.mod.common.api.ai.config.BehaviourConfig>);
+  public final float getHeight();
+  public final float getWeight();
+  public final java.util.List<com.cobblemon.mod.common.pokemon.FormData> getForms();
+  public final com.cobblemon.mod.common.api.riding.RidingProperties getRiding();
+  public final com.cobblemon.mod.common.pokemon.FormData getStandardForm();
+  public final java.util.HashSet<java.lang.String> getLabels();
+  public final java.util.Set<com.cobblemon.mod.common.pokemon.Gender> getPossibleGenders();
+  public final java.util.Set<com.cobblemon.mod.common.api.pokemon.evolution.Evolution> getEvolutions();
+  public final com.cobblemon.mod.common.api.pokemon.evolution.PreEvolution getPreEvolution();
+==== com.cobblemon.mod.common.pokemon.FormData
+public final class com.cobblemon.mod.common.pokemon.FormData implements com.cobblemon.mod.common.api.net.Decodable,com.cobblemon.mod.common.api.net.Encodable,com.cobblemon.mod.common.api.data.ShowdownIdentifiable {
+  public transient com.cobblemon.mod.common.pokemon.Species species;
+  public com.cobblemon.mod.common.pokemon.FormData(java.lang.String, java.util.Map<com.cobblemon.mod.common.api.pokemon.stats.Stat, java.lang.Integer>, java.lang.Float, java.lang.Float, net.minecraft.entity.EntityDimensions, java.lang.Integer, com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroup, java.lang.Integer, java.lang.Integer, java.util.Map<com.cobblemon.mod.common.api.pokemon.stats.Stat, java.lang.Integer>, com.cobblemon.mod.common.api.types.ElementalType, com.cobblemon.mod.common.api.types.ElementalType, java.lang.Boolean, java.util.List<com.cobblemon.mod.common.api.pokemon.effect.ShoulderEffect>, com.cobblemon.mod.common.api.pokemon.moves.Learnset, java.util.Set<com.cobblemon.mod.common.api.pokemon.evolution.Evolution>, com.cobblemon.mod.common.api.abilities.AbilityPool, com.cobblemon.mod.common.api.drop.DropTable, java.util.List<java.lang.String>, com.cobblemon.mod.common.api.pokemon.evolution.PreEvolution, java.lang.Float, java.lang.Float, java.lang.Float, java.util.Set<java.lang.String>, java.lang.Boolean, java.util.Set<? extends com.cobblemon.mod.common.api.pokemon.egg.EggGroup>, java.lang.Float, java.lang.Float, com.cobblemon.mod.common.api.riding.RidingProperties, java.util.List<com.cobblemon.mod.common.api.ai.config.BehaviourConfig>, java.util.List<com.cobblemon.mod.common.api.ai.config.BehaviourConfig>, java.lang.String, java.lang.String, java.util.List<java.lang.String>, com.cobblemon.mod.common.api.moves.MoveTemplate, net.minecraft.util.Identifier, com.cobblemon.mod.common.pokemon.lighthing.LightingData);
+  public com.cobblemon.mod.common.pokemon.FormData(java.lang.String, java.util.Map, java.lang.Float, java.lang.Float, net.minecraft.entity.EntityDimensions, java.lang.Integer, com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroup, java.lang.Integer, java.lang.Integer, java.util.Map, com.cobblemon.mod.common.api.types.ElementalType, com.cobblemon.mod.common.api.types.ElementalType, java.lang.Boolean, java.util.List, com.cobblemon.mod.common.api.pokemon.moves.Learnset, java.util.Set, com.cobblemon.mod.common.api.abilities.AbilityPool, com.cobblemon.mod.common.api.drop.DropTable, java.util.List, com.cobblemon.mod.common.api.pokemon.evolution.PreEvolution, java.lang.Float, java.lang.Float, java.lang.Float, java.util.Set, java.lang.Boolean, java.util.Set, java.lang.Float, java.lang.Float, com.cobblemon.mod.common.api.riding.RidingProperties, java.util.List, java.util.List, java.lang.String, java.lang.String, java.util.List, com.cobblemon.mod.common.api.moves.MoveTemplate, net.minecraft.util.Identifier, com.cobblemon.mod.common.pokemon.lighthing.LightingData, int, int, kotlin.jvm.internal.DefaultConstructorMarker);
+  public final java.util.Map<com.cobblemon.mod.common.api.pokemon.stats.Stat, java.lang.Integer> get_baseStats$common();
+  public final void set_baseStats$common(java.util.Map<com.cobblemon.mod.common.api.pokemon.stats.Stat, java.lang.Integer>);
+  public final java.lang.String getRequiredMove();
+  public final java.lang.String getRequiredItem();
+  public final java.util.List<java.lang.String> getRequiredItems();
+  public final com.cobblemon.mod.common.api.moves.MoveTemplate getGigantamaxMove();
+  public final java.lang.String getName();
+  public final java.util.Map<com.cobblemon.mod.common.api.pokemon.stats.Stat, java.lang.Integer> getBaseStats();
+  public final float getMaleRatio();
+  public final float getBaseScale();
+  public final net.minecraft.entity.EntityDimensions getHitbox();
+  public final int getCatchRate();
+  public final com.cobblemon.mod.common.api.pokemon.experience.ExperienceGroup getExperienceGroup();
+  public final int getBaseExperienceYield();
+  public final int getBaseFriendship();
+  public final java.util.Map<com.cobblemon.mod.common.api.pokemon.stats.Stat, java.lang.Integer> getEvYield();
+  public final com.cobblemon.mod.common.api.types.ElementalType getPrimaryType();
+  public final com.cobblemon.mod.common.api.types.ElementalType getSecondaryType();
+  public final boolean getShoulderMountable();
+  public final java.util.List<com.cobblemon.mod.common.api.pokemon.effect.ShoulderEffect> getShoulderEffects();
+  public final java.util.List<java.lang.String> getPokedex();
+  public final com.cobblemon.mod.common.api.pokemon.moves.Learnset getMoves();
+  public final java.lang.Iterable<com.cobblemon.mod.common.api.types.ElementalType> getTypes();
+  public final com.cobblemon.mod.common.api.abilities.AbilityPool getAbilities();
+  public final com.cobblemon.mod.common.api.drop.DropTable getDrops();
+  public final java.util.List<java.lang.String> getAspects();
+  public final void setAspects(java.util.List<java.lang.String>);
+  public final com.cobblemon.mod.common.api.pokemon.evolution.PreEvolution getPreEvolution();
+  public final com.cobblemon.mod.common.pokemon.ai.FormPokemonBehaviour getBehaviour();
+  public final boolean getDynamaxBlocked();
+  public final java.util.Set<com.cobblemon.mod.common.api.pokemon.egg.EggGroup> getEggGroups();
+  public final com.cobblemon.mod.common.api.riding.RidingProperties getRiding();
+  public final float getHeight();
+  public final float getWeight();
+  public final java.util.Set<java.lang.String> getLabels();
+  public final java.util.Set<com.cobblemon.mod.common.api.pokemon.evolution.Evolution> getEvolutions();
+  public final net.minecraft.util.Identifier getBattleTheme();
+  public final com.cobblemon.mod.common.pokemon.lighthing.LightingData getLightingData();
+  public final java.util.Set<com.cobblemon.mod.common.pokemon.Gender> getPossibleGenders();
+  public final java.util.List<com.cobblemon.mod.common.api.ai.config.BehaviourConfig> getBaseAI();
+  public final java.util.List<com.cobblemon.mod.common.api.ai.config.BehaviourConfig> getAi();
+  public final float eyeHeight(com.cobblemon.mod.common.entity.pokemon.PokemonEntity);
+  public final com.cobblemon.mod.common.pokemon.Species getSpecies();
+  public final void setSpecies(com.cobblemon.mod.common.pokemon.Species);
+  public final com.cobblemon.mod.common.pokemon.FormData initialize(com.cobblemon.mod.common.pokemon.Species);
+  public final void resolveEvolutionMoves$common();
+  public boolean equals(java.lang.Object);
+  public int hashCode();
+  public java.lang.String showdownId();
+  public final java.lang.String formOnlyShowdownId();
+  public com.cobblemon.mod.common.pokemon.FormData();
+==== com.cobblemon.mod.common.api.pokemon.stats.Stats
+public final class com.cobblemon.mod.common.api.pokemon.stats.Stats extends java.lang.Enum<com.cobblemon.mod.common.api.pokemon.stats.Stats> implements com.cobblemon.mod.common.api.pokemon.stats.Stat {
+  public static final com.cobblemon.mod.common.api.pokemon.stats.Stats$Companion Companion;
+  public static final com.cobblemon.mod.common.api.pokemon.stats.Stats HP;
+  public static final com.cobblemon.mod.common.api.pokemon.stats.Stats ATTACK;
+  public static final com.cobblemon.mod.common.api.pokemon.stats.Stats DEFENCE;
+  public static final com.cobblemon.mod.common.api.pokemon.stats.Stats SPECIAL_ATTACK;
+  public static final com.cobblemon.mod.common.api.pokemon.stats.Stats SPECIAL_DEFENCE;
+  public static final com.cobblemon.mod.common.api.pokemon.stats.Stats SPEED;
+  public static final com.cobblemon.mod.common.api.pokemon.stats.Stats EVASION;
+  public static final com.cobblemon.mod.common.api.pokemon.stats.Stats ACCURACY;
+  public net.minecraft.util.Identifier getIdentifier();
+  public net.minecraft.text.Text getDisplayName();
+  public com.cobblemon.mod.common.api.pokemon.stats.Stat$Type getType();
+  public java.lang.String getShowdownId();
+  public static com.cobblemon.mod.common.api.pokemon.stats.Stats[] values();
+  public static com.cobblemon.mod.common.api.pokemon.stats.Stats valueOf(java.lang.String);
+  public static kotlin.enums.EnumEntries<com.cobblemon.mod.common.api.pokemon.stats.Stats> getEntries();
+==== com.cobblemon.mod.common.api.pokemon.stats.Stat
+public interface com.cobblemon.mod.common.api.pokemon.stats.Stat {
+  public static final com.cobblemon.mod.common.api.pokemon.stats.Stat$Companion Companion;
+  public abstract net.minecraft.util.Identifier getIdentifier();
+  public abstract net.minecraft.text.Text getDisplayName();
+  public abstract com.cobblemon.mod.common.api.pokemon.stats.Stat$Type getType();
+  public abstract java.lang.String getShowdownId();
+==== com.cobblemon.mod.common.api.moves.Moves
+public final class com.cobblemon.mod.common.api.moves.Moves implements com.cobblemon.mod.common.api.data.DataRegistry {
+  public static final com.cobblemon.mod.common.api.moves.Moves INSTANCE;
+  public net.minecraft.util.Identifier getId();
+  public net.minecraft.resource.ResourceType getType();
+  public com.cobblemon.mod.common.api.reactive.SimpleObservable<com.cobblemon.mod.common.api.moves.Moves> getObservable();
+  public final java.util.Map<java.lang.String, java.lang.String> getMoveScripts$common();
+  public void reload(net.minecraft.resource.ResourceManager);
+  public void sync(net.minecraft.server.network.ServerPlayerEntity);
+  public static final com.cobblemon.mod.common.api.moves.MoveTemplate getByName(java.lang.String);
+  public static final com.cobblemon.mod.common.api.moves.MoveTemplate getByNumericalId(int);
+  public static final com.cobblemon.mod.common.api.moves.MoveTemplate getByNameOrDummy(java.lang.String);
+  public static final com.cobblemon.mod.common.api.moves.MoveTemplate getExceptional();
+  public static final int count();
+  public static final java.util.Collection<java.lang.String> names();
+  public static final java.util.List<com.cobblemon.mod.common.api.moves.MoveTemplate> all();
+  public final void receiveSyncPacket$common(java.util.Collection<? extends com.cobblemon.mod.common.api.moves.MoveTemplate>);
+==== com.cobblemon.mod.common.api.moves.MoveTemplate
+public class com.cobblemon.mod.common.api.moves.MoveTemplate {
+  public static final com.cobblemon.mod.common.api.moves.MoveTemplate$Companion Companion;
+  public com.cobblemon.mod.common.api.moves.MoveTemplate(java.lang.String, int, com.cobblemon.mod.common.api.types.ElementalType, com.cobblemon.mod.common.api.moves.categories.DamageCategory, double, com.cobblemon.mod.common.battles.MoveTarget, double, int, int, double, java.lang.Double[]);
+  public final java.lang.String getName();
+  public final int getNum();
+  public final com.cobblemon.mod.common.api.types.ElementalType getElementalType();
+  public final com.cobblemon.mod.common.api.moves.categories.DamageCategory getDamageCategory();
+  public final double getPower();
+  public final com.cobblemon.mod.common.battles.MoveTarget getTarget();
+  public final double getAccuracy();
+  public final int getPp();
+  public final int getPriority();
+  public final double getCritRatio();
+  public final java.lang.Double[] getEffectChances();
+  public final net.minecraft.text.MutableText getDisplayName();
+  public final net.minecraft.text.MutableText getDescription();
+  public final int getMaxPp();
+  public final com.cobblemon.mod.common.api.moves.Move create();
+  public final com.cobblemon.mod.common.api.moves.Move create(int);
+  public final com.cobblemon.mod.common.api.moves.Move create(int, int);
+  public final com.cobblemon.mod.common.api.types.ElementalType getEffectiveElementalType(com.cobblemon.mod.common.pokemon.Pokemon);
+==== com.cobblemon.mod.common.api.moves.categories.DamageCategories
+public final class com.cobblemon.mod.common.api.moves.categories.DamageCategories {
+  public static final com.cobblemon.mod.common.api.moves.categories.DamageCategories INSTANCE;
+  public final com.cobblemon.mod.common.api.moves.categories.DamageCategory getPHYSICAL();
+  public final com.cobblemon.mod.common.api.moves.categories.DamageCategory getSPECIAL();
+  public final com.cobblemon.mod.common.api.moves.categories.DamageCategory getSTATUS();
+  public final com.cobblemon.mod.common.api.moves.categories.DamageCategory register(java.lang.String, net.minecraft.text.Text, net.minecraft.util.Identifier, int);
+  public final com.cobblemon.mod.common.api.moves.categories.DamageCategory register(com.cobblemon.mod.common.api.moves.categories.DamageCategory);
+  public final com.cobblemon.mod.common.api.moves.categories.DamageCategory get(java.lang.String);
+  public final com.cobblemon.mod.common.api.moves.categories.DamageCategory getOrException(java.lang.String);
+  public final int count();
+==== com.cobblemon.mod.common.api.moves.categories.DamageCategory
+public final class com.cobblemon.mod.common.api.moves.categories.DamageCategory {
+  public com.cobblemon.mod.common.api.moves.categories.DamageCategory(java.lang.String, net.minecraft.text.Text, int, net.minecraft.util.Identifier);
+  public com.cobblemon.mod.common.api.moves.categories.DamageCategory(java.lang.String, net.minecraft.text.Text, int, net.minecraft.util.Identifier, int, kotlin.jvm.internal.DefaultConstructorMarker);
+  public final java.lang.String getName();
+  public final net.minecraft.text.Text getDisplayName();
+  public final int getTextureXMultiplier();
+  public final net.minecraft.util.Identifier getResourceLocation();
+==== com.cobblemon.mod.common.api.moves.MoveSet
+public final class com.cobblemon.mod.common.api.moves.MoveSet implements java.lang.Iterable<com.cobblemon.mod.common.api.moves.Move>, kotlin.jvm.internal.markers.KMappedMarker {
+  public static final com.cobblemon.mod.common.api.moves.MoveSet$Companion Companion;
+  public static final int MOVE_COUNT;
+  public com.cobblemon.mod.common.api.moves.MoveSet();
+  public final kotlin.jvm.functions.Function1<com.cobblemon.mod.common.api.moves.MoveSet, kotlin.Unit> getChangeFunction();
+  public final void setChangeFunction(kotlin.jvm.functions.Function1<? super com.cobblemon.mod.common.api.moves.MoveSet, kotlin.Unit>);
+  public java.util.Iterator<com.cobblemon.mod.common.api.moves.Move> iterator();
+  public final com.cobblemon.mod.common.api.moves.Move get(int);
+  public final java.util.List<com.cobblemon.mod.common.api.moves.Move> getMoves();
+  public final java.util.List<com.cobblemon.mod.common.api.moves.Move> getMovesWithNulls();
+  public final boolean hasSpace();
+  public final void setMove(int, com.cobblemon.mod.common.api.moves.Move);
+  public final void copyFrom(com.cobblemon.mod.common.api.moves.MoveSet);
+  public final void heal();
+  public final void partialHeal();
+  public final void clear();
+  public final void swapMove(int, int);
+  public final net.minecraft.nbt.NbtList getNBT();
+  public final boolean add(com.cobblemon.mod.common.api.moves.Move);
+  public final void update();
+  public final void doWithoutEmitting(kotlin.jvm.functions.Function0<kotlin.Unit>);
+==== com.cobblemon.mod.common.api.moves.Move
+public class com.cobblemon.mod.common.api.moves.Move {
+  public static final com.cobblemon.mod.common.api.moves.Move$Companion Companion;
+  public com.cobblemon.mod.common.api.moves.Move(com.cobblemon.mod.common.api.moves.MoveTemplate, int, int);
+  public com.cobblemon.mod.common.api.moves.Move(com.cobblemon.mod.common.api.moves.MoveTemplate, int, int, int, kotlin.jvm.internal.DefaultConstructorMarker);
+  public final com.cobblemon.mod.common.api.moves.MoveTemplate getTemplate();
+  public final com.cobblemon.mod.common.api.reactive.SimpleObservable<com.cobblemon.mod.common.api.moves.Move> getObservable();
+  public final int getCurrentPp();
+  public final void setCurrentPp(int);
+  public final int getRaisedPpStages();
+  public final void setRaisedPpStages(int);
+  public final void doThenUpdate(kotlin.jvm.functions.Function0<kotlin.Unit>);
+  public final void update();
+  public final java.lang.String getName();
+  public final net.minecraft.text.MutableText getDisplayName();
+  public final net.minecraft.text.MutableText getDescription();
+  public final com.cobblemon.mod.common.api.types.ElementalType getType();
+  public final com.cobblemon.mod.common.api.moves.categories.DamageCategory getDamageCategory();
+  public final double getPower();
+  public final double getAccuracy();
+  public final java.lang.Double[] getEffectChances();
+  public final int getMaxPp();
+  public final boolean raiseMaxPP(int);
+  public final com.cobblemon.mod.common.api.moves.Move copy();
+==== com.cobblemon.mod.common.api.pokemon.Natures
+public final class com.cobblemon.mod.common.api.pokemon.Natures {
+  public static final com.cobblemon.mod.common.api.pokemon.Natures INSTANCE;
+  public static final com.cobblemon.mod.common.pokemon.Nature HARDY;
+  public static final com.cobblemon.mod.common.pokemon.Nature LONELY;
+  public static final com.cobblemon.mod.common.pokemon.Nature BRAVE;
+  public static final com.cobblemon.mod.common.pokemon.Nature ADAMANT;
+  public static final com.cobblemon.mod.common.pokemon.Nature NAUGHTY;
+  public static final com.cobblemon.mod.common.pokemon.Nature BOLD;
+  public static final com.cobblemon.mod.common.pokemon.Nature DOCILE;
+  public static final com.cobblemon.mod.common.pokemon.Nature RELAXED;
+  public static final com.cobblemon.mod.common.pokemon.Nature IMPISH;
+  public static final com.cobblemon.mod.common.pokemon.Nature LAX;
+  public static final com.cobblemon.mod.common.pokemon.Nature TIMID;
+  public static final com.cobblemon.mod.common.pokemon.Nature HASTY;
+  public static final com.cobblemon.mod.common.pokemon.Nature SERIOUS;
+  public static final com.cobblemon.mod.common.pokemon.Nature JOLLY;
+  public static final com.cobblemon.mod.common.pokemon.Nature NAIVE;
+  public static final com.cobblemon.mod.common.pokemon.Nature MODEST;
+  public static final com.cobblemon.mod.common.pokemon.Nature MILD;
+  public static final com.cobblemon.mod.common.pokemon.Nature QUIET;
+  public static final com.cobblemon.mod.common.pokemon.Nature BASHFUL;
+  public static final com.cobblemon.mod.common.pokemon.Nature RASH;
+  public static final com.cobblemon.mod.common.pokemon.Nature CALM;
+  public static final com.cobblemon.mod.common.pokemon.Nature GENTLE;
+  public static final com.cobblemon.mod.common.pokemon.Nature SASSY;
+  public static final com.cobblemon.mod.common.pokemon.Nature CAREFUL;
+  public static final com.cobblemon.mod.common.pokemon.Nature QUIRKY;
+  public static final com.cobblemon.mod.common.pokemon.Nature registerNature(com.cobblemon.mod.common.pokemon.Nature);
+  public static final com.cobblemon.mod.common.pokemon.Nature getNature(net.minecraft.util.Identifier);
+  public static final com.cobblemon.mod.common.pokemon.Nature getNature(java.lang.String);
+  public static final com.cobblemon.mod.common.pokemon.Nature getRandomNature();
+  public static final java.util.Collection<com.cobblemon.mod.common.pokemon.Nature> all();
+  public final com.cobblemon.mod.common.pokemon.Nature getHARDY();
+  public final com.cobblemon.mod.common.pokemon.Nature getLONELY();
+  public final com.cobblemon.mod.common.pokemon.Nature getBRAVE();
+  public final com.cobblemon.mod.common.pokemon.Nature getADAMANT();
+  public final com.cobblemon.mod.common.pokemon.Nature getNAUGHTY();
+  public final com.cobblemon.mod.common.pokemon.Nature getBOLD();
+  public final com.cobblemon.mod.common.pokemon.Nature getDOCILE();
+  public final com.cobblemon.mod.common.pokemon.Nature getRELAXED();
+  public final com.cobblemon.mod.common.pokemon.Nature getIMPISH();
+  public final com.cobblemon.mod.common.pokemon.Nature getLAX();
+  public final com.cobblemon.mod.common.pokemon.Nature getTIMID();
+  public final com.cobblemon.mod.common.pokemon.Nature getHASTY();
+  public final com.cobblemon.mod.common.pokemon.Nature getSERIOUS();
+  public final com.cobblemon.mod.common.pokemon.Nature getJOLLY();
+  public final com.cobblemon.mod.common.pokemon.Nature getNAIVE();
+  public final com.cobblemon.mod.common.pokemon.Nature getMODEST();
+  public final com.cobblemon.mod.common.pokemon.Nature getMILD();
+  public final com.cobblemon.mod.common.pokemon.Nature getQUIET();
+  public final com.cobblemon.mod.common.pokemon.Nature getBASHFUL();
+  public final com.cobblemon.mod.common.pokemon.Nature getRASH();
+  public final com.cobblemon.mod.common.pokemon.Nature getCALM();
+  public final com.cobblemon.mod.common.pokemon.Nature getGENTLE();
+  public final com.cobblemon.mod.common.pokemon.Nature getSASSY();
+  public final com.cobblemon.mod.common.pokemon.Nature getCAREFUL();
+  public final com.cobblemon.mod.common.pokemon.Nature getQUIRKY();
+==== com.cobblemon.mod.common.pokemon.Nature
+public final class com.cobblemon.mod.common.pokemon.Nature {
+  public static final com.cobblemon.mod.common.pokemon.Nature$Companion Companion;
+  public com.cobblemon.mod.common.pokemon.Nature(net.minecraft.util.Identifier, java.lang.String, com.cobblemon.mod.common.api.pokemon.stats.Stat, com.cobblemon.mod.common.api.pokemon.stats.Stat, com.cobblemon.mod.common.api.cooking.Flavour, com.cobblemon.mod.common.api.cooking.Flavour);
+  public final net.minecraft.util.Identifier getName();
+  public final java.lang.String getDisplayName();
+  public final com.cobblemon.mod.common.api.pokemon.stats.Stat getIncreasedStat();
+  public final com.cobblemon.mod.common.api.pokemon.stats.Stat getDecreasedStat();
+  public final com.cobblemon.mod.common.api.cooking.Flavour getFavouriteFlavour();
+  public final com.cobblemon.mod.common.api.cooking.Flavour getDislikedFlavour();
+  public final int modifyStat(com.cobblemon.mod.common.api.pokemon.stats.Stat, int);
+==== com.cobblemon.mod.common.api.abilities.AbilityPool
+public class com.cobblemon.mod.common.api.abilities.AbilityPool extends com.cobblemon.mod.common.api.PrioritizedList<com.cobblemon.mod.common.api.abilities.PotentialAbility> {
+  public com.cobblemon.mod.common.api.abilities.AbilityPool();
+  public final kotlin.Pair<com.cobblemon.mod.common.api.abilities.Ability, com.cobblemon.mod.common.api.Priority> select(com.cobblemon.mod.common.pokemon.Species, java.util.Set<java.lang.String>);
+==== com.cobblemon.mod.common.api.abilities.PotentialAbility
+public interface com.cobblemon.mod.common.api.abilities.PotentialAbility {
+  public static final com.cobblemon.mod.common.api.abilities.PotentialAbility$Companion Companion;
+  public abstract com.cobblemon.mod.common.api.abilities.AbilityTemplate getTemplate();
+  public abstract com.cobblemon.mod.common.api.Priority getPriority();
+  public abstract com.cobblemon.mod.common.api.abilities.PotentialAbilityType<?> getType();
+  public abstract boolean isSatisfiedBy(java.util.Set<java.lang.String>);
+==== com.cobblemon.mod.common.api.abilities.AbilityTemplate
+public final class com.cobblemon.mod.common.api.abilities.AbilityTemplate {
+  public static final com.cobblemon.mod.common.api.abilities.AbilityTemplate$Companion Companion;
+  public com.cobblemon.mod.common.api.abilities.AbilityTemplate(java.lang.String, kotlin.jvm.functions.Function3<? super com.cobblemon.mod.common.api.abilities.AbilityTemplate, ? super java.lang.Boolean, ? super com.cobblemon.mod.common.api.Priority, ? extends com.cobblemon.mod.common.api.abilities.Ability>, java.lang.String, java.lang.String);
+  public com.cobblemon.mod.common.api.abilities.AbilityTemplate(java.lang.String, kotlin.jvm.functions.Function3, java.lang.String, java.lang.String, int, kotlin.jvm.internal.DefaultConstructorMarker);
+  public final java.lang.String getName();
+  public final kotlin.jvm.functions.Function3<com.cobblemon.mod.common.api.abilities.AbilityTemplate, java.lang.Boolean, com.cobblemon.mod.common.api.Priority, com.cobblemon.mod.common.api.abilities.Ability> getBuilder();
+  public final void setBuilder(kotlin.jvm.functions.Function3<? super com.cobblemon.mod.common.api.abilities.AbilityTemplate, ? super java.lang.Boolean, ? super com.cobblemon.mod.common.api.Priority, ? extends com.cobblemon.mod.common.api.abilities.Ability>);
+  public final java.lang.String getDisplayName();
+  public final java.lang.String getDescription();
+  public final com.cobblemon.mod.common.api.abilities.Ability create(boolean, com.cobblemon.mod.common.api.Priority);
+  public final com.cobblemon.mod.common.api.abilities.Ability create(net.minecraft.nbt.NbtCompound);
+  public final com.cobblemon.mod.common.api.abilities.Ability create(com.google.gson.JsonObject);
+  public com.cobblemon.mod.common.api.abilities.AbilityTemplate();
+==== com.cobblemon.mod.common.api.abilities.Ability
+public class com.cobblemon.mod.common.api.abilities.Ability {
+  public static final com.cobblemon.mod.common.api.abilities.Ability$Companion Companion;
+  public com.cobblemon.mod.common.api.abilities.Ability(com.cobblemon.mod.common.api.abilities.AbilityTemplate, boolean, com.cobblemon.mod.common.api.Priority);
+  public final com.cobblemon.mod.common.api.abilities.AbilityTemplate getTemplate();
+  public final void setTemplate(com.cobblemon.mod.common.api.abilities.AbilityTemplate);
+  public final java.lang.String getName();
+  public final java.lang.String getDisplayName();
+  public final java.lang.String getDescription();
+  public final boolean getForced();
+  public final void setForced$common(boolean);
+  public final int getIndex();
+  public final void setIndex$common(int);
+  public final com.cobblemon.mod.common.api.Priority getPriority();
+  public final void setPriority$common(com.cobblemon.mod.common.api.Priority);
+==== com.cobblemon.mod.common.pokemon.IVs
+public final class com.cobblemon.mod.common.pokemon.IVs extends com.cobblemon.mod.common.pokemon.PokemonStats {
+  public static final com.cobblemon.mod.common.pokemon.IVs$Companion Companion;
+  public static final int MAX_VALUE;
+  public static final int MAX_TOTAL;
+  public com.cobblemon.mod.common.pokemon.IVs();
+  public kotlin.ranges.IntRange getAcceptableRange();
+  public int getDefaultValue();
+  public final java.util.Map<com.cobblemon.mod.common.api.pokemon.stats.Stat, java.lang.Integer> getHyperTrainedIVs();
+  public final boolean isHyperTrained(com.cobblemon.mod.common.api.pokemon.stats.Stat);
+  public final void setHyperTrainedIV(com.cobblemon.mod.common.api.pokemon.stats.Stat, int);
+  public final int getEffectiveBattleIV(com.cobblemon.mod.common.api.pokemon.stats.Stat);
+  public final int getEffectiveBattleTotal();
+  public static final com.cobblemon.mod.common.pokemon.IVs createRandomIVs(int);
+==== com.cobblemon.mod.common.pokemon.EVs
+public final class com.cobblemon.mod.common.pokemon.EVs extends com.cobblemon.mod.common.pokemon.PokemonStats {
+  public static final com.cobblemon.mod.common.pokemon.EVs$Companion Companion;
+  public static final int MAX_STAT_VALUE;
+  public static final int MAX_TOTAL_VALUE;
+  public com.cobblemon.mod.common.pokemon.EVs();
+  public kotlin.ranges.IntRange getAcceptableRange();
+  public int getDefaultValue();
+  public final int add(com.cobblemon.mod.common.api.pokemon.stats.Stat, int);
+  public final int add(com.cobblemon.mod.common.api.pokemon.stats.Stat, int, com.cobblemon.mod.common.api.pokemon.stats.EvSource);
+  public static final com.cobblemon.mod.common.pokemon.EVs createEmpty();
+==== com.cobblemon.mod.common.api.pokemon.stats.PokemonStatContainer
+==== com.cobblemon.mod.common.api.types.ElementalTypes
+public final class com.cobblemon.mod.common.api.types.ElementalTypes {
+  public static final com.cobblemon.mod.common.api.types.ElementalTypes INSTANCE;
+  public static final com.cobblemon.mod.common.api.types.ElementalType NORMAL;
+  public static final com.cobblemon.mod.common.api.types.ElementalType FIRE;
+  public static final com.cobblemon.mod.common.api.types.ElementalType WATER;
+  public static final com.cobblemon.mod.common.api.types.ElementalType GRASS;
+  public static final com.cobblemon.mod.common.api.types.ElementalType ELECTRIC;
+  public static final com.cobblemon.mod.common.api.types.ElementalType ICE;
+  public static final com.cobblemon.mod.common.api.types.ElementalType FIGHTING;
+  public static final com.cobblemon.mod.common.api.types.ElementalType POISON;
+  public static final com.cobblemon.mod.common.api.types.ElementalType GROUND;
+  public static final com.cobblemon.mod.common.api.types.ElementalType FLYING;
+  public static final com.cobblemon.mod.common.api.types.ElementalType PSYCHIC;
+  public static final com.cobblemon.mod.common.api.types.ElementalType BUG;
+  public static final com.cobblemon.mod.common.api.types.ElementalType ROCK;
+  public static final com.cobblemon.mod.common.api.types.ElementalType GHOST;
+  public static final com.cobblemon.mod.common.api.types.ElementalType DRAGON;
+  public static final com.cobblemon.mod.common.api.types.ElementalType DARK;
+  public static final com.cobblemon.mod.common.api.types.ElementalType STEEL;
+  public static final com.cobblemon.mod.common.api.types.ElementalType FAIRY;
+  public static final com.cobblemon.mod.common.api.types.ElementalType register(java.lang.String, net.minecraft.text.MutableText, int, int);
+  public static final com.cobblemon.mod.common.api.types.ElementalType register(com.cobblemon.mod.common.api.types.ElementalType);
+  public static final com.cobblemon.mod.common.api.types.ElementalType get(java.lang.String);
+  public static final com.cobblemon.mod.common.api.types.ElementalType getOrException(java.lang.String);
+  public static final int count();
+  public static final java.util.List<com.cobblemon.mod.common.api.types.ElementalType> all();
+  public static final com.cobblemon.mod.common.api.types.ElementalType getRandomType();
+  public final com.cobblemon.mod.common.api.types.ElementalType getNORMAL();
+  public final com.cobblemon.mod.common.api.types.ElementalType getFIRE();
+  public final com.cobblemon.mod.common.api.types.ElementalType getWATER();
+  public final com.cobblemon.mod.common.api.types.ElementalType getGRASS();
+  public final com.cobblemon.mod.common.api.types.ElementalType getELECTRIC();
+  public final com.cobblemon.mod.common.api.types.ElementalType getICE();
+  public final com.cobblemon.mod.common.api.types.ElementalType getFIGHTING();
+  public final com.cobblemon.mod.common.api.types.ElementalType getPOISON();
+  public final com.cobblemon.mod.common.api.types.ElementalType getGROUND();
+  public final com.cobblemon.mod.common.api.types.ElementalType getFLYING();
+  public final com.cobblemon.mod.common.api.types.ElementalType getPSYCHIC();
+  public final com.cobblemon.mod.common.api.types.ElementalType getBUG();
+  public final com.cobblemon.mod.common.api.types.ElementalType getROCK();
+  public final com.cobblemon.mod.common.api.types.ElementalType getGHOST();
+  public final com.cobblemon.mod.common.api.types.ElementalType getDRAGON();
+  public final com.cobblemon.mod.common.api.types.ElementalType getDARK();
+  public final com.cobblemon.mod.common.api.types.ElementalType getSTEEL();
+  public final com.cobblemon.mod.common.api.types.ElementalType getFAIRY();
+==== com.cobblemon.mod.common.api.types.ElementalType
+public final class com.cobblemon.mod.common.api.types.ElementalType implements com.cobblemon.mod.common.api.data.ShowdownIdentifiable {
+  public static final com.cobblemon.mod.common.api.types.ElementalType$Companion Companion;
+  public com.cobblemon.mod.common.api.types.ElementalType(java.lang.String, net.minecraft.text.MutableText, int, int, net.minecraft.util.Identifier, java.lang.String);
+  public com.cobblemon.mod.common.api.types.ElementalType(java.lang.String, net.minecraft.text.MutableText, int, int, net.minecraft.util.Identifier, java.lang.String, int, kotlin.jvm.internal.DefaultConstructorMarker);
+  public final java.lang.String getName();
+  public final net.minecraft.text.MutableText getDisplayName();
+  public final int getHue();
+  public final int getTextureXMultiplier();
+  public final net.minecraft.util.Identifier getResourceLocation();
+  public final java.lang.String getShowdownId();
+  public java.lang.String showdownId();
+  public final com.cobblemon.mod.common.pokemon.IVs getIvs();
+  public final com.cobblemon.mod.common.pokemon.EVs getEvs();
+  public final com.cobblemon.mod.common.api.types.ElementalType getPrimaryType();
+  public final com.cobblemon.mod.common.api.types.ElementalType getSecondaryType();
+  public final java.lang.Iterable<com.cobblemon.mod.common.api.types.ElementalType> getTypes();
+  public final com.cobblemon.mod.common.pokemon.Nature getNature();
+  public final com.cobblemon.mod.common.pokemon.Nature getMintedNature();
+  public final com.cobblemon.mod.common.pokemon.Nature getEffectiveNature();
+  public final com.cobblemon.mod.common.api.moves.MoveSet getMoveSet();
+  public final com.cobblemon.mod.common.api.abilities.Ability getAbility();
+  public final int getAttack();
+  public final int getDefence();
+  public final int getSpecialAttack();
+  public final int getSpecialDefence();
+  public final int getSpeed();
+com/cobblemon/mod/common/util/adapters/PossibleHeldItemAdapter.class
+com/cobblemon/mod/common/client/render/item/HeldItemRenderer.class
+com/cobblemon/mod/common/net/messages/client/pokemon/update/HeldItemUpdatePacket.class
+com/cobblemon/mod/common/item/battle/BagItem$Companion$EMPTY$1.class
+com/cobblemon/mod/common/pokemon/requirements/HeldItemRequirement$Companion.class
+com/cobblemon/mod/common/net/messages/client/pokemon/update/HeldItemUpdatePacket$Companion.class
+com/cobblemon/mod/common/pokemon/requirements/HeldItemRequirement.class
+com/cobblemon/mod/common/command/HeldItemCommand.class
+com/cobblemon/mod/common/item/battle/DireHitItem$bagItem$1.class
+com/cobblemon/mod/common/pokemon/helditem/CobblemonHeldItemManager.class
+com/cobblemon/mod/common/item/battle/SimpleBagItemLike.class
+com/cobblemon/mod/common/api/events/pokemon/HeldItemEvent$Pre.class
+com/cobblemon/mod/common/api/pokemon/helditem/HeldItemManager.class
+com/cobblemon/mod/common/api/events/pokemon/HeldItemEvent$Post.class
+com/cobblemon/mod/common/item/battle/BagItemLike$DefaultImpls.class
+com/cobblemon/mod/common/api/item/HeldItems.class
+com/cobblemon/mod/common/item/components/HeldItemEffectComponent.class
+com/cobblemon/mod/common/api/spawning/detail/PossibleHeldItem.class
+com/cobblemon/mod/common/api/pokemon/helditem/HeldItemProvider.class
+com/cobblemon/mod/common/item/battle/BagItem.class
+com/cobblemon/mod/common/item/battle/XStatItem.class
+com/cobblemon/mod/common/pokemon/helditem/CobblemonEmptyHeldItemManager.class
+com/cobblemon/mod/common/client/render/item/HeldItemRenderer$Companion.class
+com/cobblemon/mod/common/entity/pokemon/ai/tasks/EatHeldItemTask$Companion.class
+com/cobblemon/mod/common/item/battle/SimpleBagItemLike$DefaultImpls.class
+com/cobblemon/mod/common/entity/pokemon/ai/tasks/EatHeldItemTask.class
+com/cobblemon/mod/common/api/pokemon/helditem/HeldItemManager$Companion.class
+com/cobblemon/mod/common/api/events/pokemon/HeldItemEvent.class
+com/cobblemon/mod/common/api/events/pokemon/interaction/HeldItemUpdatedEvent.class
+com/cobblemon/mod/common/client/render/item/HeldItemRenderer$WhenMappings.class

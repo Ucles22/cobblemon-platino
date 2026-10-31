@@ -1,0 +1,268 @@
+==== com.cobblemon.mod.common.net.messages.server.storage.party.SwapPartyPokemonPacket
+Compiled from "SwapPartyPokemonPacket.java"
+public final class com.cobblemon.mod.common.net.messages.server.storage.party.SwapPartyPokemonPacket implements com.cobblemon.mod.common.api.net.NetworkPacket<com.cobblemon.mod.common.net.messages.server.storage.party.SwapPartyPokemonPacket> {
+  public static final com.cobblemon.mod.common.net.messages.server.storage.party.SwapPartyPokemonPacket$Companion Companion;
+  private final java.util.UUID pokemon1ID;
+  private final com.cobblemon.mod.common.api.storage.party.PartyPosition position1;
+  private final java.util.UUID pokemon2ID;
+  private final com.cobblemon.mod.common.api.storage.party.PartyPosition position2;
+  private final net.minecraft.util.Identifier id;
+  private static final net.minecraft.util.Identifier ID;
+  public com.cobblemon.mod.common.net.messages.server.storage.party.SwapPartyPokemonPacket(java.util.UUID, com.cobblemon.mod.common.api.storage.party.PartyPosition, java.util.UUID, com.cobblemon.mod.common.api.storage.party.PartyPosition);
+  public final java.util.UUID getPokemon1ID();
+  public final com.cobblemon.mod.common.api.storage.party.PartyPosition getPosition1();
+  public final java.util.UUID getPokemon2ID();
+  public final com.cobblemon.mod.common.api.storage.party.PartyPosition getPosition2();
+  public net.minecraft.util.Identifier getId();
+  public void encode(net.minecraft.network.RegistryByteBuf);
+  public void sendToPlayer(net.minecraft.server.network.ServerPlayerEntity);
+  public void sendToPlayers(java.lang.Iterable<? extends net.minecraft.server.network.ServerPlayerEntity>);
+  public void sendToAllPlayers();
+  public void sendToServer();
+  public void sendToPlayersAround(double, double, double, double, net.minecraft.registry.RegistryKey<net.minecraft.world.World>, kotlin.jvm.functions.Function1<? super net.minecraft.server.network.ServerPlayerEntity, java.lang.Boolean>);
+  public net.minecraft.network.packet.CustomPayload$Id<com.cobblemon.mod.common.net.messages.server.storage.party.SwapPartyPokemonPacket> getId();
+  static {};
+}
+==== com.cobblemon.mod.common.net.messages.server.storage.party.MovePartyPokemonPacket
+Compiled from "MovePartyPokemonPacket.java"
+public final class com.cobblemon.mod.common.net.messages.server.storage.party.MovePartyPokemonPacket implements com.cobblemon.mod.common.api.net.NetworkPacket<com.cobblemon.mod.common.net.messages.server.storage.party.MovePartyPokemonPacket> {
+  public static final com.cobblemon.mod.common.net.messages.server.storage.party.MovePartyPokemonPacket$Companion Companion;
+  private final java.util.UUID pokemonID;
+  private final com.cobblemon.mod.common.api.storage.party.PartyPosition oldPosition;
+  private final com.cobblemon.mod.common.api.storage.party.PartyPosition newPosition;
+  private final net.minecraft.util.Identifier id;
+  private static final net.minecraft.util.Identifier ID;
+  public com.cobblemon.mod.common.net.messages.server.storage.party.MovePartyPokemonPacket(java.util.UUID, com.cobblemon.mod.common.api.storage.party.PartyPosition, com.cobblemon.mod.common.api.storage.party.PartyPosition);
+  public final java.util.UUID getPokemonID();
+  public final com.cobblemon.mod.common.api.storage.party.PartyPosition getOldPosition();
+  public final com.cobblemon.mod.common.api.storage.party.PartyPosition getNewPosition();
+  public net.minecraft.util.Identifier getId();
+  public void encode(net.minecraft.network.RegistryByteBuf);
+  public void sendToPlayer(net.minecraft.server.network.ServerPlayerEntity);
+  public void sendToPlayers(java.lang.Iterable<? extends net.minecraft.server.network.ServerPlayerEntity>);
+  public void sendToAllPlayers();
+  public void sendToServer();
+  public void sendToPlayersAround(double, double, double, double, net.minecraft.registry.RegistryKey<net.minecraft.world.World>, kotlin.jvm.functions.Function1<? super net.minecraft.server.network.ServerPlayerEntity, java.lang.Boolean>);
+  public net.minecraft.network.packet.CustomPayload$Id<com.cobblemon.mod.common.net.messages.server.storage.party.MovePartyPokemonPacket> getId();
+  static {};
+}
+==== com.cobblemon.mod.common.net.messages.server.RequestMoveSwapPacket
+Compiled from "RequestMoveSwapPacket.java"
+public final class com.cobblemon.mod.common.net.messages.server.RequestMoveSwapPacket implements com.cobblemon.mod.common.api.net.NetworkPacket<com.cobblemon.mod.common.net.messages.server.RequestMoveSwapPacket> {
+  public static final com.cobblemon.mod.common.net.messages.server.RequestMoveSwapPacket$Companion Companion;
+  private final int move1;
+  private final int move2;
+  private final int slot;
+  private final net.minecraft.util.Identifier id;
+  private static final net.minecraft.util.Identifier ID;
+  public com.cobblemon.mod.common.net.messages.server.RequestMoveSwapPacket(int, int, int);
+  public final int getMove1();
+  public final int getMove2();
+  public final int getSlot();
+  public net.minecraft.util.Identifier getId();
+  public void encode(net.minecraft.network.RegistryByteBuf);
+  public void sendToPlayer(net.minecraft.server.network.ServerPlayerEntity);
+  public void sendToPlayers(java.lang.Iterable<? extends net.minecraft.server.network.ServerPlayerEntity>);
+  public void sendToAllPlayers();
+  public void sendToServer();
+  public void sendToPlayersAround(double, double, double, double, net.minecraft.registry.RegistryKey<net.minecraft.world.World>, kotlin.jvm.functions.Function1<? super net.minecraft.server.network.ServerPlayerEntity, java.lang.Boolean>);
+  public net.minecraft.network.packet.CustomPayload$Id<com.cobblemon.mod.common.net.messages.server.RequestMoveSwapPacket> getId();
+  static {};
+}
+==== com.cobblemon.mod.common.net.messages.server.BenchMovePacket
+Compiled from "BenchMovePacket.java"
+public final class com.cobblemon.mod.common.net.messages.server.BenchMovePacket implements com.cobblemon.mod.common.api.net.NetworkPacket<com.cobblemon.mod.common.net.messages.server.BenchMovePacket> {
+  public static final com.cobblemon.mod.common.net.messages.server.BenchMovePacket$Companion Companion;
+  private final boolean isParty;
+  private final java.util.UUID uuid;
+  private final com.cobblemon.mod.common.api.moves.MoveTemplate oldMove;
+  private final com.cobblemon.mod.common.api.moves.MoveTemplate newMove;
+  private final net.minecraft.util.Identifier id;
+  private static final net.minecraft.util.Identifier ID;
+  public com.cobblemon.mod.common.net.messages.server.BenchMovePacket(boolean, java.util.UUID, com.cobblemon.mod.common.api.moves.MoveTemplate, com.cobblemon.mod.common.api.moves.MoveTemplate);
+  public final boolean isParty();
+  public final java.util.UUID getUuid();
+  public final com.cobblemon.mod.common.api.moves.MoveTemplate getOldMove();
+  public final com.cobblemon.mod.common.api.moves.MoveTemplate getNewMove();
+  public net.minecraft.util.Identifier getId();
+  public void encode(net.minecraft.network.RegistryByteBuf);
+  public void sendToPlayer(net.minecraft.server.network.ServerPlayerEntity);
+  public void sendToPlayers(java.lang.Iterable<? extends net.minecraft.server.network.ServerPlayerEntity>);
+  public void sendToAllPlayers();
+  public void sendToServer();
+  public void sendToPlayersAround(double, double, double, double, net.minecraft.registry.RegistryKey<net.minecraft.world.World>, kotlin.jvm.functions.Function1<? super net.minecraft.server.network.ServerPlayerEntity, java.lang.Boolean>);
+  public net.minecraft.network.packet.CustomPayload$Id<com.cobblemon.mod.common.net.messages.server.BenchMovePacket> getId();
+  static {};
+}
+==== com.cobblemon.mod.common.api.moves.BenchedMoves
+Compiled from "BenchedMoves.java"
+public final class com.cobblemon.mod.common.api.moves.BenchedMoves implements java.lang.Iterable<com.cobblemon.mod.common.api.moves.BenchedMove>, kotlin.jvm.internal.markers.KMappedMarker {
+  public static final com.cobblemon.mod.common.api.moves.BenchedMoves$Companion Companion;
+  private kotlin.jvm.functions.Function1<? super com.cobblemon.mod.common.api.moves.BenchedMoves, kotlin.Unit> changeFunction;
+  private boolean emit;
+  private final java.util.List<com.cobblemon.mod.common.api.moves.BenchedMove> benchedMoves;
+  private static final com.mojang.serialization.Codec<com.cobblemon.mod.common.api.moves.BenchedMoves> CODEC;
+  public com.cobblemon.mod.common.api.moves.BenchedMoves();
+  public final kotlin.jvm.functions.Function1<com.cobblemon.mod.common.api.moves.BenchedMoves, kotlin.Unit> getChangeFunction();
+  public final void setChangeFunction(kotlin.jvm.functions.Function1<? super com.cobblemon.mod.common.api.moves.BenchedMoves, kotlin.Unit>);
+  public final void doWithoutEmitting(kotlin.jvm.functions.Function0<kotlin.Unit>);
+  public final void copyFrom(com.cobblemon.mod.common.api.moves.BenchedMoves);
+  public final void doThenEmit(kotlin.jvm.functions.Function0<kotlin.Unit>);
+  public final void update();
+  public final boolean add(com.cobblemon.mod.common.api.moves.BenchedMove);
+  public final void addAll(java.lang.Iterable<com.cobblemon.mod.common.api.moves.BenchedMove>);
+  public final void clear();
+  public final void remove(com.cobblemon.mod.common.api.moves.BenchedMove);
+  public final void remove(com.cobblemon.mod.common.api.moves.MoveTemplate);
+  public java.util.Iterator<com.cobblemon.mod.common.api.moves.BenchedMove> iterator();
+  public final net.minecraft.nbt.NbtList saveToNBT(net.minecraft.nbt.NbtList);
+  public final com.google.gson.JsonArray saveToJSON(com.google.gson.JsonArray);
+  public final void saveToBuffer(net.minecraft.network.RegistryByteBuf);
+  public final com.cobblemon.mod.common.api.moves.BenchedMoves loadFromNBT(net.minecraft.nbt.NbtList);
+  public final com.cobblemon.mod.common.api.moves.BenchedMoves loadFromJSON(com.google.gson.JsonArray);
+  public final com.cobblemon.mod.common.api.moves.BenchedMoves loadFromBuffer(net.minecraft.network.RegistryByteBuf);
+  public static final com.mojang.serialization.Codec<com.cobblemon.mod.common.api.moves.BenchedMoves> getCODEC();
+  static {};
+}
+==== com.cobblemon.mod.common.api.moves.BenchedMove
+Compiled from "BenchedMove.java"
+public final class com.cobblemon.mod.common.api.moves.BenchedMove {
+  public static final com.cobblemon.mod.common.api.moves.BenchedMove$Companion Companion;
+  private final com.cobblemon.mod.common.api.moves.MoveTemplate moveTemplate;
+  private final int ppRaisedStages;
+  private static final com.mojang.serialization.Codec<com.cobblemon.mod.common.api.moves.BenchedMove> CODEC;
+  public com.cobblemon.mod.common.api.moves.BenchedMove(com.cobblemon.mod.common.api.moves.MoveTemplate, int);
+  public final com.cobblemon.mod.common.api.moves.MoveTemplate getMoveTemplate();
+  public final int getPpRaisedStages();
+  public final net.minecraft.nbt.NbtCompound saveToNBT(net.minecraft.nbt.NbtCompound);
+  public final com.google.gson.JsonObject saveToJSON(com.google.gson.JsonObject);
+  public final void saveToBuffer(net.minecraft.network.RegistryByteBuf);
+  public final com.cobblemon.mod.common.api.moves.MoveTemplate component1();
+  public final int component2();
+  public final com.cobblemon.mod.common.api.moves.BenchedMove copy(com.cobblemon.mod.common.api.moves.MoveTemplate, int);
+  public static com.cobblemon.mod.common.api.moves.BenchedMove copy$default(com.cobblemon.mod.common.api.moves.BenchedMove, com.cobblemon.mod.common.api.moves.MoveTemplate, int, int, java.lang.Object);
+  public java.lang.String toString();
+  public int hashCode();
+  public boolean equals(java.lang.Object);
+  public static final com.mojang.serialization.Codec<com.cobblemon.mod.common.api.moves.BenchedMove> getCODEC();
+  static {};
+}
+==== com.cobblemon.mod.common.api.storage.party.PartyPosition
+Compiled from "PartyPosition.java"
+public final class com.cobblemon.mod.common.api.storage.party.PartyPosition implements com.cobblemon.mod.common.api.storage.StorePosition {
+  private final int slot;
+  public com.cobblemon.mod.common.api.storage.party.PartyPosition(int);
+  public final int getSlot();
+  public final int component1();
+  public final com.cobblemon.mod.common.api.storage.party.PartyPosition copy(int);
+  public static com.cobblemon.mod.common.api.storage.party.PartyPosition copy$default(com.cobblemon.mod.common.api.storage.party.PartyPosition, int, int, java.lang.Object);
+  public java.lang.String toString();
+  public int hashCode();
+  public boolean equals(java.lang.Object);
+}
+==== com.cobblemon.mod.common.api.net.NetworkPacket
+Compiled from "NetworkPacket.java"
+public interface com.cobblemon.mod.common.api.net.NetworkPacket<T extends com.cobblemon.mod.common.api.net.NetworkPacket<T>> extends net.minecraft.network.packet.CustomPayload, com.cobblemon.mod.common.api.net.Encodable {
+  public abstract net.minecraft.util.Identifier getId();
+  public default void sendToPlayer(net.minecraft.server.network.ServerPlayerEntity);
+  public default void sendToPlayers(java.lang.Iterable<? extends net.minecraft.server.network.ServerPlayerEntity>);
+  public default void sendToAllPlayers();
+  public default void sendToServer();
+  public default void sendToPlayersAround(double, double, double, double, net.minecraft.registry.RegistryKey<net.minecraft.world.World>, kotlin.jvm.functions.Function1<? super net.minecraft.server.network.ServerPlayerEntity, java.lang.Boolean>);
+  public static void sendToPlayersAround$default(com.cobblemon.mod.common.api.net.NetworkPacket, double, double, double, double, net.minecraft.registry.RegistryKey, kotlin.jvm.functions.Function1, int, java.lang.Object);
+  public default net.minecraft.network.packet.CustomPayload$Id<T> getId();
+}
+==== com.cobblemon.mod.common.CobblemonNetwork
+Compiled from "CobblemonNetwork.java"
+public final class com.cobblemon.mod.common.CobblemonNetwork {
+  public static final com.cobblemon.mod.common.CobblemonNetwork INSTANCE;
+  private static final java.util.List<com.cobblemon.mod.common.net.PacketRegisterInfo<?>> s2cPayloads;
+  private static final java.util.List<com.cobblemon.mod.common.net.PacketRegisterInfo<?>> c2sPayloads;
+  private com.cobblemon.mod.common.CobblemonNetwork();
+  public final void sendPacket(net.minecraft.server.network.ServerPlayerEntity, com.cobblemon.mod.common.api.net.NetworkPacket<?>);
+  public static final void sendToServer(com.cobblemon.mod.common.api.net.NetworkPacket<?>);
+  public static final void sendToAllPlayers(com.cobblemon.mod.common.api.net.NetworkPacket<?>);
+  public static final void sendPacketToPlayers(java.lang.Iterable<? extends net.minecraft.server.network.ServerPlayerEntity>, com.cobblemon.mod.common.api.net.NetworkPacket<?>);
+  public final java.util.List<com.cobblemon.mod.common.net.PacketRegisterInfo<?>> getS2cPayloads();
+  public final java.util.List<com.cobblemon.mod.common.net.PacketRegisterInfo<?>> getC2sPayloads();
+  private final java.util.List<com.cobblemon.mod.common.net.PacketRegisterInfo<?>> generateS2CPacketInfoList();
+  private final java.util.List<com.cobblemon.mod.common.net.PacketRegisterInfo<?>> generateC2SPacketInfoList();
+  public final void sendPacketToPlayer(net.minecraft.server.network.ServerPlayerEntity, com.cobblemon.mod.common.api.net.NetworkPacket<?>);
+  static {};
+}
+==== com.cobblemon.mod.common.client.storage.ClientParty
+Compiled from "ClientParty.java"
+public final class com.cobblemon.mod.common.client.storage.ClientParty extends com.cobblemon.mod.common.client.storage.ClientStorage<com.cobblemon.mod.common.api.storage.party.PartyPosition> implements java.lang.Iterable<com.cobblemon.mod.common.pokemon.Pokemon>, kotlin.jvm.internal.markers.KMappedMarker {
+  private final java.util.List<com.cobblemon.mod.common.pokemon.Pokemon> slots;
+  public com.cobblemon.mod.common.client.storage.ClientParty(java.util.UUID, int);
+  public final java.util.List<com.cobblemon.mod.common.pokemon.Pokemon> getSlots();
+  public java.util.Iterator<com.cobblemon.mod.common.pokemon.Pokemon> iterator();
+  public com.cobblemon.mod.common.pokemon.Pokemon findByUUID(java.util.UUID);
+  public void set(com.cobblemon.mod.common.api.storage.party.PartyPosition, com.cobblemon.mod.common.pokemon.Pokemon);
+  public final com.cobblemon.mod.common.pokemon.Pokemon get(int);
+  public com.cobblemon.mod.common.pokemon.Pokemon get(com.cobblemon.mod.common.api.storage.party.PartyPosition);
+  public final boolean isEmpty();
+  public final int getPosition(java.util.UUID);
+  public com.cobblemon.mod.common.api.storage.party.PartyPosition getPosition(com.cobblemon.mod.common.pokemon.Pokemon);
+  public void set(com.cobblemon.mod.common.api.storage.StorePosition, com.cobblemon.mod.common.pokemon.Pokemon);
+  public com.cobblemon.mod.common.pokemon.Pokemon get(com.cobblemon.mod.common.api.storage.StorePosition);
+  public com.cobblemon.mod.common.api.storage.StorePosition getPosition(com.cobblemon.mod.common.pokemon.Pokemon);
+}
+==== com.cobblemon.mod.common.client.storage.ClientStorage
+Compiled from "ClientStorage.java"
+public abstract class com.cobblemon.mod.common.client.storage.ClientStorage<T extends com.cobblemon.mod.common.api.storage.StorePosition> {
+  private final java.util.UUID uuid;
+  public com.cobblemon.mod.common.client.storage.ClientStorage(java.util.UUID);
+  public final java.util.UUID getUuid();
+  public abstract com.cobblemon.mod.common.pokemon.Pokemon findByUUID(java.util.UUID);
+  public abstract void set(T, com.cobblemon.mod.common.pokemon.Pokemon);
+  public abstract com.cobblemon.mod.common.pokemon.Pokemon get(T);
+  public abstract T getPosition(com.cobblemon.mod.common.pokemon.Pokemon);
+  public final void swap(java.util.UUID, java.util.UUID);
+  public final void remove(java.util.UUID);
+  public final void move(java.util.UUID, T);
+}
+==== summary bytecode (packets)
+com.cobblemon.mod.common.client.gui.summary.widgets.MarkingsWidget:   public final void saveMarkingsToPokemon(boolean);
+com.cobblemon.mod.common.client.gui.summary.widgets.MarkingsWidget:       35: new           #270                // class com/cobblemon/mod/common/net/messages/server/pokemon/update/SetMarkingsPacket
+com.cobblemon.mod.common.client.gui.summary.widgets.MarkingsWidget:       53: invokespecial #279                // Method com/cobblemon/mod/common/net/messages/server/pokemon/update/SetMarkingsPacket."<init>":(Ljava/util/UUID;Ljava/util/List;Z)V
+com.cobblemon.mod.common.client.gui.summary.widgets.MarkingsWidget:       56: checkcast     #281                // class com/cobblemon/mod/common/api/net/NetworkPacket
+com.cobblemon.mod.common.client.gui.summary.widgets.MarkingsWidget:       59: invokestatic  #287                // Method com/cobblemon/mod/common/CobblemonNetwork.sendToServer:(Lcom/cobblemon/mod/common/api/net/NetworkPacket;)V
+com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MoveSwapScreen$MoveSlot:   public boolean mouseClicked(double, double, int);
+com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MoveSwapScreen$MoveSlot:       43: new           #354                // class com/cobblemon/mod/common/net/messages/server/BenchMovePacket
+com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MoveSwapScreen$MoveSlot:       84: invokespecial #374                // Method com/cobblemon/mod/common/net/messages/server/BenchMovePacket."<init>":(ZLjava/util/UUID;Lcom/cobblemon/mod/common/api/moves/MoveTemplate;Lcom/cobblemon/mod/common/api/moves/MoveTemplate;)V
+com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MoveSwapScreen$MoveSlot:       87: checkcast     #376                // class com/cobblemon/mod/common/api/net/NetworkPacket
+com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MoveSwapScreen$MoveSlot:       90: invokestatic  #382                // Method com/cobblemon/mod/common/CobblemonNetwork.sendToServer:(Lcom/cobblemon/mod/common/api/net/NetworkPacket;)V
+com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MovesWidget:   public final void reorderMove(com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MoveSlotWidget, boolean);
+com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MovesWidget:       93: new           #403                // class com/cobblemon/mod/common/net/messages/server/RequestMoveSwapPacket
+com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MovesWidget:      129: invokespecial #432                // Method com/cobblemon/mod/common/net/messages/server/RequestMoveSwapPacket."<init>":(III)V
+com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MovesWidget:      132: checkcast     #434                // class com/cobblemon/mod/common/api/net/NetworkPacket
+com.cobblemon.mod.common.client.gui.summary.widgets.screens.moves.MovesWidget:      135: invokestatic  #440                // Method com/cobblemon/mod/common/CobblemonNetwork.sendToServer:(Lcom/cobblemon/mod/common/api/net/NetworkPacket;)V
+com.cobblemon.mod.common.client.gui.summary.Summary:   public final void swapPartySlot(int, int);
+com.cobblemon.mod.common.client.gui.summary.Summary:       58: new           #546                // class com/cobblemon/mod/common/api/storage/party/PartyPosition
+com.cobblemon.mod.common.client.gui.summary.Summary:       63: invokespecial #548                // Method com/cobblemon/mod/common/api/storage/party/PartyPosition."<init>":(I)V
+com.cobblemon.mod.common.client.gui.summary.Summary:       68: new           #546                // class com/cobblemon/mod/common/api/storage/party/PartyPosition
+com.cobblemon.mod.common.client.gui.summary.Summary:       73: invokespecial #548                // Method com/cobblemon/mod/common/api/storage/party/PartyPosition."<init>":(I)V
+com.cobblemon.mod.common.client.gui.summary.Summary:       89: new           #550                // class com/cobblemon/mod/common/net/messages/server/storage/party/SwapPartyPokemonPacket
+com.cobblemon.mod.common.client.gui.summary.Summary:      120: invokespecial #559                // Method com/cobblemon/mod/common/net/messages/server/storage/party/SwapPartyPokemonPacket."<init>":(Ljava/util/UUID;Lcom/cobblemon/mod/common/api/storage/party/PartyPosition;Ljava/util/UUID;Lcom/cobblemon/mod/common/api/storage/party/PartyPosition;)V
+com.cobblemon.mod.common.client.gui.summary.Summary:      124: checkcast     #561                // class com/cobblemon/mod/common/api/net/NetworkPacket
+com.cobblemon.mod.common.client.gui.summary.Summary:      131: new           #563                // class com/cobblemon/mod/common/net/messages/server/storage/party/MovePartyPokemonPacket
+com.cobblemon.mod.common.client.gui.summary.Summary:      150: invokespecial #566                // Method com/cobblemon/mod/common/net/messages/server/storage/party/MovePartyPokemonPacket."<init>":(Ljava/util/UUID;Lcom/cobblemon/mod/common/api/storage/party/PartyPosition;Lcom/cobblemon/mod/common/api/storage/party/PartyPosition;)V
+com.cobblemon.mod.common.client.gui.summary.Summary:      153: checkcast     #561                // class com/cobblemon/mod/common/api/net/NetworkPacket
+com.cobblemon.mod.common.client.gui.summary.Summary:      160: invokeinterface #569,  1          // InterfaceMethod com/cobblemon/mod/common/api/net/NetworkPacket.sendToServer:()V
+com.cobblemon.mod.common.client.gui.summary.Summary: --
+com.cobblemon.mod.common.client.gui.summary.Summary:   private static final void init$lambda$3(com.cobblemon.mod.common.client.gui.summary.Summary, net.minecraft.client.gui.widget.ButtonWidget);
+com.cobblemon.mod.common.client.gui.summary.Summary:       60: new           #1316               // class com/cobblemon/mod/common/net/messages/server/pokemon/update/SetItemHiddenPacket
+com.cobblemon.mod.common.client.gui.summary.Summary:       85: invokespecial #1319               // Method com/cobblemon/mod/common/net/messages/server/pokemon/update/SetItemHiddenPacket."<init>":(Ljava/util/UUID;Z)V
+com.cobblemon.mod.common.client.gui.summary.Summary:       88: checkcast     #561                // class com/cobblemon/mod/common/api/net/NetworkPacket
+com.cobblemon.mod.common.client.gui.summary.Summary:       91: invokestatic  #1324               // Method com/cobblemon/mod/common/CobblemonNetwork.sendToServer:(Lcom/cobblemon/mod/common/api/net/NetworkPacket;)V
+com.cobblemon.mod.common.client.gui.summary.widgets.screens.marks.MarksWidget:   public final void saveActiveMarkToPokemon();
+com.cobblemon.mod.common.client.gui.summary.widgets.screens.marks.MarksWidget:       14: new           #389                // class com/cobblemon/mod/common/net/messages/server/pokemon/update/SetActiveMarkPacket
+com.cobblemon.mod.common.client.gui.summary.widgets.screens.marks.MarksWidget:       36: invokespecial #398                // Method com/cobblemon/mod/common/net/messages/server/pokemon/update/SetActiveMarkPacket."<init>":(Ljava/util/UUID;Lcom/cobblemon/mod/common/api/mark/Mark;)V
+com.cobblemon.mod.common.client.gui.summary.widgets.screens.marks.MarksWidget:       39: checkcast     #400                // class com/cobblemon/mod/common/api/net/NetworkPacket
+com.cobblemon.mod.common.client.gui.summary.widgets.screens.marks.MarksWidget:       42: invokestatic  #406                // Method com/cobblemon/mod/common/CobblemonNetwork.sendToServer:(Lcom/cobblemon/mod/common/api/net/NetworkPacket;)V
+com.cobblemon.mod.common.client.gui.summary.widgets.NicknameEntryWidget:   private final void updateNickname(java.lang.String);
+com.cobblemon.mod.common.client.gui.summary.widgets.NicknameEntryWidget:       73: new           #242                // class com/cobblemon/mod/common/net/messages/server/pokemon/update/SetNicknamePacket
+com.cobblemon.mod.common.client.gui.summary.widgets.NicknameEntryWidget:       81: invokespecial #245                // Method com/cobblemon/mod/common/net/messages/server/pokemon/update/SetNicknamePacket."<init>":(Ljava/util/UUID;ZLjava/lang/String;)V
+com.cobblemon.mod.common.client.gui.summary.widgets.NicknameEntryWidget:       84: checkcast     #247                // class com/cobblemon/mod/common/api/net/NetworkPacket
+com.cobblemon.mod.common.client.gui.summary.widgets.NicknameEntryWidget:       87: invokestatic  #253                // Method com/cobblemon/mod/common/CobblemonNetwork.sendToServer:(Lcom/cobblemon/mod/common/api/net/NetworkPacket;)V

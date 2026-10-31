@@ -1,0 +1,56 @@
+Compiled from "Summary.java"
+public final class com.cobblemon.mod.common.client.gui.summary.Summary$Companion {
+  private com.cobblemon.mod.common.client.gui.summary.Summary$Companion();
+  public final net.minecraft.util.Identifier getIconShinyResource();
+  public final net.minecraft.util.Identifier getIconHeldItemResource();
+  public final net.minecraft.util.Identifier getIconCosmeticItemResource();
+  public final void open(java.util.Collection<? extends com.cobblemon.mod.common.pokemon.Pokemon>, boolean, int);
+  public static void open$default(com.cobblemon.mod.common.client.gui.summary.Summary$Companion, java.util.Collection, boolean, int, int, java.lang.Object);
+  public com.cobblemon.mod.common.client.gui.summary.Summary$Companion(kotlin.jvm.internal.DefaultConstructorMarker);
+}
+com/cobblemon/mod/common/client/gui/pokedex/PokedexGUI$updateTabInfoElement$$inlined$sortedBy$1.class
+com/cobblemon/mod/common/client/gui/pokedex/PokedexGUI$init$2.class
+com/cobblemon/mod/common/client/gui/pokedex/PokedexGUI.class
+com/cobblemon/mod/common/client/gui/pokedex/PokedexGUIConstants.class
+com/cobblemon/mod/common/client/gui/pokedex/PokedexGUI$Companion.class
+Compiled from "PokedexGUI.java"
+public final class com.cobblemon.mod.common.client.gui.pokedex.PokedexGUI$Companion {
+  private com.cobblemon.mod.common.client.gui.pokedex.PokedexGUI$Companion();
+  public final void open(com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager, com.cobblemon.mod.common.client.pokedex.PokedexType, net.minecraft.util.Identifier, net.minecraft.util.math.BlockPos);
+  public static void open$default(com.cobblemon.mod.common.client.gui.pokedex.PokedexGUI$Companion, com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager, com.cobblemon.mod.common.client.pokedex.PokedexType, net.minecraft.util.Identifier, net.minecraft.util.math.BlockPos, int, java.lang.Object);
+  public com.cobblemon.mod.common.client.gui.pokedex.PokedexGUI$Companion(kotlin.jvm.internal.DefaultConstructorMarker);
+}
+Compiled from "PokedexGUI.java"
+public final class com.cobblemon.mod.common.client.gui.pokedex.PokedexGUI extends net.minecraft.client.gui.screen.Screen implements com.cobblemon.mod.common.client.gui.CobblemonRenderable {
+  public static final com.cobblemon.mod.common.client.gui.pokedex.PokedexGUI$Companion Companion;
+  private final com.cobblemon.mod.common.client.pokedex.PokedexType type;
+  private final net.minecraft.util.Identifier initSpecies;
+  private final net.minecraft.util.math.BlockPos blockPos;
+  private double oldDragPosX;
+  private boolean canDragRender;
+  private java.util.Collection<? extends com.cobblemon.mod.common.api.pokedex.def.PokedexDef> filteredPokedex;
+  private java.lang.String seenCount;
+  private java.lang.String ownedCount;
+  private final com.bedrockk.molang.runtime.MoLangRuntime runtime;
+  private com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry selectedEntry;
+  private com.cobblemon.mod.common.api.pokedex.entry.PokedexForm selectedForm;
+  private java.util.List<net.minecraft.util.Identifier> availableRegions;
+  private int selectedRegionIndex;
+  private com.cobblemon.mod.common.client.gui.pokedex.ScaledButton regionSelectWidgetUp;
+  private com.cobblemon.mod.common.client.gui.pokedex.ScaledButton regionSelectWidgetDown;
+  private com.cobblemon.mod.common.client.gui.pokedex.ScaledButton searchByTypeButton;
+  private com.cobblemon.mod.common.client.gui.pokedex.widgets.EntriesScrollingWidget scrollScreen;
+com/cobblemon/mod/common/api/pokedex/filter/SearchByType.class
+com/cobblemon/mod/common/client/pokedex/PokedexType.class
+Compiled from "PokedexItem.java"
+public final class com.cobblemon.mod.common.item.PokedexItem extends com.cobblemon.mod.common.item.CobblemonItem {
+  private final com.cobblemon.mod.common.client.pokedex.PokedexType type;
+  public com.cobblemon.mod.common.item.PokedexItem(com.cobblemon.mod.common.client.pokedex.PokedexType);
+  public final com.cobblemon.mod.common.client.pokedex.PokedexType getType();
+  public net.minecraft.util.UseAction getUseAction(net.minecraft.item.ItemStack);
+  public int getMaxUseTime(net.minecraft.item.ItemStack, net.minecraft.entity.LivingEntity);
+  public net.minecraft.util.TypedActionResult<net.minecraft.item.ItemStack> use(net.minecraft.world.World, net.minecraft.entity.player.PlayerEntity, net.minecraft.util.Hand);
+  public void usageTick(net.minecraft.world.World, net.minecraft.entity.LivingEntity, net.minecraft.item.ItemStack, int);
+  public void onStoppedUsing(net.minecraft.item.ItemStack, net.minecraft.world.World, net.minecraft.entity.LivingEntity, int);
+}
+Error: class not found: com.cobblemon.mod.common.api.item.PokedexType

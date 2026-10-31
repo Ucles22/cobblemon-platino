@@ -1,0 +1,99 @@
+  private static final kotlin.Unit _init_$lambda$0(com.cobblemon.mod.common.client.gui.battle.subscreen.BattleGeneralActionSelection, com.cobblemon.mod.common.client.gui.battle.BattleGUI, com.cobblemon.mod.common.client.battle.SingleActionRequest);
+       1: invokestatic  #102                // Method net/minecraft/client/MinecraftClient.getInstance:()Lnet/minecraft/client/MinecraftClient;
+       4: invokevirtual #351                // Method net/minecraft/client/MinecraftClient.getSoundManager:()Lnet/minecraft/client/sound/SoundManager;
+      11: invokestatic  #127                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      14: invokevirtual #356                // Method playDownSound:(Lnet/minecraft/client/sound/SoundManager;)V
+      24: invokespecial #426                // Method com/cobblemon/mod/common/client/gui/battle/subscreen/BattleMoveSelection."<init>":(Lcom/cobblemon/mod/common/client/gui/battle/BattleGUI;Lcom/cobblemon/mod/common/client/battle/SingleActionRequest;)V
+      30: invokevirtual #370                // Method com/cobblemon/mod/common/client/gui/battle/BattleGUI.changeActionSelection:(Lcom/cobblemon/mod/common/client/gui/battle/subscreen/BattleActionSelection;)V
+      33: getstatic     #431                // Field kotlin/Unit.INSTANCE:Lkotlin/Unit;
+  private static final kotlin.Unit _init_$lambda$1(com.cobblemon.mod.common.client.gui.battle.BattleGUI, com.cobblemon.mod.common.client.battle.SingleActionRequest, com.cobblemon.mod.common.client.gui.battle.subscreen.BattleGeneralActionSelection);
+       7: invokespecial #434                // Method com/cobblemon/mod/common/client/gui/battle/subscreen/BattleSwitchPokemonSelection."<init>":(Lcom/cobblemon/mod/common/client/gui/battle/BattleGUI;Lcom/cobblemon/mod/common/client/battle/SingleActionRequest;)V
+      13: invokevirtual #370                // Method com/cobblemon/mod/common/client/gui/battle/BattleGUI.changeActionSelection:(Lcom/cobblemon/mod/common/client/gui/battle/subscreen/BattleActionSelection;)V
+      17: invokestatic  #102                // Method net/minecraft/client/MinecraftClient.getInstance:()Lnet/minecraft/client/MinecraftClient;
+      20: invokevirtual #351                // Method net/minecraft/client/MinecraftClient.getSoundManager:()Lnet/minecraft/client/sound/SoundManager;
+      27: invokestatic  #127                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      30: invokevirtual #356                // Method playDownSound:(Lnet/minecraft/client/sound/SoundManager;)V
+      33: getstatic     #431                // Field kotlin/Unit.INSTANCE:Lkotlin/Unit;
+  private static final kotlin.Unit lambda$2$0(com.cobblemon.mod.common.client.gui.battle.subscreen.BattleGeneralActionSelection);
+       0: getstatic     #145                // Field com/cobblemon/mod/common/client/CobblemonClient.INSTANCE:Lcom/cobblemon/mod/common/client/CobblemonClient;
+       3: invokevirtual #149                // Method com/cobblemon/mod/common/client/CobblemonClient.getBattle:()Lcom/cobblemon/mod/common/client/battle/ClientBattle;
+      11: invokevirtual #438                // Method com/cobblemon/mod/common/client/battle/ClientBattle.setMinimised:(Z)V
+      18: invokestatic  #102                // Method net/minecraft/client/MinecraftClient.getInstance:()Lnet/minecraft/client/MinecraftClient;
+      35: invokestatic  #122                // Method com/cobblemon/mod/common/util/LocalizationUtilsKt.battleLang:(Ljava/lang/String;[Ljava/lang/Object;)Lnet/minecraft/text/MutableText;
+      42: invokevirtual #452                // Method net/minecraft/client/network/ClientPlayerEntity.sendMessage:(Lnet/minecraft/text/Text;Z)V
+      50: invokestatic  #102                // Method net/minecraft/client/MinecraftClient.getInstance:()Lnet/minecraft/client/MinecraftClient;
+      53: invokevirtual #351                // Method net/minecraft/client/MinecraftClient.getSoundManager:()Lnet/minecraft/client/sound/SoundManager;
+      60: invokestatic  #127                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      63: invokevirtual #356                // Method playDownSound:(Lnet/minecraft/client/sound/SoundManager;)V
+      66: getstatic     #431                // Field kotlin/Unit.INSTANCE:Lkotlin/Unit;
+  private static final kotlin.Unit lambda$2$1(com.cobblemon.mod.common.client.gui.battle.subscreen.BattleGeneralActionSelection);
+       0: getstatic     #145                // Field com/cobblemon/mod/common/client/CobblemonClient.INSTANCE:Lcom/cobblemon/mod/common/client/CobblemonClient;
+       3: invokevirtual #149                // Method com/cobblemon/mod/common/client/CobblemonClient.getBattle:()Lcom/cobblemon/mod/common/client/battle/ClientBattle;
+      11: invokevirtual #438                // Method com/cobblemon/mod/common/client/battle/ClientBattle.setMinimised:(Z)V
+      18: invokestatic  #102                // Method net/minecraft/client/MinecraftClient.getInstance:()Lnet/minecraft/client/MinecraftClient;
+      35: invokestatic  #122                // Method com/cobblemon/mod/common/util/LocalizationUtilsKt.battleLang:(Ljava/lang/String;[Ljava/lang/Object;)Lnet/minecraft/text/MutableText;
+      42: invokevirtual #452                // Method net/minecraft/client/network/ClientPlayerEntity.sendMessage:(Lnet/minecraft/text/Text;Z)V
+      50: invokestatic  #102                // Method net/minecraft/client/MinecraftClient.getInstance:()Lnet/minecraft/client/MinecraftClient;
+      53: invokevirtual #351                // Method net/minecraft/client/MinecraftClient.getSoundManager:()Lnet/minecraft/client/sound/SoundManager;
+      60: invokestatic  #127                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      63: invokevirtual #356                // Method playDownSound:(Lnet/minecraft/client/sound/SoundManager;)V
+      66: getstatic     #431                // Field kotlin/Unit.INSTANCE:Lkotlin/Unit;
+  private static final kotlin.Unit lambda$2$2(com.cobblemon.mod.common.client.gui.battle.BattleGUI, com.cobblemon.mod.common.client.battle.SingleActionRequest, com.cobblemon.mod.common.client.gui.battle.subscreen.BattleGeneralActionSelection);
+       7: invokespecial #457                // Method com/cobblemon/mod/common/client/gui/battle/subscreen/ForfeitConfirmationSelection."<init>":(Lcom/cobblemon/mod/common/client/gui/battle/BattleGUI;Lcom/cobblemon/mod/common/client/battle/SingleActionRequest;)V
+      13: invokevirtual #370                // Method com/cobblemon/mod/common/client/gui/battle/BattleGUI.changeActionSelection:(Lcom/cobblemon/mod/common/client/gui/battle/subscreen/BattleActionSelection;)V
+      17: invokestatic  #102                // Method net/minecraft/client/MinecraftClient.getInstance:()Lnet/minecraft/client/MinecraftClient;
+      20: invokevirtual #351                // Method net/minecraft/client/MinecraftClient.getSoundManager:()Lnet/minecraft/client/sound/SoundManager;
+      27: invokestatic  #127                // Method kotlin/jvm/internal/Intrinsics.checkNotNullExpressionValue:(Ljava/lang/Object;Ljava/lang/String;)V
+      30: invokevirtual #356                // Method playDownSound:(Lnet/minecraft/client/sound/SoundManager;)V
+      33: getstatic     #431                // Field kotlin/Unit.INSTANCE:Lkotlin/Unit;
+==== BattleGUI.close / minimize
+  public void close();
+       1: invokespecial #535                // Method net/minecraft/client/gui/screen/Screen.close:()V
+       7: invokevirtual #141                // Method com/cobblemon/mod/common/client/CobblemonClient.getBattle:()Lcom/cobblemon/mod/common/client/battle/ClientBattle;
+      15: invokevirtual #539                // Method com/cobblemon/mod/common/client/battle/ClientBattle.setMinimised:(Z)V
+  private final boolean minimizeBattle();
+       3: invokevirtual #141                // Method com/cobblemon/mod/common/client/CobblemonClient.getBattle:()Lcom/cobblemon/mod/common/client/battle/ClientBattle;
+      16: invokevirtual #386                // Method com/cobblemon/mod/common/client/battle/ClientBattle.getMinimised:()Z
+      27: invokevirtual #539                // Method com/cobblemon/mod/common/client/battle/ClientBattle.setMinimised:(Z)V
+      33: invokevirtual #591                // Method com/cobblemon/mod/common/client/keybind/keybinds/PartySendBinding.actioned:()V
+==== clases de uso de objetos
+com/cobblemon/mod/common/api/item/HealingSource.class
+com/cobblemon/mod/common/item/MoomooMilk$bagItem$1.class
+com/cobblemon/mod/common/item/battle/BagItem$Companion$EMPTY$1.class
+com/cobblemon/mod/common/item/berry/PortionHealingBerryItem$bagItem$1.class
+com/cobblemon/mod/common/client/gui/interact/partyselect/PartySelectGUI$Companion.class
+com/cobblemon/mod/common/battles/BagItemActionResponse.class
+com/cobblemon/mod/common/item/interactive/BerryJuiceItem$bagItem$1.class
+com/cobblemon/mod/common/client/gui/interact/partyselect/PartySelectGUI$2.class
+com/cobblemon/mod/common/item/battle/DireHitItem$bagItem$1.class
+com/cobblemon/mod/common/item/interactive/EtherItem$bagItem$1.class
+com/cobblemon/mod/common/item/battle/SimpleBagItemLike.class
+com/cobblemon/mod/common/item/interactive/ElixirItem$bagItem$1.class
+com/cobblemon/mod/common/api/callback/PartySelectPokemonDTO.class
+com/cobblemon/mod/common/net/messages/server/callback/party/PartySelectCancelledPacket.class
+com/cobblemon/mod/common/net/messages/server/callback/party/PartySelectCancelledPacket$Companion.class
+com/cobblemon/mod/common/client/gui/interact/partyselect/PartySelectGUI.class
+com/cobblemon/mod/common/item/interactive/EnergyRootItem$bagItem$1.class
+com/cobblemon/mod/common/item/battle/BagItemLike$DefaultImpls.class
+com/cobblemon/mod/common/api/callback/PartySelectCallback.class
+com/cobblemon/mod/common/item/battle/BagItem.class
+com/cobblemon/mod/common/item/battle/XStatItem.class
+com/cobblemon/mod/common/item/interactive/HealPowderItem$bagItem$1.class
+com/cobblemon/mod/common/item/battle/SimpleBagItemLike$DefaultImpls.class
+com/cobblemon/mod/common/item/interactive/RemedyItem$bagItem$1.class
+com/cobblemon/mod/common/client/gui/interact/partyselect/PartySlotButton$Companion.class
+com/cobblemon/mod/common/api/callback/PartySelectCallbacks.class
+com/cobblemon/mod/common/item/RevivalHerbItem$bagItem$1.class
+com/cobblemon/mod/common/battles/BagItems.class
+com/cobblemon/mod/common/item/interactive/ReviveItem$bagItem$1.class
+com/cobblemon/mod/common/api/item/HealingSource$Force.class
+com/cobblemon/mod/common/item/berry/HealingBerryItem$bagItem$1.class
+com/cobblemon/mod/common/item/battle/XStatItem$bagItem$1.class
+com/cobblemon/mod/common/client/gui/interact/partyselect/PartySelectConfiguration.class
+com/cobblemon/mod/common/item/berry/PPRestoringBerryItem$bagItem$1.class
+com/cobblemon/mod/common/net/serverhandling/callback/party/PartySelectCancelledHandler.class
+com/cobblemon/mod/common/item/battle/BagItemLike.class
+com/cobblemon/mod/common/item/interactive/StatusCureItem$bagItem$1.class
+com/cobblemon/mod/common/client/gui/interact/partyselect/PartySlotButton.class
+com/cobblemon/mod/common/item/battle/GuardSpecItem.class
+com/cobblemon/mod/common/item/battle/BagItem$Companion.class

@@ -1,0 +1,14 @@
+       0: invokestatic  #823                // Method net/minecraft/item/ItemGroups.getGroupsToDisplay:()Ljava/util/List;
+       3: invokeinterface #215,  1          // InterfaceMethod java/util/List.iterator:()Ljava/util/Iterator;
+      12: invokeinterface #220,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+      22: invokeinterface #224,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+      44: invokevirtual #1091               // Method renderTabIcon:(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/item/ItemGroup;)V
+      54: invokevirtual #1095               // Method net/minecraft/item/ItemGroup.getTexture:()Lnet/minecraft/util/Identifier;
+      75: invokevirtual #1099               // Method net/minecraft/client/gui/DrawContext.drawTexture:(Lnet/minecraft/util/Identifier;IIIIII)V
+      87: invokevirtual #1100               // Method net/minecraft/client/gui/widget/TextFieldWidget.render:(Lnet/minecraft/client/gui/DrawContext;IIF)V
+     119: invokevirtual #845                // Method net/minecraft/item/ItemGroup.hasScrollbar:()Z
+     126: invokevirtual #834                // Method hasScrollbar:()Z
+     170: invokevirtual #1110               // Method net/minecraft/client/gui/DrawContext.drawGuiTexture:(Lnet/minecraft/util/Identifier;IIII)V
+     178: invokevirtual #1091               // Method renderTabIcon:(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/item/ItemGroup;)V
+     184: invokevirtual #234                // Method net/minecraft/item/ItemGroup.getType:()Lnet/minecraft/item/ItemGroup$Type;
+     239: invokestatic  #1115               // Method net/minecraft/client/gui/screen/ingame/InventoryScreen.drawEntity:(Lnet/minecraft/client/gui/DrawContext;IIIIIFFFLnet/minecraft/entity/LivingEntity;)V

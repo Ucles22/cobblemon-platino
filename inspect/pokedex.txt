@@ -1,0 +1,96 @@
+==== com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager
+Compiled from "ClientPokedexManager.java"
+public final class com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager extends com.cobblemon.mod.common.api.pokedex.AbstractPokedexManager implements com.cobblemon.mod.common.api.storage.player.client.ClientInstancedPlayerData {
+  public static final com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager$Companion Companion;
+  private final java.util.Map<net.minecraft.util.Identifier, com.cobblemon.mod.common.api.pokedex.SpeciesDexRecord> speciesRecords;
+  public com.cobblemon.mod.common.api.storage.player.client.ClientPokedexManager(java.util.Map<net.minecraft.util.Identifier, com.cobblemon.mod.common.api.pokedex.SpeciesDexRecord>);
+  public java.util.Map<net.minecraft.util.Identifier, com.cobblemon.mod.common.api.pokedex.SpeciesDexRecord> getSpeciesRecords();
+  public void encode(net.minecraft.network.RegistryByteBuf);
+  static {};
+}
+==== com.cobblemon.mod.common.api.pokedex.AbstractPokedexManager
+Compiled from "AbstractPokedexManager.java"
+public abstract class com.cobblemon.mod.common.api.pokedex.AbstractPokedexManager {
+  private final java.util.Map<net.minecraft.util.Identifier, com.cobblemon.mod.common.api.pokedex.SpeciesDexRecord> speciesRecords;
+  private final java.util.Map<net.minecraft.util.Identifier, java.util.Map<com.cobblemon.mod.common.api.pokedex.PokedexValueCalculator<?>, java.lang.Object>> dexCalculatedValues;
+  private final java.util.Map<com.cobblemon.mod.common.api.pokedex.GlobalPokedexValueCalculator<?>, java.lang.Object> globalCalculatedValues;
+  private final transient com.bedrockk.molang.runtime.struct.QueryStruct struct;
+  public com.cobblemon.mod.common.api.pokedex.AbstractPokedexManager();
+  public java.util.Map<net.minecraft.util.Identifier, com.cobblemon.mod.common.api.pokedex.SpeciesDexRecord> getSpeciesRecords();
+  public final com.bedrockk.molang.runtime.struct.QueryStruct getStruct();
+  public final void deleteSpeciesRecord(net.minecraft.util.Identifier);
+  public final void deleteFormRecord(net.minecraft.util.Identifier, java.lang.String);
+  public final com.cobblemon.mod.common.api.pokedex.SpeciesDexRecord getSpeciesRecord(net.minecraft.util.Identifier);
+  public final com.cobblemon.mod.common.api.pokedex.SpeciesDexRecord getOrCreateSpeciesRecord(net.minecraft.util.Identifier);
+  public final com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress getHighestKnowledgeForSpecies(net.minecraft.util.Identifier);
+  public final com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress getHighestKnowledgeFor(com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry);
+  public final java.util.List<com.cobblemon.mod.common.api.pokedex.entry.PokedexForm> getEncounteredForms(com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry);
+  public final java.util.List<com.cobblemon.mod.common.api.pokedex.entry.PokedexForm> getCaughtForms(com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry);
+  public final java.util.List<com.cobblemon.mod.common.api.pokedex.entry.PokedexForm> getFormsWithKnowledge(com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry, com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress);
+  public final com.cobblemon.mod.common.api.pokedex.PokedexLearnedInformation getNewInformation(com.cobblemon.mod.common.pokedex.scanner.PokedexEntityData);
+  public final java.util.Set<java.lang.String> getSeenShinyStates(com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry, com.cobblemon.mod.common.api.pokedex.entry.PokedexForm);
+  public final java.util.Set<com.cobblemon.mod.common.pokemon.Gender> getSeenGenders(com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry, com.cobblemon.mod.common.api.pokedex.entry.PokedexForm);
+  public final java.util.Set<java.lang.String> getSeenAspects(com.cobblemon.mod.common.api.pokedex.entry.PokedexEntry);
+  public final com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress getKnowledgeForSpecies(net.minecraft.util.Identifier);
+  public void onSpeciesRecordUpdated(com.cobblemon.mod.common.api.pokedex.SpeciesDexRecord);
+  public final void clearCalculatedValues();
+  public final <T> T getDexCalculatedValue(net.minecraft.util.Identifier, com.cobblemon.mod.common.api.pokedex.PokedexValueCalculator<T>);
+  public final <T> T getGlobalCalculatedValue(com.cobblemon.mod.common.api.pokedex.GlobalPokedexValueCalculator<T>);
+  public void markDirty();
+}
+==== com.cobblemon.mod.common.api.pokedex.SpeciesDexRecord
+Compiled from "SpeciesDexRecord.java"
+public final class com.cobblemon.mod.common.api.pokedex.SpeciesDexRecord {
+  public static final com.cobblemon.mod.common.api.pokedex.SpeciesDexRecord$Companion Companion;
+  public transient net.minecraft.util.Identifier id;
+  private final java.util.Set<java.lang.String> aspects;
+  private final java.util.Map<java.lang.String, com.cobblemon.mod.common.api.pokedex.FormDexRecord> formRecords;
+  private final transient com.bedrockk.molang.runtime.struct.QueryStruct struct;
+  public transient com.cobblemon.mod.common.api.pokedex.AbstractPokedexManager pokedexManager;
+  private static final com.mojang.serialization.Codec<com.cobblemon.mod.common.api.pokedex.SpeciesDexRecord> CODEC;
+  public com.cobblemon.mod.common.api.pokedex.SpeciesDexRecord();
+  public final net.minecraft.util.Identifier getId();
+  public final void setId(net.minecraft.util.Identifier);
+  public final boolean isFormRecordsEmpty();
+  public final java.lang.String describe();
+  public final com.bedrockk.molang.runtime.struct.QueryStruct getStruct();
+  public final com.cobblemon.mod.common.api.pokedex.AbstractPokedexManager getPokedexManager();
+  public final void setPokedexManager(com.cobblemon.mod.common.api.pokedex.AbstractPokedexManager);
+  public final void initialize(com.cobblemon.mod.common.api.pokedex.AbstractPokedexManager, net.minecraft.util.Identifier);
+  public final void onFormRecordUpdated(com.cobblemon.mod.common.api.pokedex.FormDexRecord);
+  public final void addInformation(com.cobblemon.mod.common.pokemon.Pokemon, com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress);
+  public final void addInformation(com.cobblemon.mod.common.pokedex.scanner.PokedexEntityData, com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress);
+  public final void addAspects(java.util.Set<java.lang.String>);
+  public final boolean wouldBeDifferent$common(com.cobblemon.mod.common.pokemon.Pokemon);
+  public final boolean wouldBeDifferent$common(com.cobblemon.mod.common.pokedex.scanner.PokedexEntityData);
+  public final com.cobblemon.mod.common.api.pokedex.FormDexRecord getOrCreateFormRecord(java.lang.String);
+  public final com.cobblemon.mod.common.api.pokedex.FormDexRecord getFormRecord(java.lang.String);
+  public final void deleteFormRecord(java.lang.String);
+  public final com.cobblemon.mod.common.api.pokedex.SpeciesDexRecord clone();
+  public final java.util.Set<java.lang.String> getAspects();
+  public final boolean hasAspect(java.lang.String);
+  public final com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress getKnowledge();
+  public final boolean hasAtLeast(com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress);
+  public final boolean hasSeenForm(java.lang.String);
+  public final void encode(net.minecraft.network.RegistryByteBuf);
+  public final void decode(net.minecraft.network.RegistryByteBuf);
+  static {};
+}
+==== com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress
+Compiled from "PokedexEntryProgress.java"
+public final class com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress extends java.lang.Enum<com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress> implements net.minecraft.util.StringIdentifiable, java.lang.Comparable<com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress> {
+  public static final com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress$Companion Companion;
+  private static final com.mojang.serialization.Codec<com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress> CODEC;
+  public static final com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress NONE;
+  public static final com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress ENCOUNTERED;
+  public static final com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress CAUGHT;
+  private static final com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress[] $VALUES;
+  private static final kotlin.enums.EnumEntries $ENTRIES;
+  private com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress();
+  public java.lang.String asString();
+  public static com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress[] values();
+  public static com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress valueOf(java.lang.String);
+  public static kotlin.enums.EnumEntries<com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress> getEntries();
+  private static final com.cobblemon.mod.common.api.pokedex.PokedexEntryProgress[] $values();
+  static {};
+}
