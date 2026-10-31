@@ -1,0 +1,58 @@
+{
+  "mappings": {
+    "com/platino/mixin/BattleGUIMixin": {
+      "mouseClicked": "Lcom/cobblemon/mod/common/client/gui/battle/BattleGUI;method_25402(DDI)Z"
+    },
+    "com/platino/mixin/BattleGeneralSelectionMixin": {
+      "renderWidget": "Lcom/cobblemon/mod/common/client/gui/battle/subscreen/BattleGeneralActionSelection;method_48579(Lnet/minecraft/class_332;IIF)V"
+    },
+    "com/platino/mixin/BattleMessagePaneMixin": {
+      "mouseClicked": "Lcom/cobblemon/mod/common/client/gui/battle/widgets/BattleMessagePane;method_25402(DDI)Z",
+      "mouseDragged": "Lcom/cobblemon/mod/common/client/gui/battle/widgets/BattleMessagePane;method_25403(DDIDD)Z",
+      "renderWidget": "Lcom/cobblemon/mod/common/client/gui/battle/widgets/BattleMessagePane;method_48579(Lnet/minecraft/class_332;IIF)V"
+    },
+    "com/platino/mixin/CreativeInventoryScreenMixin": {
+      "Lnet/minecraft/client/gui/DrawContext;drawTexture(Lnet/minecraft/util/Identifier;IIIIII)V": "Lnet/minecraft/class_332;method_25302(Lnet/minecraft/class_2960;IIIIII)V",
+      "drawBackground": "Lnet/minecraft/class_481;method_2389(Lnet/minecraft/class_332;FII)V"
+    },
+    "com/platino/mixin/InventoryScreenMixin": {
+      "Lnet/minecraft/client/gui/DrawContext;drawTexture(Lnet/minecraft/util/Identifier;IIIIII)V": "Lnet/minecraft/class_332;method_25302(Lnet/minecraft/class_2960;IIIIII)V",
+      "drawBackground": "Lnet/minecraft/class_490;method_2389(Lnet/minecraft/class_332;FII)V"
+    },
+    "com/platino/mixin/PartyOverlayMixin": {
+      "render": "Lcom/cobblemon/mod/common/client/gui/PartyOverlay;method_1753(Lnet/minecraft/class_332;Lnet/minecraft/class_9779;)V"
+    },
+    "com/platino/mixin/PcScreenMixin": {
+      "setScreen": "Lnet/minecraft/class_310;method_1507(Lnet/minecraft/class_437;)V"
+    }
+  },
+  "data": {
+    "named:intermediary": {
+      "com/platino/mixin/BattleGUIMixin": {
+        "mouseClicked": "Lcom/cobblemon/mod/common/client/gui/battle/BattleGUI;method_25402(DDI)Z"
+      },
+      "com/platino/mixin/BattleGeneralSelectionMixin": {
+        "renderWidget": "Lcom/cobblemon/mod/common/client/gui/battle/subscreen/BattleGeneralActionSelection;method_48579(Lnet/minecraft/class_332;IIF)V"
+      },
+      "com/platino/mixin/BattleMessagePaneMixin": {
+        "mouseClicked": "Lcom/cobblemon/mod/common/client/gui/battle/widgets/BattleMessagePane;method_25402(DDI)Z",
+        "mouseDragged": "Lcom/cobblemon/mod/common/client/gui/battle/widgets/BattleMessagePane;method_25403(DDIDD)Z",
+        "renderWidget": "Lcom/cobblemon/mod/common/client/gui/battle/widgets/BattleMessagePane;method_48579(Lnet/minecraft/class_332;IIF)V"
+      },
+      "com/platino/mixin/CreativeInventoryScreenMixin": {
+        "Lnet/minecraft/client/gui/DrawContext;drawTexture(Lnet/minecraft/util/Identifier;IIIIII)V": "Lnet/minecraft/class_332;method_25302(Lnet/minecraft/class_2960;IIIIII)V",
+        "drawBackground": "Lnet/minecraft/class_481;method_2389(Lnet/minecraft/class_332;FII)V"
+      },
+      "com/platino/mixin/InventoryScreenMixin": {
+        "Lnet/minecraft/client/gui/DrawContext;drawTexture(Lnet/minecraft/util/Identifier;IIIIII)V": "Lnet/minecraft/class_332;method_25302(Lnet/minecraft/class_2960;IIIIII)V",
+        "drawBackground": "Lnet/minecraft/class_490;method_2389(Lnet/minecraft/class_332;FII)V"
+      },
+      "com/platino/mixin/PartyOverlayMixin": {
+        "render": "Lcom/cobblemon/mod/common/client/gui/PartyOverlay;method_1753(Lnet/minecraft/class_332;Lnet/minecraft/class_9779;)V"
+      },
+      "com/platino/mixin/PcScreenMixin": {
+        "setScreen": "Lnet/minecraft/class_310;method_1507(Lnet/minecraft/class_437;)V"
+      }
+    }
+  }
+}
