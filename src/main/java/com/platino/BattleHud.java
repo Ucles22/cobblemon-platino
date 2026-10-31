@@ -17,8 +17,6 @@ import java.util.UUID;
 public final class BattleHud {
 	public static final int W = 132;
 	/** Texto gris oscuro (no negro puro), nítido y sin sombra. */
-	private static final int TXT = 0xFF404448;
-	private static final int SHADOW = 0xFFC8C8C0;
 
 	private BattleHud() {}
 
@@ -66,71 +64,65 @@ public final class BattleHud {
 		boolean low = ally && cur > 0f && cur <= 0.2f;
 		if (low) LowHpAlarm.mark();
 		boolean blinkOn = (System.currentTimeMillis() / 350) % 2 == 0;
-		int border = hovered ? Draw.GOLD_DARK : (low && blinkOn) ? 0xFFC82828 : 0xFF343B3A;
+		int border = hovered ? Draw.GOLD_DARK : (low && blinkOn) ? 0xFFC82828 : FRAME;
 
-		// Caja calcada de DPPt: marco oscuro de 2 px, extremo interior muy redondeado, pestaña gris en el lado
-		// de la pantalla, filo gris claro arriba y abajo y cuerpo blanco.
-		boolean roundRight = ally; // el extremo redondeado mira al centro de la pantalla
-		drawFrame(c, x, y, W, h, roundRight, border);
+		// Caja de Platino: marco oscuro, filo oliva claro, cuerpo oliva, esquina interior achaflanada y el
+		// "raíl" marrón de la barra de PS que sale de la caja hacia el centro de la pantalla con una punta.
+		boolean inwardRight = ally; // tu caja está a la izquierda: mira a la derecha
+		drawFrame(c, x, y, W, h, inwardRight, border);
 
-		int ix = ally ? x + 9 : x + 7;            // tras la pestaña (izq. en tu caja) o tras el redondeo
-		int right = ally ? x + W - 7 : x + W - 9; // antes del redondeo (tu caja) o de la pestaña (rival)
+		int ix = x + 6;
+		int right = x + W - 6;
+		String name = Draw.fit(bp.getDisplayName().getString().toUpperCase(java.util.Locale.ROOT), W - 60);
+		Draw.dsText(c, name, ix, y + 5, WHITE, DARK);
 
-		// Nombre (mayúsculas, gris oscuro con sombra gris clara como en DS)
-		String name = Draw.fit(bp.getDisplayName().getString().toUpperCase(java.util.Locale.ROOT), W - 64);
-		Draw.dsText(c, name, ix, y + 5, TXT, SHADOW);
-
-		// Sexo + "Nv" + nivel a la derecha
 		String lvNum = String.valueOf(bp.getLevel());
 		int lvx = right - Draw.width(lvNum);
-		Draw.dsText(c, lvNum, lvx, y + 5, TXT, SHADOW);
+		Draw.dsText(c, lvNum, lvx, y + 5, WHITE, DARK);
 		int nvx = lvx - Draw.width("Nv") - 1;
-		Draw.dsText(c, "Nv", nvx, y + 5, TXT, SHADOW);
+		Draw.dsText(c, "Nv", nvx, y + 5, WHITE, DARK);
 		Gender g = bp.getGender();
-		if (g == Gender.MALE) Draw.dsText(c, "♂", nvx - 8, y + 5, 0xFF4890E8, 0xFFB8D0F0);
-		else if (g == Gender.FEMALE) Draw.dsText(c, "♀", nvx - 8, y + 5, 0xFFE86078, 0xFFF0C0C8);
+		if (g == Gender.MALE) Draw.dsText(c, "♂", nvx - 8, y + 5, 0xFF4890E8, DARK);
+		else if (g == Gender.FEMALE) Draw.dsText(c, "♀", nvx - 8, y + 5, 0xFFF06080, DARK);
 
-		// Fila de la barra: ball de capturado a la izquierda, estado, % del rival y la cápsula de PS a la derecha
-		int barY = ally ? y + 17 : y + 18;
-		int capW = ally ? 88 : 72;
-		int capX = right - capW;
+		// Raíl + barra de PS
+		int railY = ally ? y + 17 : y + 19;
+		int barX2 = right - 1, barX1 = barX2 - (ally ? 82 : 70);
+		drawRail(c, x, railY, W, inwardRight, barX1 - 14, barX2, cur);
+		Draw.dsText(c, "PS", barX1 - 12, railY - 1, 0xFFF8F0B0, DARK);
+
 		int lx = ix;
 		if (!ally && dexState != null && dexState.equalsIgnoreCase("CAUGHT")) {
-			Draw.tinyBall(c, lx, barY);
+			Draw.tinyBall(c, lx, railY - 1);
 			lx += 10;
 		}
 		PersistentStatus st = bp.getStatus();
 		if (st != null) {
-			int bw = Draw.statusBadge(c, st.getShowdownName(), lx, barY - 1);
+			int bw = Draw.statusBadge(c, st.getShowdownName(), lx, railY - 2);
 			if (bw > 0) lx += bw + 2;
 		}
 		if (!ally) {
+			// % de PS del rival, a la izquierda de "PS"
 			String pct = Math.round(cur * 100) + "%";
-			Draw.dsText(c, pct, capX - 3 - Draw.width(pct), barY, TXT, SHADOW);
+			Draw.dsText(c, pct, barX1 - 16 - Draw.width(pct), railY - 1, WHITE, DARK);
 		}
-		drawHpCapsule(c, capX, barY, right, cur);
 
 		if (ally) {
-			// PS numéricos debajo de la barra y EXP azul en el borde inferior
 			if (bp.isHpFlat()) {
 				String hp = Math.round(bp.getHpValue()) + "/" + Math.round(max);
-				Draw.dsText(c, hp, right - Draw.width(hp), y + 27, TXT, SHADOW);
+				Draw.dsText(c, hp, right - Draw.width(hp), y + 25, WHITE, DARK);
 			}
 			Pokemon own = findOwn(bp.getUuid());
 			if (own != null) {
 				float er = Math.max(0, Math.min(1, expRatio(own)));
 				int ey = y + h - 7;
-				int ex1 = x + 30, ex2 = x + W - 8;
+				int ex1 = x + 4, ex2 = x + W - 4;
 				Draw.batch(c, () -> {
-					c.fill(ex1, ey, ex2, ey + 4, 0xFF3A3633);
-					c.fill(ex1 + 1, ey + 1, ex2 - 1, ey + 3, 0xFF606868);
+					c.fill(ex1, ey, ex2, ey + 3, FRAME);
+					c.fill(ex1 + 1, ey + 1, ex2 - 1, ey + 2, 0xFFF8F8F8);
 					int ew = Math.round((ex2 - ex1 - 2) * er);
-					if (ew > 0) {
-						c.fill(ex1 + 1, ey + 1, ex1 + 1 + ew, ey + 3, 0xFF40A0F8);
-						c.fill(ex1 + 1, ey + 1, ex1 + 1 + ew, ey + 2, 0xFF88D0F8);
-					}
+					if (ew > 0) c.fill(ex1 + 1, ey + 1, ex1 + 1 + ew, ey + 2, 0xFF40A0F8);
 				});
-				Draw.dsText(c, "EXP", ix, ey - 2, 0xFFE0A020, 0xFF806010);
 			}
 		}
 
@@ -141,66 +133,62 @@ public final class BattleHud {
 		}
 	}
 
-	/** Marco de la caja: 2 px oscuros, redondeado grande en el extremo interior y pequeño en el de la pantalla. */
-	private static void drawFrame(DrawContext c, int x, int y, int w, int h, boolean roundRight, int border) {
-		int[] big = {5, 3, 2, 1, 1}, small = {1};
+	private static final int FRAME = 0xFF293028, RIM = 0xFFA8AB96, BODY = 0xFF69715A, WHITE = 0xFFF8FCF6, DARK = 0xFF2B3029;
+	private static final int RAIL = 0xFF5F4A37;
+
+	/** Marco de Platino: 2 px oscuros, 1 px de filo claro y cuerpo oliva; la esquina superior interior achaflanada. */
+	private static void drawFrame(DrawContext c, int x, int y, int w, int h, boolean inwardRight, int border) {
 		Draw.batch(c, () -> {
-			// sombra
 			for (int r = 0; r < h; r++) {
-				int k = Math.min(r, h - 1 - r);
-				int ib = k < big.length ? big[k] : 0, is = k < small.length ? small[k] : 0;
-				int l = roundRight ? is : ib, rr = roundRight ? ib : is;
-				c.fill(x + l + 2, y + r + 2, x + w - rr + 2, y + r + 3, 0x40000000);
-			}
-			for (int r = 0; r < h; r++) {
-				int k = Math.min(r, h - 1 - r);
-				int ib = k < big.length ? big[k] : 0, is = k < small.length ? small[k] : 0;
-				int l = roundRight ? is : ib, rr = roundRight ? ib : is;
+				int cut = r == 0 ? 2 : r == 1 ? 1 : 0;
+				int l = inwardRight ? 0 : cut, rr = inwardRight ? cut : 0;
 				c.fill(x + l, y + r, x + w - rr, y + r + 1, border);
 			}
-			// cuerpo (2 px dentro del marco)
-			int[] bigIn = {3, 1, 1};
-			for (int r = 2; r < h - 2; r++) {
-				int k = Math.min(r - 2, h - 3 - r);
-				int ib = k < bigIn.length ? bigIn[k] : 0;
-				int l = roundRight ? 2 : 2 + ib, rr = roundRight ? 2 + ib : 2;
-				int col = (r == 2 || r == h - 3) ? 0xFFC8CDC2 : (r < h / 2 ? 0xFFF8F8F8 : 0xFFF2F3EE);
-				c.fill(x + l, y + r, x + w - rr, y + r + 1, col);
-			}
-			// pestaña gris del lado de la pantalla
-			int tx = roundRight ? x + 2 : x + w - 6;
-			c.fill(tx, y + 3, tx + 4, y + h - 3, 0xFFA1A793);
-			c.fill(roundRight ? tx + 4 : tx - 1, y + 3, roundRight ? tx + 5 : tx, y + h - 3, 0xFF8C927E);
+			c.fill(x + 2, y + 2, x + w - 2, y + h - 2, RIM);
+			c.fill(x + 3, y + 3, x + w - 3, y + h - 3, BODY);
+			c.fill(x + 3, y + h - 3, x + w - 3, y + h - 2, 0xFF5A604C);
 		});
 	}
 
-	/** Cápsula de PS de DPPt: contorno oscuro con puntas redondas, "PS" rosado sobre granate y barra verde. */
-	private static void drawHpCapsule(DrawContext c, int x1, int y, int x2, float ratio) {
+	/**
+	 * Raíl marrón (marrón / oscuro / marrón) que cruza la caja y sale 10 px hacia el centro terminando en punta,
+	 * con la barra de PS de marco blanco encima.
+	 */
+	private static void drawRail(DrawContext c, int x, int ry, int w, boolean inwardRight, int railFrom, int barX2, float ratio) {
 		float r = Math.max(0, Math.min(1, ratio));
+		int barX1 = railFrom + 14;
 		Draw.batch(c, () -> {
-			c.fill(x1 + 1, y, x2 - 1, y + 8, 0xFF3A3633);
-			c.fill(x1, y + 1, x2, y + 7, 0xFF3A3633);
-			c.fill(x1 + 1, y + 1, x1 + 15, y + 7, 0xFF5A2C30);
-			int bx = x1 + 16, bw = x2 - 2 - bx;
-			c.fill(bx, y + 1, bx + bw, y + 7, 0xFF586060);
+			int x1, x2;
+			if (inwardRight) {
+				x1 = railFrom;
+				x2 = x + w + 10;
+			} else {
+				x1 = x - 10;
+				x2 = barX2 + 2;
+			}
+			c.fill(x1, ry, x2, ry + 2, RAIL);
+			c.fill(x1, ry + 2, x2, ry + 4, FRAME);
+			c.fill(x1, ry + 4, x2, ry + 6, RAIL);
+			// punta
+			for (int k = 0; k < 5; k++) {
+				int col = inwardRight ? x2 + k : x1 - 1 - k;
+				int top = ry - 2 + k, bot = ry + 8 - k;
+				if (bot <= top) break;
+				c.fill(col, top, col + 1, bot, k == 4 ? FRAME : RAIL);
+				c.fill(col, top, col + 1, top + 1, FRAME);
+				c.fill(col, bot - 1, col + 1, bot, FRAME);
+			}
+			// barra: marco blanco arriba/abajo, relleno de 2 filas y sombra negra
+			c.fill(barX1, ry + 1, barX2, ry + 2, 0xFFF8FCF8);
+			c.fill(barX1, ry + 2, barX2, ry + 4, 0xFF384030);
+			c.fill(barX1, ry + 4, barX2, ry + 5, 0xFFF8FCF8);
+			c.fill(barX1, ry + 5, barX2, ry + 6, 0xFF050100);
+			int bw = barX2 - barX1;
 			int fw = Math.round(bw * r);
 			if (r > 0 && fw < 1) fw = 1;
-			int dark, mid, hi;
-			if (r > 0.5f) { dark = 0xFF1E4D1B; mid = 0xFF42A644; hi = 0xFF67EF66; }
-			else if (r > 0.2f) { dark = 0xFF6A5208; mid = 0xFFC8A008; hi = 0xFFF8E038; }
-			else { dark = 0xFF6A1810; mid = 0xFFC83020; hi = 0xFFF86848; }
-			if (fw > 0) {
-				c.fill(bx, y + 1, bx + fw, y + 7, mid);
-				c.fill(bx, y + 1, bx + fw, y + 2, dark);
-				c.fill(bx, y + 6, bx + fw, y + 7, dark);
-				c.fill(bx, y + 3, bx + fw, y + 5, hi);
-			}
+			int col = r > 0.5f ? 0xFF18C420 : r > 0.2f ? 0xFFF8C018 : 0xFFF83818;
+			if (fw > 0) c.fill(barX1, ry + 2, barX1 + fw, ry + 4, col);
 		});
-		// "PS" rosado, nítido
-		c.getMatrices().push();
-		c.getMatrices().translate(0, 0, 1);
-		c.drawText(Draw.font(), "PS", x1 + 3, y, 0xFFF8B0A8, false);
-		c.getMatrices().pop();
 	}
 
 	private static Pokemon findOwn(UUID uuid) {
