@@ -157,3 +157,17 @@ if [ -n "$CJAR" ] && [ -f "$CJAR" ]; then
     echo "==== PCGUI lambdas"; javap -p -c -cp "$CJAR" com.cobblemon.mod.common.client.gui.pc.PCGUI | awk '/ (init\$lambda)/{f=1} f{print} f&&/^$/{f=0}' | grep -E '^  [a-z]|invoke|new ' | head -60
   } > inspect/pc-open.txt 2>&1
 fi
+# --- Decimoquinta ronda: renombrar cajas y fondos
+if [ -n "$CJAR" ] && [ -f "$CJAR" ]; then
+  { for c in com.cobblemon.mod.common.net.messages.server.storage.pc.RequestRenamePCBoxPacket com.cobblemon.mod.common.net.messages.server.storage.pc.RequestChangePCBoxWallpaperPacket \
+           com.cobblemon.mod.common.client.gui.pc.WallpapersScrollingWidget 'com.cobblemon.mod.common.client.gui.pc.WallpapersScrollingWidget$WallpaperEntry' com.cobblemon.mod.common.client.gui.pc.BoxNameWidget \
+           com.cobblemon.mod.common.net.messages.client.storage.pc.wallpaper.SetPCBoxWallpapersPacket com.cobblemon.mod.common.net.messages.client.storage.pc.wallpaper.UnlockPCBoxWallpaperPacket; do
+      echo "==== $c"; javap -p -cp "$CJAR" "$c" 2>&1 | grep -vE 'lambda|access\$|encode|decode|Codec|sendToPlayer|sendToAll' | head -50; done
+    echo "==== WallpapersScrollingWidget bytecode"
+    javap -p -c -cp "$CJAR" com.cobblemon.mod.common.client.gui.pc.WallpapersScrollingWidget | grep -E '^  [a-z]|invoke|getstatic|new ' | head -120
+    echo "==== BoxNameWidget bytecode"
+    javap -p -c -cp "$CJAR" com.cobblemon.mod.common.client.gui.pc.BoxNameWidget | grep -E '^  [a-z]|invoke|getstatic|new ' | head -80
+    grep -iE 'wallpaper' inspect/cobblemon-files.txt | grep -v '\.class$' | head -60
+    grep -iE 'wallpaper.*\.class$' inspect/cobblemon-files.txt | head -40
+  } > inspect/pc-boxes.txt 2>&1
+fi
