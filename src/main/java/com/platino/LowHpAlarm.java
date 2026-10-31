@@ -2,14 +2,20 @@ package com.platino;
 
 import com.cobblemon.mod.common.client.CobblemonClient;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.sound.PositionedSoundInstance;
-import net.minecraft.sound.SoundEvents;
+import net.minecraft.client.sound.MovingSoundInstance;
+import net.minecraft.client.sound.SoundInstance;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.Identifier;
 
-/** Pitido "pi-pi… pi-pi…" mientras tu Pokémon en combate tiene la vida en rojo. */
+/**
+ * Alarma de vida baja de DPPt: un bucle «pi-po… pi-po…» que suena mientras tu Pokémon en combate tiene la vida en
+ * rojo. El sonido es assets/cobbleplatino/sounds/low_hp.ogg; con un paquete de recursos se puede cambiar por otro.
+ */
 public final class LowHpAlarm {
+	private static final SoundEvent LOW_HP = SoundEvent.of(Identifier.of(PlatinoClient.MOD_ID, "low_hp"));
 	private static volatile long lastSeen;
-	private static long nextBeep;
-	private static int phase;
+	private static Loop playing;
 
 	private LowHpAlarm() {}
 
@@ -18,17 +24,38 @@ public final class LowHpAlarm {
 		lastSeen = System.currentTimeMillis();
 	}
 
-	public static void tick(MinecraftClient client) {
-		long now = System.currentTimeMillis();
-		if (!PlatinoConfig.get().lowHpBeep || now - lastSeen > 400 || CobblemonClient.INSTANCE.getBattle() == null) {
-			phase = 0;
-			return;
+	static boolean active() {
+		try {
+			return PlatinoConfig.get().lowHpBeep && System.currentTimeMillis() - lastSeen <= 400
+					&& CobblemonClient.INSTANCE.getBattle() != null;
+		} catch (Throwable t) {
+			return false;
 		}
-		if (now < nextBeep) return;
-		// Dos pitidos seguidos y una pausa
-		client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.BLOCK_NOTE_BLOCK_BIT.value(),
-				phase == 0 ? 1.9f : 1.7f, 0.35f));
-		nextBeep = now + (phase == 0 ? 170 : 600);
-		phase = 1 - phase;
+	}
+
+	public static void tick(MinecraftClient client) {
+		if (!active()) return;
+		if (playing == null || playing.isDone() || !client.getSoundManager().isPlaying(playing)) {
+			playing = new Loop();
+			client.getSoundManager().play(playing);
+		}
+	}
+
+	/** Sonido en bucle que se apaga solo en cuanto deja de haber vida baja. */
+	private static final class Loop extends MovingSoundInstance {
+		Loop() {
+			super(LOW_HP, SoundCategory.MASTER, SoundInstance.createRandom());
+			this.repeat = true;
+			this.repeatDelay = 0;
+			this.volume = 0.45f;
+			this.pitch = 1f;
+			this.relative = true;
+			this.attenuationType = SoundInstance.AttenuationType.NONE;
+		}
+
+		@Override
+		public void tick() {
+			if (!active()) setDone();
+		}
 	}
 }

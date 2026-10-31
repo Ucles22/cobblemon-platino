@@ -1,0 +1,6 @@
+{
+  "low_hp": {
+    "subtitle": "Low HP",
+    "sounds": [{ "name": "cobbleplatino:low_hp", "stream": false }]
+  }
+}
