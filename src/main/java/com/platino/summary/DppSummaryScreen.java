@@ -62,12 +62,12 @@ public class DppSummaryScreen extends Screen {
 	private static int lastPage = 0;
 
 	private enum Page {
-		INFO(com.platino.Tr.t("INFO. POKéMON"), 0xFF58B848, 0xFFE0F0C8),
-		MEMO(com.platino.Tr.t("NOTAS ENTRENADOR"), 0xFF48A8A0, 0xFFD8F4F0),
-		SKILLS(com.platino.Tr.t("HABILIDADES"), 0xFF6870C8, 0xFFC8C8F0),
-		MOVES(com.platino.Tr.t("MOVIMIENTOS"), 0xFFE05850, 0xFFF8B0A8),
-		STATS("IVs / EVs", 0xFFD8A028, 0xFFF8E8B0),
-		MARKS(com.platino.Tr.t("MARCAS"), 0xFFD060B8, 0xFFF8D8F0);
+		INFO(com.platino.Tr.t("INFO. POKéMON"), 0xFF68B880, 0xFFE0F0C8),
+		MEMO(com.platino.Tr.t("NOTAS ENTRENADOR"), 0xFF60C0C8, 0xFFD8F4F0),
+		SKILLS(com.platino.Tr.t("HABILIDADES"), 0xFF7088D0, 0xFFC8D0F0),
+		MOVES(com.platino.Tr.t("MOVIMIENTOS"), 0xFFE88078, 0xFFF8C0B8),
+		STATS("IVs / EVs", 0xFFB890E0, 0xFFE8D8F8),
+		MARKS(com.platino.Tr.t("MARCAS"), 0xFFE890C0, 0xFFF8D8EC);
 
 		final String title;
 		final int color, light;
@@ -330,9 +330,17 @@ public class DppSummaryScreen extends Screen {
 		int tx = x + 13;
 		for (Page pg : pages) {
 			boolean sel = pg == page;
-			int ty = sel ? y : y + 2;
-			Draw.panel(c, tx, ty, tx + 22, y + 18, sel ? 0xFF303848 : 0xFF707888, sel ? pg.light : Draw.lerpColor(pg.color, 0xFFFFFFFF, 0.35f));
-			realTabIcon(c, pg, tx + 3, ty + 1, sel ? pg.color : Draw.lerpColor(pg.color, 0xFF303038, 0.2f));
+			int ty = sel ? y - 1 : y + 1;
+			boolean hov = !sel && mx >= tx && mx < tx + 22 && my >= y && my < y + 18;
+			// Pestaña de color con la parte de arriba redondeada (estilo DPPt/DBPR) e icono blanco
+			int fill = sel ? Draw.lerpColor(pg.color, 0xFFFFFFFF, 0.18f) : hov ? Draw.lerpColor(pg.color, 0xFFFFFFFF, 0.08f) : Draw.lerpColor(pg.color, 0xFF303848, 0.12f);
+			c.fill(tx + 2, ty, tx + 20, ty + 1, 0xFF303848);
+			c.fill(tx + 1, ty + 1, tx + 21, ty + 2, 0xFF303848);
+			c.fill(tx, ty + 2, tx + 22, y + 18, 0xFF303848);
+			c.fill(tx + 2, ty + 1, tx + 20, ty + 2, fill);
+			c.fill(tx + 1, ty + 2, tx + 21, y + 18, fill);
+			if (sel) c.fill(tx + 3, ty + 2, tx + 19, ty + 3, 0x60FFFFFF);
+			Icons.tex(c, Identifier.of(com.platino.PlatinoClient.MOD_ID, "textures/gui/tabs/" + pg.name().toLowerCase(Locale.ROOT) + ".png"), tx + 3, sel ? ty + 2 : ty + 1, 16, 16);
 			hits.add(new Hit(tx, y, tx + 22, y + 18, () -> setPage(pg)));
 			tx += 24;
 		}
