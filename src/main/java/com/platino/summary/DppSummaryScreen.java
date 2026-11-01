@@ -238,7 +238,7 @@ public class DppSummaryScreen extends Screen {
 		for (int yy = y; yy < y0 + H - 4; yy += 3) c.fill(x, yy, x + w, yy + 1, 0x18FFFFFF);
 		// Placa de nombre naranja
 		Draw.panelGradient(c, x + 2, y + 2, x + w - 2, y + 18, 0xFF7A3A08, 0xFFE8902C, 0xFFC0600E); // placa del nombre, naranja oscuro para leer bien el blanco
-		Draw.tinyBall(c, x + 6, y + 6);
+		Icons.ball(c, p, x + 4, y + 4, 12);
 		boolean nickEditable = canEdit(p);
 		if (nickBuffer != null) {
 			// Campo de texto del mote
@@ -284,11 +284,21 @@ public class DppSummaryScreen extends Screen {
 		}
 		// Ordenar equipo
 		if (canEdit(p) && party.size() > 1) {
-			button(c, x + 10, py + ps + 15, x + w - 10, py + ps + 28, com.platino.Tr.t("⇅ Equipo"), mx, my, 0xFFB8D8F8, () -> {
+			int bx1 = x + 10, by1 = py + ps + 14, bx2 = x + w - 10, by2 = by1 + 16;
+			boolean hov = mx >= bx1 && mx < bx2 && my >= by1 && my < by2;
+			Draw.round(c, bx1 + 1, by1 + 1, bx2 + 1, by2 + 1, 0x50000000);
+			Draw.panelGradient(c, bx1, by1, bx2, by2, 0xFF1C3C70, hov ? 0xFF90C8F8 : 0xFF70A8E8, hov ? 0xFF4878D0 : 0xFF3460B8);
+			c.fill(bx1 + 2, by1 + 1, bx2 - 2, by1 + 2, 0x60FFFFFF);
+			Icons.ball(c, p, bx1 + 4, by1 + 2, 12);
+			if (Icons.exists(Icons.PARTY_SWAP)) Icons.tex(c, Icons.PARTY_SWAP, bx2 - 14, by1 + 2, 9, 12);
+			String lbl = com.platino.Tr.t("Equipo");
+			Draw.dsText(c, lbl, (bx1 + bx2) / 2 - Draw.width(lbl) / 2, by1 + 4, 0xFFFFFFFF, 0xFF1C3C70);
+			hits.add(new Hit(bx1, by1, bx2, by2, () -> {
+				beep(1.6f);
 				ClientParty cp = clientParty();
 				int slot = cp == null ? 0 : Math.max(0, cp.getPosition(p.getUuid()));
 				MinecraftClient.getInstance().setScreen(new PartyScreen(this, slot));
-			});
+			}));
 		}
 		// Objeto
 		int iy = y0 + H - 38;
@@ -308,25 +318,62 @@ public class DppSummaryScreen extends Screen {
 		}
 		// Flechas para cambiar de Pokémon
 		if (party.size() > 1) {
-			button(c, x + w - 30, y + 20, x + w - 18, y + 31, "▲", mx, my, 0xFFF0F0E8, () -> switchPokemon(-1));
-			button(c, x + w - 16, y + 20, x + w - 4, y + 31, "▼", mx, my, 0xFFF0F0E8, () -> switchPokemon(1));
+			arrowButton(c, x + w - 30, y + 20, 2, mx, my, () -> switchPokemon(-1));
+			arrowButton(c, x + w - 16, y + 20, 3, mx, my, () -> switchPokemon(1));
 		}
 	}
 
 	private void drawTabs(DrawContext c, int mx, int my) {
 		int x = x0 + LW + 4, y = y0 + 22;
-		button(c, x, y + 2, x + 10, y + 16, "◀", mx, my, 0xFF8090D0, () -> switchPage(-1));
+		arrowButton(c, x + 1, y + 5, 0, mx, my, () -> switchPage(-1));
 		Page[] pages = Page.values();
 		int tx = x + 13;
 		for (Page pg : pages) {
 			boolean sel = pg == page;
 			int ty = sel ? y : y + 2;
 			Draw.panel(c, tx, ty, tx + 22, y + 18, sel ? 0xFF303848 : 0xFF707888, sel ? pg.light : Draw.lerpColor(pg.color, 0xFFFFFFFF, 0.35f));
-			tabIcon(c, pg, tx + 5, ty + 3, sel ? pg.color : Draw.lerpColor(pg.color, 0xFF303038, 0.2f));
+			realTabIcon(c, pg, tx + 3, ty + 1, sel ? pg.color : Draw.lerpColor(pg.color, 0xFF303038, 0.2f));
 			hits.add(new Hit(tx, y, tx + 22, y + 18, () -> setPage(pg)));
 			tx += 24;
 		}
-		button(c, tx + 1, y + 2, tx + 11, y + 16, "▶", mx, my, 0xFF8090D0, () -> switchPage(1));
+		arrowButton(c, tx + 1, y + 5, 1, mx, my, () -> switchPage(1));
+	}
+
+	/** Botón de flecha blanca sin marco. */
+	private void arrowButton(DrawContext c, int x, int y, int dir, int mx, int my, Runnable action) {
+		boolean hover = mx >= x - 2 && mx < x + 10 && my >= y - 2 && my < y + 10;
+		Icons.arrow(c, x, y, dir, hover);
+		hits.add(new Hit(x - 2, y - 2, x + 10, y + 10, () -> {
+			beep(1.6f);
+			action.run();
+		}));
+	}
+
+	/** Icono real de cada pestaña: los de Cobblemon y objetos de verdad; si faltan, el dibujado. */
+	private static void realTabIcon(DrawContext c, Page pg, int x, int y, int col) {
+		Identifier tex = switch (pg) {
+			case INFO -> Icons.TAB_INFO;
+			case SKILLS -> Icons.TAB_STATS;
+			case MOVES -> Icons.TAB_MOVES;
+			case MARKS -> Icons.TAB_MARKS;
+			default -> null;
+		};
+		if (tex != null && Icons.exists(tex)) {
+			Icons.tex(c, tex, x, y, 16, 16);
+			return;
+		}
+		if (pg == Page.MEMO) {
+			Icons.item(c, Identifier.of("minecraft", "writable_book"), x, y, 16);
+			return;
+		}
+		if (pg == Page.STATS) {
+			Identifier vit = Identifier.of("cobblemon", "hp_up");
+			if (net.minecraft.registry.Registries.ITEM.containsId(vit)) {
+				Icons.item(c, vit, x, y, 16);
+				return;
+			}
+		}
+		tabIcon(c, pg, x + 2, y + 2, col);
 	}
 
 	private static void tabIcon(DrawContext c, Page pg, int x, int y, int col) {

@@ -209,8 +209,12 @@ public class DppPcScreen extends Screen {
 			name = Draw.fit(name.toUpperCase(Locale.ROOT), bw - 40);
 			Draw.dsText(c, name, bx + bw / 2 - Draw.width(name) / 2, by + 5, 0xFF303038, 0xFFE8F0F8);
 		}
-		button(c, bx + 3, by + 3, bx + 15, by + 15, "◀", mx, my, 0xFFF0F0F8, () -> changeBox(-1));
-		button(c, bx + bw - 15, by + 3, bx + bw - 3, by + 15, "▶", mx, my, 0xFFF0F0F8, () -> changeBox(1));
+		boolean hl = mx >= bx + 2 && mx < bx + 14 && my >= by + 2 && my < by + 16;
+		boolean hr = mx >= bx + bw - 14 && mx < bx + bw - 2 && my >= by + 2 && my < by + 16;
+		Icons.arrow(c, bx + 5, by + 5, 0, hl);
+		Icons.arrow(c, bx + bw - 10, by + 5, 1, hr);
+		hits.add(new Hit(bx + 2, by + 2, bx + 14, by + 16, () -> changeBox(-1)));
+		hits.add(new Hit(bx + bw - 14, by + 2, bx + bw - 2, by + 16, () -> changeBox(1)));
 		hits.add(new Hit(bx + 16, by, bx + bw - 16, by + 18, () -> {
 			if (boxName != null || wallPicker) return;
 			boxName = boxLabel(pc.getBoxes().get(box), box);
@@ -338,7 +342,7 @@ public class DppPcScreen extends Screen {
 			Draw.dsText(c, "—", x + 8, y + 6, 0xFFFFFFFF, 0xFF4A1E00);
 			return;
 		}
-		Draw.tinyBall(c, x + 6, y + 6);
+		Icons.ball(c, p, x + 4, y + 4, 12);
 		Draw.dsText(c, Draw.fit(p.getDisplayName(false).getString().toUpperCase(Locale.ROOT), w - 34), x + 16, y + 6, 0xFFFFFFFF, 0xFF4A1E00);
 		Gender g = p.getGender();
 		if (g == Gender.MALE) Draw.dsText(c, "♂", x + w - 12, y + 6, 0xFFA8D0FF, 0xFF203878);
