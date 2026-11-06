@@ -925,12 +925,35 @@ public class DppSummaryScreen extends Screen {
 
 	/** Abre el Resumen original de Cobblemon (para cambiar mote, ordenar movimientos, evolucionar…). */
 	private void openOriginal() {
+		int idx = originalIndex();
+		if (idx < 0) return; // equipo vacío: no hay nada que abrir
 		bypass = true;
 		try {
-			Summary.Companion.open(original, editable, Math.max(0, original.indexOf(pk())));
+			Summary.Companion.open(original, editable, idx);
 		} finally {
 			bypass = false;
 		}
+	}
+
+	/**
+	 * Hueco de "original" donde está el Pokémon que se está viendo.
+	 * Se busca por UUID porque "original" se refresca con objetos nuevos del equipo y
+	 * indexOf (que compara por objeto) puede fallar. Si no aparece, el primer hueco no vacío.
+	 * Nunca devuelve un hueco vacío: otros mods (p. ej. Mega Showdown) fallan si el resumen
+	 * se abre con un Pokémon null seleccionado.
+	 */
+	private int originalIndex() {
+		Pokemon current = pk();
+		if (current != null) {
+			for (int i = 0; i < original.size(); i++) {
+				Pokemon p = original.get(i);
+				if (p != null && p.getUuid().equals(current.getUuid())) return i;
+			}
+		}
+		for (int i = 0; i < original.size(); i++) {
+			if (original.get(i) != null) return i;
+		}
+		return -1;
 	}
 
 	@Override
