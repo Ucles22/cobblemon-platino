@@ -924,36 +924,35 @@ public class DppSummaryScreen extends Screen {
 	}
 
 	/** Abre el Resumen original de Cobblemon (para cambiar mote, ordenar movimientos, evolucionar…). */
+	/**
+	 * Abre el Resumen original de Cobblemon.
+	 * Se le pasa el equipo SIN huecos vacíos: otros mods (p. ej. Mega Showdown) recorren
+	 * toda la lista al abrir el resumen y fallan con los null. El Pokémon que se está viendo
+	 * se busca por UUID porque "original" se refresca con objetos nuevos y indexOf (que compara
+	 * por objeto) puede no encontrarlo.
+	 */
 	private void openOriginal() {
-		int idx = originalIndex();
-		if (idx < 0) return; // equipo vacío: no hay nada que abrir
+		List<Pokemon> list = new ArrayList<>();
+		for (Pokemon p : original) {
+			if (p != null) list.add(p);
+		}
+		if (list.isEmpty()) return; // equipo vacío: no hay nada que abrir
+		int idx = 0;
+		Pokemon current = pk();
+		if (current != null) {
+			for (int i = 0; i < list.size(); i++) {
+				if (list.get(i).getUuid().equals(current.getUuid())) {
+					idx = i;
+					break;
+				}
+			}
+		}
 		bypass = true;
 		try {
-			Summary.Companion.open(original, editable, idx);
+			Summary.Companion.open(list, editable, idx);
 		} finally {
 			bypass = false;
 		}
-	}
-
-	/**
-	 * Hueco de "original" donde está el Pokémon que se está viendo.
-	 * Se busca por UUID porque "original" se refresca con objetos nuevos del equipo y
-	 * indexOf (que compara por objeto) puede fallar. Si no aparece, el primer hueco no vacío.
-	 * Nunca devuelve un hueco vacío: otros mods (p. ej. Mega Showdown) fallan si el resumen
-	 * se abre con un Pokémon null seleccionado.
-	 */
-	private int originalIndex() {
-		Pokemon current = pk();
-		if (current != null) {
-			for (int i = 0; i < original.size(); i++) {
-				Pokemon p = original.get(i);
-				if (p != null && p.getUuid().equals(current.getUuid())) return i;
-			}
-		}
-		for (int i = 0; i < original.size(); i++) {
-			if (original.get(i) != null) return i;
-		}
-		return -1;
 	}
 
 	@Override
